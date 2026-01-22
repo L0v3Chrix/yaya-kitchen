@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YaYa's Kitchen | A Small Exhale for Your Week</title>
+  <meta name="description" content="A small, local kitchen project bringing ease, nourishment, and quiet beauty into the week. Weekly meal baskets for the Orlando community.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="YaYa's Kitchen | Weekly Meal Baskets">
+  <meta property="og:description" content="Intentionally prepared food for your family. A small exhale for your week.">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Oswald:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================
+       CSS VARIABLES - Brand Colors from BRAND-COLORS.md
+    ============================================ */
+    :root {
+      /* Primary Brand Colors */
+      --color-purple: #2F1957;
+      --color-gold: #EEA421;
+      --color-green: #7C841D;
+      --color-orange: #D8491F;
+
+      /* Neutrals */
+      --color-charcoal: #141412;
+      --color-cream: #FAF8F5;
+      --color-cream-dark: #F5F2ED;
+      --color-gray: #6B6B6B;
+      --color-gray-light: #E0E0E0;
+
+      /* Typography */
+      --font-script: 'Cormorant Garamond', Georgia, serif;
+      --font-headline: 'Oswald', 'Arial Narrow', sans-serif;
+      --font-body: 'Lato', 'Helvetica Neue', sans-serif;
+
+      /* Spacing */
+      --section-padding: 100px;
+      --container-width: 1200px;
+      --nav-height: 90px;
+      --nav-height-scrolled: 70px;
+    }
+
+    /* ============================================
+       RESET & BASE
+    ============================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--color-charcoal);
+      background-color: var(--color-cream);
+      overflow-x: hidden;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ============================================
+       TYPOGRAPHY CLASSES
+    ============================================ */
+    .script {
+      font-family: var(--font-script);
+      font-style: italic;
+      font-weight: 500;
+      color: var(--color-gold);
+    }
+
+    .headline {
+      font-family: var(--font-headline);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      line-height: 1.1;
+    }
+
+    /* ============================================
+       NAVIGATION - LPQ Style (Centered Logo + Split Links)
+    ============================================ */
+    .nav-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 20px 30px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-wrapper.scrolled {
+      padding: 10px 30px;
+      background: rgba(250, 248, 245, 0.95);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px 30px;
+      border: 1px solid var(--color-gray-light);
+      background: var(--color-cream);
+      transition: all 0.3s ease;
+    }
+
+    .nav-wrapper.scrolled .nav {
+      padding: 10px 25px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+    }
+
+    .nav-left,
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .nav-logo {
+      margin: 0 40px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-logo img {
+      height: 50px;
+      transition: height 0.3s ease;
+    }
+
+    .nav-wrapper.scrolled .nav-logo img {
+      height: 40px;
+    }
+
+    .nav-link {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-charcoal);
+      padding: 8px 12px;
+      border: 1px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      border-color: var(--color-charcoal);
+    }
+
+    .nav-cta {
+      background: var(--color-charcoal);
+      color: white;
+      border-color: var(--color-charcoal);
+    }
+
+    .nav-cta:hover {
+      background: var(--color-purple);
+      border-color: var(--color-purple);
+    }
+
+    /* Mobile Navigation */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 10px;
+      background: none;
+      border: none;
+    }
+
+    .nav-toggle span {
+      width: 25px;
+      height: 2px;
+      background: var(--color-charcoal);
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--color-cream);
+      z-index: 999;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .mobile-menu a {
+      font-family: var(--font-headline);
+      font-size: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .mobile-close {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      font-size: 30px;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    /* ============================================
+       HERO SECTION
+    ============================================ */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 140px 20px 80px;
+      position: relative;
+      background: var(--color-cream);
+    }
+
+    .hero-content {
+      max-width: 900px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--color-gray);
+      margin-bottom: 40px;
+    }
+
+    .hero-title {
+      margin-bottom: 50px;
+    }
+
+    .hero-line {
+      display: block;
+      font-family: var(--font-headline);
+      font-size: clamp(40px, 8vw, 80px);
+      font-weight: 600;
+      text-transform: uppercase;
+      line-height: 1.0;
+      color: var(--color-gray-light);
+      opacity: 0.4;
+      transition: all 0.6s ease;
+    }
+
+    .hero-line.visible {
+      color: var(--color-charcoal);
+      opacity: 1;
+    }
+
+    .hero-line.script-line {
+      font-family: var(--font-script);
+      font-style: italic;
+      font-weight: 500;
+      text-transform: none;
+      color: var(--color-gold);
+      font-size: clamp(36px, 7vw, 70px);
+      opacity: 1;
+    }
+
+    .hero-image {
+      width: 100%;
+      max-width: 550px;
+      margin: 50px auto;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: auto;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-body);
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--color-gray);
+      max-width: 550px;
+      margin: 0 auto 50px;
+      line-height: 1.8;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      right: 40px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--color-gray);
+    }
+
+    .scroll-indicator svg {
+      width: 20px;
+      height: 20px;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(6px); }
+      60% { transform: translateY(3px); }
+    }
+
+    /* ============================================
+       BUTTONS
+    ============================================ */
+    .btn {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 18px 40px;
+      border: 2px solid var(--color-charcoal);
+      background: var(--color-charcoal);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background: var(--color-purple);
+      border-color: var(--color-purple);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--color-charcoal);
+    }
+
+    .btn-outline:hover {
+      background: var(--color-charcoal);
+      color: white;
+    }
+
+    .btn-large {
+      padding: 22px 56px;
+      font-size: 15px;
+    }
+
+    /* ============================================
+       SPLIT SECTIONS (LPQ Style)
+    ============================================ */
+    .split-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 650px;
+    }
+
+    .split-section.reverse {
+      direction: rtl;
+    }
+
+    .split-section.reverse > * {
+      direction: ltr;
+    }
+
+    .split-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 100px;
+      background: var(--color-cream);
+    }
+
+    .split-section.alt-bg .split-content {
+      background: var(--color-cream-dark);
+    }
+
+    .split-image {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .split-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .split-section:hover .split-image img {
+      transform: scale(1.02);
+    }
+
+    .section-label {
+      font-family: var(--font-script);
+      font-style: italic;
+      font-size: clamp(24px, 3vw, 36px);
+      color: var(--color-gold);
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: var(--font-headline);
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      line-height: 1.1;
+      margin-bottom: 25px;
+      color: var(--color-charcoal);
+    }
+
+    .section-text {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.9;
+      color: var(--color-gray);
+      margin-bottom: 25px;
+    }
+
+    .section-list {
+      list-style: none;
+      margin-bottom: 30px;
+    }
+
+    .section-list li {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 16px;
+      color: var(--color-gray);
+      padding: 10px 0;
+      padding-left: 25px;
+      position: relative;
+    }
+
+    .section-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      background: var(--color-gold);
+      border-radius: 50%;
+    }
+
+    /* ============================================
+       CENTERED SECTION
+    ============================================ */
+    .centered-section {
+      text-align: center;
+      padding: 120px 20px;
+      background: var(--color-cream);
+    }
+
+    .centered-section.alt-bg {
+      background: var(--color-cream-dark);
+    }
+
+    .centered-section .section-title {
+      max-width: 700px;
+      margin: 0 auto 25px;
+    }
+
+    .centered-section .section-text {
+      max-width: 600px;
+      margin: 0 auto 20px;
+    }
+
+    .centered-section .section-text:last-of-type {
+      margin-bottom: 40px;
+    }
+
+    /* ============================================
+       FULL WIDTH IMAGE
+    ============================================ */
+    .full-image {
+      width: 100%;
+      height: 500px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .full-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ============================================
+       ABOUT SECTION
+    ============================================ */
+    .about-section {
+      background: var(--color-cream-dark);
+      padding: 120px 20px;
+    }
+
+    .about-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      max-width: var(--container-width);
+      margin: 0 auto;
+      align-items: center;
+    }
+
+    .about-image {
+      position: relative;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .about-image img {
+      width: 100%;
+      border-radius: 4px;
+    }
+
+    .about-text-block {
+      max-width: 500px;
+    }
+
+    /* ============================================
+       ORDER FORM SECTION
+    ============================================ */
+    .form-section {
+      background: white;
+      padding: 120px 20px;
+    }
+
+    .form-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .form-group {
+      margin-bottom: 40px;
+    }
+
+    .form-group-title {
+      font-family: var(--font-headline);
+      font-size: 16px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 25px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--color-cream-dark);
+      color: var(--color-charcoal);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+
+    label {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--color-gray);
+      margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 16px 18px;
+      font-family: var(--font-body);
+      font-size: 16px;
+      border: 1px solid var(--color-gray-light);
+      border-radius: 0;
+      background: white;
+      transition: border-color 0.3s ease;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--color-purple);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    /* Checkbox & Radio Styles */
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .checkbox-item,
+    .radio-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      cursor: pointer;
+    }
+
+    .checkbox-item input,
+    .radio-item input {
+      width: 20px;
+      height: 20px;
+      margin-top: 3px;
+      cursor: pointer;
+      accent-color: var(--color-purple);
+    }
+
+    .checkbox-item span,
+    .radio-item span {
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--color-charcoal);
+      line-height: 1.5;
+    }
+
+    .price {
+      color: var(--color-gray);
+      font-size: 14px;
+    }
+
+    /* Conditional fields */
+    .conditional-field {
+      display: none;
+      margin-top: 20px;
+      padding-left: 34px;
+    }
+
+    .conditional-field.visible {
+      display: block;
+    }
+
+    /* Form Submit */
+    .form-submit {
+      text-align: center;
+      margin-top: 60px;
+    }
+
+    /* Form Messages */
+    .form-message {
+      padding: 25px;
+      margin-bottom: 30px;
+      text-align: center;
+      display: none;
+      border-radius: 4px;
+    }
+
+    .form-message.success {
+      display: block;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #a5d6a7;
+    }
+
+    .form-message.error {
+      display: block;
+      background: #ffebee;
+      color: #c62828;
+      border: 1px solid #ef9a9a;
+    }
+
+    /* ============================================
+       FOOTER
+    ============================================ */
+    .footer {
+      background: var(--color-purple);
+      color: white;
+      padding: 100px 20px 50px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      height: 90px;
+      margin: 0 auto 50px;
+      filter: brightness(0) invert(1);
+    }
+
+    .footer-tagline {
+      font-family: var(--font-script);
+      font-style: italic;
+      font-size: 26px;
+      color: var(--color-gold);
+      margin-bottom: 25px;
+    }
+
+    .footer-text {
+      font-family: var(--font-body);
+      font-weight: 300;
+      font-size: 15px;
+      color: rgba(255,255,255,0.7);
+      max-width: 450px;
+      margin: 0 auto 20px;
+      line-height: 1.8;
+    }
+
+    .footer-contact {
+      margin-top: 40px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .footer-contact a {
+      color: rgba(255,255,255,0.8);
+      transition: color 0.3s ease;
+    }
+
+    .footer-contact a:hover {
+      color: var(--color-gold);
+    }
+
+    .footer-bottom {
+      margin-top: 60px;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ============================================
+       ANIMATIONS
+    ============================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ============================================
+       RESPONSIVE
+    ============================================ */
+    @media (max-width: 1024px) {
+      .nav-left,
+      .nav-right {
+        display: none;
+      }
+
+      .nav-toggle {
+        display: flex;
+        position: absolute;
+        right: 20px;
+      }
+
+      .mobile-menu {
+        display: flex;
+      }
+
+      .nav {
+        justify-content: center;
+        position: relative;
+      }
+
+      .nav-logo {
+        margin: 0;
+      }
+
+      .split-section {
+        grid-template-columns: 1fr;
+      }
+
+      .split-section.reverse {
+        direction: ltr;
+      }
+
+      .split-content {
+        padding: 60px 40px;
+        order: 2;
+      }
+
+      .split-image {
+        min-height: 400px;
+        order: 1;
+      }
+
+      .about-content {
+        grid-template-columns: 1fr;
+        gap: 50px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --section-padding: 70px;
+      }
+
+      .hero {
+        padding: 120px 20px 60px;
+      }
+
+      .split-content {
+        padding: 50px 25px;
+      }
+
+      .section-title {
+        font-size: 28px;
+      }
+
+      .section-label {
+        font-size: 22px;
+      }
+
+      .scroll-indicator {
+        display: none;
+      }
+
+      .centered-section {
+        padding: 80px 20px;
+      }
+
+      .full-image {
+        height: 350px;
+      }
+
+      .footer {
+        padding: 70px 20px 40px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-line {
+        font-size: 36px;
+      }
+
+      .hero-line.script-line {
+        font-size: 32px;
+      }
+
+      .btn {
+        padding: 16px 30px;
+        width: 100%;
+      }
+
+      .nav-wrapper {
+        padding: 15px 15px;
+      }
+
+      .nav {
+        padding: 12px 20px;
+      }
+    }
+
+    /* Loading state */
+    .btn.loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation - LPQ Style -->
+  <div class="nav-wrapper" id="nav-wrapper">
+    <nav class="nav">
+      <div class="nav-left">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#basket" class="nav-link">The Basket</a>
+        <a href="#how-it-works" class="nav-link">How It Works</a>
+      </div>
+
+      <div class="nav-logo">
+        <a href="#home">
+          <img src="images/brand/logo-header.jpg" alt="YaYa's Kitchen">
+        </a>
+      </div>
+
+      <div class="nav-right">
+        <a href="#menu" class="nav-link">This Week</a>
+        <a href="#order" class="nav-link nav-cta">Order Now</a>
+      </div>
+
+      <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <button class="mobile-close" id="mobile-close" aria-label="Close menu">&times;</button>
+    <a href="#about">About</a>
+    <a href="#basket">The Basket</a>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#menu">This Week</a>
+    <a href="#order">Order Now</a>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <p class="hero-tagline">A small, local kitchen project</p>
+
+      <div class="hero-title">
+        <span class="hero-line" data-delay="0">This is not</span>
+        <span class="hero-line" data-delay="1">just food.</span>
+        <span class="hero-line script-line" data-delay="2">This is care.</span>
+        <span class="hero-line" data-delay="3">It's about</span>
+        <span class="hero-line" data-delay="4">slowing down.</span>
+        <span class="hero-line script-line" data-delay="5">A small exhale</span>
+        <span class="hero-line" data-delay="6">for your week.</span>
+      </div>
+
+      <div class="hero-image reveal">
+        <img src="images/hero/kitchen-hero.jpg" alt="YaYa's Kitchen - Fresh cooking on the stove">
+      </div>
+
+      <p class="hero-subtitle reveal">
+        Intentionally prepared food for your family, accompanied by the beauty of flowers — creating a sense that someone has provided ease for your week.
+      </p>
+
+      <a href="#order" class="btn reveal">Place Your Order</a>
+    </div>
+
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Weekly Basket Section -->
+  <section class="split-section" id="basket">
+    <div class="split-content">
+      <span class="section-label reveal">Discover</span>
+      <h2 class="section-title reveal">The Weekly Basket</h2>
+      <p class="section-text reveal">
+        Each week, we prepare a limited number of kitchen baskets for our local community — designed to support several meals, reduce planning and prep, and help the week feel more spacious.
+      </p>
+      <p class="section-text reveal">
+        Food nourishes not only the body, but also the soul. Made fresh with clean ingredients always, organic when possible.
+      </p>
+      <a href="#order" class="btn btn-outline reveal">See What's Inside</a>
+    </div>
+    <div class="split-image">
+      <img src="images/food/soup-elegant.jpg" alt="Elegant soup presentation">
+    </div>
+  </section>
+
+  <!-- What's Included Section -->
+  <section class="split-section reverse alt-bg" id="menu">
+    <div class="split-content">
+      <span class="section-label reveal">What's inside</span>
+      <h2 class="section-title reveal">Core Kitchen Basket</h2>
+      <ul class="section-list reveal">
+        <li>Breakfast item</li>
+        <li>Soup</li>
+        <li>Sandwich-style salad</li>
+        <li>Freshly baked bread</li>
+      </ul>
+      <p class="section-text reveal">
+        Items rotate seasonally. Not all items appear every week. The basket is designed to support several meals — not replace grocery shopping.
+      </p>
+      <p class="section-text reveal">
+        <strong>$70–90 weekly</strong>
+      </p>
+    </div>
+    <div class="split-image">
+      <img src="images/food/chicken-dinner.jpg" alt="Fresh prepared meal">
+    </div>
+  </section>
+
+  <!-- Dinner Anchor Section -->
+  <section class="split-section" id="how-it-works">
+    <div class="split-content">
+      <span class="section-label reveal">Complete your week</span>
+      <h2 class="section-title reveal">The Dinner Anchor</h2>
+      <p class="section-text reveal">
+        Each week includes one complete family dinner, which we call the Dinner Anchor.
+      </p>
+      <p class="section-text reveal">
+        <strong>Boards</strong> — Gather-and-eat style dinners with protein, meats, cheeses, vegetables, and generous selections that feel relaxed.
+      </p>
+      <p class="section-text reveal">
+        <strong>Bowls</strong> — Warm, composed meals built around protein, vegetables, grain, and sauce.
+      </p>
+      <p class="section-text reveal">
+        <strong>Traditional</strong> — About once monthly, a classic family meal for nights when simplicity is exactly what's needed.
+      </p>
+      <p class="section-text reveal">
+        <strong>Add-on: $68–78 | Bundle with basket: $135–155</strong>
+      </p>
+    </div>
+    <div class="split-image">
+      <img src="images/food/dinner-plate.jpg" alt="Plated dinner">
+    </div>
+  </section>
+
+  <!-- Full Width Image -->
+  <div class="full-image">
+    <img src="images/flowers/arrangement.jpg" alt="Fresh flower arrangements">
+  </div>
+
+  <!-- Flowers & Treats Section -->
+  <section class="centered-section">
+    <span class="section-label reveal">A little extra</span>
+    <h2 class="section-title reveal">Flowers & Treats</h2>
+    <p class="section-text reveal">
+      Small, seasonal flower arrangements for your home — kitchen, bedside, bathroom, or workspace. Along with food, flowers may also be ordered as gifts for others.
+    </p>
+    <p class="section-text reveal">
+      Weekly smoothies (~16 oz, $7–9). Rotating desserts like cobbler, cake, tart, or homemade ice cream ($16–30, serves 4–6).
+    </p>
+    <p class="section-text reveal">
+      Because sometimes, a small touch of beauty makes all the difference.
+    </p>
+  </section>
+
+  <!-- For Travelers Section -->
+  <section class="split-section reverse">
+    <div class="split-content">
+      <span class="section-label reveal">For visitors</span>
+      <h2 class="section-title reveal">Arrival Baskets</h2>
+      <p class="section-text reveal">
+        YaYa's Kitchen baskets are also available as a one-time option for guests staying in the Orlando area.
+      </p>
+      <p class="section-text reveal">
+        This is the same weekly basket we prepare for our local community — thoughtfully made, seasonal, and designed to help people land after travel.
+      </p>
+      <p class="section-text reveal">
+        Ideal for late arrivals, first mornings, or families who don't want to think right away.
+      </p>
+      <p class="section-text reveal">
+        <strong>Arrival Basket: $105–125</strong><br>
+        <strong>Basic Pantry Starter: $45–65</strong> (coffee/tea, eggs, milk, olive oil, basics)
+      </p>
+      <a href="#order" class="btn btn-outline reveal">Order an Arrival Basket</a>
+    </div>
+    <div class="split-image">
+      <img src="images/food/cake-flowers.jpg" alt="Dessert with flowers">
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section" id="about">
+    <div class="about-content">
+      <div class="about-image reveal">
+        <img src="images/about/yaya-portrait.jpg" alt="YaYa in her kitchen">
+      </div>
+      <div class="about-text-block">
+        <span class="section-label reveal">Our story</span>
+        <h2 class="section-title reveal">Why YaYa's Kitchen</h2>
+        <p class="section-text reveal">
+          YaYa's Kitchen is a brand that originated in 2011, built around the same guiding principles of nurturing and nourishing people.
+        </p>
+        <p class="section-text reveal">
+          The original expression grew into a larger commercial food manufacturing experience. While our sauces were quite successful, the large-batch, wholesale world was not ultimately a good match for how we wanted to work or live.
+        </p>
+        <p class="section-text reveal">
+          After many years of experience, learning, and refinement, we believe this version of YaYa's Kitchen — small, local, and relationship-centered — is a much better fit for our values, our energy, and the kind of care we want to offer.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Order Form Section -->
+  <section class="form-section" id="order">
+    <div class="form-container">
+      <div class="form-header">
+        <span class="section-label">Ready to begin?</span>
+        <h2 class="section-title">Place Your Order</h2>
+        <p class="section-text">
+          Orders are placed ahead of time so we can cook intentionally and avoid waste. Baskets are delivered locally on Fridays.
+        </p>
+      </div>
+
+      <div id="form-message" class="form-message"></div>
+
+      <form id="order-form">
+        <!-- Contact Information -->
+        <div class="form-group">
+          <h3 class="form-group-title">Contact Information</h3>
+          <div class="form-row">
+            <div>
+              <label for="name">Full Name *</label>
+              <input type="text" id="name" name="name" required>
+            </div>
+            <div>
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+          </div>
+          <div class="form-row" style="margin-top: 25px;">
+            <div>
+              <label for="phone">Phone Number *</label>
+              <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div></div>
+          </div>
+          <div style="margin-top: 25px;">
+            <label for="address">Delivery Address *</label>
+            <textarea id="address" name="address" rows="3" required placeholder="Street address, city, zip code"></textarea>
+          </div>
+        </div>
+
+        <!-- Weekly Basket -->
+        <div class="form-group">
+          <h3 class="form-group-title">Weekly Basket</h3>
+          <div class="checkbox-group">
+            <label class="radio-item">
+              <input type="radio" name="weeklyBasket" value="Yes" id="basket-yes">
+              <span>Yes, include the Weekly Basket this week <span class="price">($70–90)</span></span>
+            </label>
+            <label class="radio-item">
+              <input type="radio" name="weeklyBasket" value="No" id="basket-no" checked>
+              <span>Not this week</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Dinner Anchor (conditional) -->
+        <div class="form-group" id="dinner-anchor-group" style="display: none;">
+          <h3 class="form-group-title">Dinner Anchor</h3>
+          <div class="checkbox-group">
+            <label class="radio-item">
+              <input type="radio" name="dinnerAnchor" value="None" checked>
+              <span>No dinner anchor this week</span>
+            </label>
+            <label class="radio-item">
+              <input type="radio" name="dinnerAnchor" value="Add-On">
+              <span>Add Dinner Anchor <span class="price">($68–78)</span></span>
+            </label>
+            <label class="radio-item">
+              <input type="radio" name="dinnerAnchor" value="Bundle">
+              <span>Bundle: Core Basket + Dinner Anchor <span class="price">($135–155, recommended)</span></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Add-Ons -->
+        <div class="form-group">
+          <h3 class="form-group-title">Optional Add-Ons</h3>
+
+          <div style="margin-bottom: 25px;">
+            <label for="smoothieQty">Smoothies <span class="price">(~16 oz each, $7–9)</span></label>
+            <select id="smoothieQty" name="smoothieQty">
+              <option value="0">None</option>
+              <option value="1">1 smoothie</option>
+              <option value="2">2 smoothies</option>
+              <option value="3">3 smoothies</option>
+            </select>
+          </div>
+
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" name="dessert" value="Yes" id="dessert">
+              <span>Add weekly dessert <span class="price">(cobbler, cake, tart, or ice cream — $16–30, serves 4–6)</span></span>
+            </label>
+          </div>
+
+          <div style="margin-top: 30px;">
+            <label for="flowersHome">Flowers for Your Home</label>
+            <select id="flowersHome" name="flowersHome">
+              <option value="None">None</option>
+              <option value="1 arrangement">1 arrangement ($15–18)</option>
+              <option value="2-3 arrangements">2–3 arrangements ($30–45)</option>
+            </select>
+          </div>
+
+          <div style="margin-top: 25px;" class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" name="flowersGift" value="Yes" id="flowers-gift">
+              <span>Add flowers as a gift <span class="price">(same pricing, delivery fee may apply)</span></span>
+            </label>
+          </div>
+
+          <div class="conditional-field" id="gift-recipient-field">
+            <label for="giftRecipient">Gift recipient name & delivery details</label>
+            <textarea id="giftRecipient" name="giftRecipient" rows="2" placeholder="Recipient name, address, and any delivery notes"></textarea>
+          </div>
+        </div>
+
+        <!-- One-Time Orders -->
+        <div class="form-group">
+          <h3 class="form-group-title">One-Time & Traveler Options</h3>
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" name="arrivalBasket" value="Yes" id="arrival-basket">
+              <span>Arrival Basket <span class="price">(one-time order, $105–125)</span></span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="pantryStarter" value="Yes" id="pantry-starter">
+              <span>Basic Pantry Starter <span class="price">(coffee/tea, eggs, milk, olive oil, salt & pepper — $45–65)</span></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Container Deposit -->
+        <div class="form-group">
+          <h3 class="form-group-title">Containers & Delivery</h3>
+          <p class="section-text" style="margin-bottom: 20px;">
+            Food is delivered in reusable baskets using glass containers and beeswax wraps. A refundable container deposit ($30–40) carries forward week to week.
+          </p>
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" name="containerDeposit" value="Yes" id="container-deposit" required>
+              <span>I understand a refundable container deposit applies *</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Special Notes -->
+        <div class="form-group">
+          <h3 class="form-group-title">Special Notes</h3>
+          <label for="specialNotes">Dietary needs, allergies, delivery instructions, or anything else we should know</label>
+          <textarea id="specialNotes" name="specialNotes" rows="4"></textarea>
+        </div>
+
+        <!-- Submit -->
+        <div class="form-submit">
+          <button type="submit" class="btn btn-large" id="submit-btn">Place My Order</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <img src="images/brand/logo-full.jpg" alt="YaYa's Kitchen" class="footer-logo">
+    <p class="footer-tagline">A small exhale for your week.</p>
+    <p class="footer-text">
+      YaYa's Kitchen is a small project by design. It's meant to feel personal, calm, and cared for — for you and for us.
+    </p>
+    <p class="footer-text">
+      Thank you for being part of this experience.
+    </p>
+    <p class="footer-contact">
+      Questions? <a href="mailto:hello@yayaskitchen.com">hello@yayaskitchen.com</a>
+    </p>
+    <p class="footer-bottom">
+      &copy; 2025 YaYa's Kitchen. Orlando, Florida.
+    </p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // ============================================
+    // CONFIGURATION
+    // ============================================
+    const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
+
+    // ============================================
+    // NAVIGATION
+    // ============================================
+    const navWrapper = document.getElementById('nav-wrapper');
+    const navToggle = document.getElementById('nav-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileClose = document.getElementById('mobile-close');
+
+    // Scroll effect
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navWrapper.classList.add('scrolled');
+      } else {
+        navWrapper.classList.remove('scrolled');
+      }
+    });
+
+    // Mobile menu toggle
+    navToggle.addEventListener('click', () => {
+      mobileMenu.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+
+    mobileClose.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+
+    // Close mobile menu on link click
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // ============================================
+    // HERO TEXT ANIMATION
+    // ============================================
+    const heroLines = document.querySelectorAll('.hero-line');
+
+    // Animate hero lines on load with stagger
+    heroLines.forEach((line, index) => {
+      setTimeout(() => {
+        line.classList.add('visible');
+      }, 300 + (index * 150));
+    });
+
+    // ============================================
+    // SCROLL REVEAL ANIMATION
+    // ============================================
+    const revealElements = document.querySelectorAll('.reveal');
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // ============================================
+    // FORM CONDITIONAL LOGIC
+    // ============================================
+    const basketYes = document.getElementById('basket-yes');
+    const basketNo = document.getElementById('basket-no');
+    const dinnerAnchorGroup = document.getElementById('dinner-anchor-group');
+
+    function toggleDinnerAnchor() {
+      if (basketYes.checked) {
+        dinnerAnchorGroup.style.display = 'block';
+      } else {
+        dinnerAnchorGroup.style.display = 'none';
+      }
+    }
+
+    basketYes.addEventListener('change', toggleDinnerAnchor);
+    basketNo.addEventListener('change', toggleDinnerAnchor);
+
+    // Gift flowers conditional
+    const flowersGift = document.getElementById('flowers-gift');
+    const giftRecipientField = document.getElementById('gift-recipient-field');
+
+    flowersGift.addEventListener('change', () => {
+      if (flowersGift.checked) {
+        giftRecipientField.classList.add('visible');
+      } else {
+        giftRecipientField.classList.remove('visible');
+      }
+    });
+
+    // ============================================
+    // FORM SUBMISSION
+    // ============================================
+    const form = document.getElementById('order-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const formMessage = document.getElementById('form-message');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Validate container deposit
+      if (!document.getElementById('container-deposit').checked) {
+        showMessage('Please acknowledge the container deposit policy.', 'error');
+        return;
+      }
+
+      // Disable button
+      submitBtn.classList.add('loading');
+      submitBtn.textContent = 'Submitting...';
+
+      // Gather form data
+      const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value,
+        weeklyBasket: document.querySelector('input[name="weeklyBasket"]:checked').value,
+        dinnerAnchor: document.querySelector('input[name="dinnerAnchor"]:checked')?.value || 'None',
+        smoothieQty: document.getElementById('smoothieQty').value,
+        dessert: document.getElementById('dessert').checked ? 'Yes' : 'No',
+        flowersHome: document.getElementById('flowersHome').value,
+        flowersGift: document.getElementById('flowers-gift').checked ? 'Yes' : 'No',
+        giftRecipient: document.getElementById('giftRecipient').value,
+        arrivalBasket: document.getElementById('arrival-basket').checked ? 'Yes' : 'No',
+        pantryStarter: document.getElementById('pantry-starter').checked ? 'Yes' : 'No',
+        containerDeposit: document.getElementById('container-deposit').checked ? 'Yes' : 'No',
+        specialNotes: document.getElementById('specialNotes').value
+      };
+
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        });
+
+        // With no-cors, assume success
+        showMessage('Thank you! Your order has been received. We\'ll be in touch soon.', 'success');
+        form.reset();
+        toggleDinnerAnchor();
+        giftRecipientField.classList.remove('visible');
+
+      } catch (error) {
+        showMessage('Something went wrong. Please try again or email us directly.', 'error');
+        console.error('Form submission error:', error);
+      }
+
+      // Re-enable button
+      submitBtn.classList.remove('loading');
+      submitBtn.textContent = 'Place My Order';
+    });
+
+    function showMessage(text, type) {
+      formMessage.textContent = text;
+      formMessage.className = 'form-message ' + type;
+      formMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // ============================================
+    // SMOOTH SCROLL FOR ANCHOR LINKS
+    // ============================================
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          const offset = 100;
+          const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+          window.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
