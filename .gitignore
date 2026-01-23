@@ -22,17 +22,6 @@ images/original/
 *-backup.*
 *-backup-*
 
-# Large unoptimized images (use -web versions for production)
-images/**/*.webp
-!images/**/*-web.webp
-images/hero/hero-bread.jpg
-images/hero/hero-main.jpg
-images/hero/kitchen-hero.jpg
-images/food/appetizers.jpg
-images/food/chicken-plum.jpg
-images/food/focaccia-art.jpg
-images/flowers/arrangement.jpg
-
 # Node (if we add any build tools later)
 node_modules/
 npm-debug.log
