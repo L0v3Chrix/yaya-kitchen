@@ -102,14 +102,22 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Navigation Borders (LPQ Style) */
 .nav-item {
-  border: 1px solid var(--color-charcoal);
+  border: 2px solid var(--color-purple);
   padding: 0.75rem 1.5rem;
-  transition: all 0.3s ease;
+  color: var(--color-purple);
+  transition: all 0.2s ease;
 }
 
 .nav-item:hover {
-  background-color: var(--color-charcoal);
-  color: var(--color-cream);
+  background-color: var(--color-purple);
+  color: var(--color-green);
+}
+
+.nav-item:focus-visible {
+  outline: none;
+  ring: 2px solid var(--color-purple);
+  ring-offset: 2px;
+  box-shadow: 0 0 0 2px var(--color-cream), 0 0 0 4px var(--color-purple);
 }
 
 /* Mobile Menu Drawer */
@@ -129,12 +137,17 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-headline);
   letter-spacing: 0.1em;
   padding: 1rem 2rem;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
-  background-color: var(--color-orange);
-  color: white;
+  background-color: var(--color-purple);
+  color: var(--color-green);
+}
+
+.btn-primary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-cream), 0 0 0 4px var(--color-purple);
 }
 
 .btn-secondary {
@@ -144,12 +157,68 @@ h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-headline);
   letter-spacing: 0.1em;
   padding: 1rem 2rem;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .btn-secondary:hover {
   background-color: var(--color-purple);
-  color: white;
+  color: var(--color-green);
+}
+
+.btn-secondary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-cream), 0 0 0 4px var(--color-purple);
+}
+
+/* Button Outline Purple (default state for nav-style buttons) */
+.btn-outline-purple {
+  background-color: transparent;
+  border: 2px solid var(--color-purple);
+  color: var(--color-purple);
+  font-family: var(--font-headline);
+  letter-spacing: 0.1em;
+  padding: 1rem 2rem;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btn-outline-purple:hover {
+  background-color: var(--color-purple);
+  color: var(--color-green);
+}
+
+.btn-outline-purple:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-cream), 0 0 0 4px var(--color-purple);
+}
+
+/* Button Solid Gold (CTA buttons) */
+.btn-solid-gold {
+  background-color: var(--color-gold);
+  border: 2px solid var(--color-gold);
+  color: var(--color-charcoal);
+  font-family: var(--font-headline);
+  letter-spacing: 0.1em;
+  padding: 1rem 2rem;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btn-solid-gold:hover {
+  background-color: var(--color-purple);
+  border-color: var(--color-purple);
+  color: var(--color-green);
+}
+
+.btn-solid-gold:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-cream), 0 0 0 4px var(--color-purple);
 }
 
 /* Form Styles */

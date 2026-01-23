@@ -146,7 +146,7 @@ export default function Hero() {
           >
             <Link
               href="#order"
-              className="inline-block bg-gold text-charcoal font-headline text-lg tracking-widest uppercase px-8 py-4 hover:bg-orange hover:text-white transition-all duration-300 transform hover:scale-105"
+              className="inline-block bg-gold text-charcoal font-headline text-lg tracking-widest uppercase px-8 py-4 border-2 border-gold hover:bg-purple hover:border-purple hover:text-green transition-all duration-200 transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
             >
               Order Your Basket
             </Link>

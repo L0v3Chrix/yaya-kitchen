@@ -54,13 +54,13 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
             className="fixed top-0 left-0 bottom-0 w-80 max-w-[85vw] bg-cream z-50 flex flex-col"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-charcoal/20">
-              <span className="font-headline text-lg tracking-widest uppercase">
+            <div className="flex items-center justify-between p-6 border-b border-purple/20">
+              <span className="font-headline text-lg tracking-widest uppercase text-purple">
                 Menu
               </span>
               <button
                 onClick={onClose}
-                className="p-2 -mr-2 hover:bg-charcoal/10 rounded-full transition-colors"
+                className="p-2 -mr-2 hover:bg-purple/10 rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2"
                 aria-label="Close menu"
               >
                 <svg
@@ -91,10 +91,10 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
                   <Link
                     href={item.href}
                     onClick={onClose}
-                    className={`block px-6 py-4 text-lg font-headline tracking-wider uppercase transition-colors ${
+                    className={`block px-6 py-4 text-lg font-headline tracking-wider uppercase transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 ${
                       item.primary
-                        ? 'bg-gold text-charcoal hover:bg-orange hover:text-white mt-4 mx-4 text-center'
-                        : 'hover:bg-charcoal/5 border-b border-charcoal/10'
+                        ? 'bg-gold text-charcoal hover:bg-purple hover:text-green mt-4 mx-4 text-center border-2 border-gold hover:border-purple'
+                        : 'text-purple hover:bg-purple hover:text-green border-b border-purple/10'
                     }`}
                   >
                     {item.label}

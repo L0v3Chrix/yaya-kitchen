@@ -33,7 +33,7 @@ export default function Header() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="nav-item flex items-center text-sm font-headline tracking-widest uppercase hover:bg-charcoal hover:text-cream transition-colors border-r border-charcoal/20"
+                    className="nav-item flex items-center text-sm font-headline tracking-widest uppercase border-r border-purple/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
                   >
                     {item.label}
                   </Link>
@@ -65,10 +65,10 @@ export default function Header() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`nav-item flex items-center text-sm font-headline tracking-widest uppercase transition-colors ${
+                    className={`flex items-center text-sm font-headline tracking-widest uppercase transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-cream ${
                       item.primary
-                        ? 'bg-gold text-charcoal hover:bg-orange hover:text-white'
-                        : 'hover:bg-charcoal hover:text-cream'
+                        ? 'bg-gold text-charcoal px-6 py-4 border-2 border-gold hover:bg-purple hover:border-purple hover:text-green'
+                        : 'nav-item'
                     }`}
                   >
                     {item.label}
@@ -127,7 +127,7 @@ export default function Header() {
           {/* Order Now Button - RIGHT Side */}
           <Link
             href="#order"
-            className="flex items-center justify-center py-3 bg-gold text-charcoal text-sm font-headline tracking-widest uppercase hover:bg-orange hover:text-white transition-colors"
+            className="flex items-center justify-center py-3 bg-gold text-charcoal text-sm font-headline tracking-widest uppercase hover:bg-purple hover:text-green transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
           >
             Order Now
           </Link>

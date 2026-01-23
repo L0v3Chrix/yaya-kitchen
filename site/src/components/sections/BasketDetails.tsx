@@ -180,7 +180,7 @@ export default function BasketDetails() {
             <div className="mt-8 text-center">
               <a
                 href="#order"
-                className="inline-block bg-[--color-gold] text-[--color-charcoal] font-headline text-lg tracking-widest uppercase px-8 py-4 hover:bg-[--color-orange] hover:text-white transition-all duration-300 w-full md:w-auto"
+                className="inline-block bg-[--color-gold] text-[--color-charcoal] font-headline text-lg tracking-widest uppercase px-8 py-4 border-2 border-[--color-gold] hover:bg-[--color-purple] hover:border-[--color-purple] hover:text-[--color-green] transition-all duration-200 w-full md:w-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-purple] focus-visible:ring-offset-2"
               >
                 Start Your Order
               </a>

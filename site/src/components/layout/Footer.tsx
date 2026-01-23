@@ -21,34 +21,34 @@ export default function Footer() {
         </div>
 
         {/* Navigation Links */}
-        <nav className="flex flex-wrap justify-center gap-x-8 gap-y-2 mb-8">
+        <nav className="flex flex-wrap justify-center items-center gap-x-8 gap-y-4 mb-8">
           <Link
             href="#weekly-basket"
-            className="text-sm font-headline tracking-wider uppercase text-charcoal/70 hover:text-gold transition-colors"
+            className="text-sm font-headline tracking-wider uppercase text-purple hover:text-green transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2"
           >
             Weekly Basket
           </Link>
           <Link
             href="#menu"
-            className="text-sm font-headline tracking-wider uppercase text-charcoal/70 hover:text-gold transition-colors"
+            className="text-sm font-headline tracking-wider uppercase text-purple hover:text-green transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2"
           >
             The Menu
           </Link>
           <Link
             href="#flowers"
-            className="text-sm font-headline tracking-wider uppercase text-charcoal/70 hover:text-gold transition-colors"
+            className="text-sm font-headline tracking-wider uppercase text-purple hover:text-green transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2"
           >
             Flowers
           </Link>
           <Link
             href="#about"
-            className="text-sm font-headline tracking-wider uppercase text-charcoal/70 hover:text-gold transition-colors"
+            className="text-sm font-headline tracking-wider uppercase text-purple hover:text-green transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2"
           >
             About
           </Link>
           <Link
             href="#order"
-            className="text-sm font-headline tracking-wider uppercase text-gold hover:text-orange transition-colors"
+            className="text-sm font-headline tracking-wider uppercase px-4 py-2 border-2 border-purple text-purple hover:bg-purple hover:text-green transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2"
           >
             Order Now
           </Link>
@@ -61,7 +61,7 @@ export default function Footer() {
           </p>
           <a
             href="mailto:hello@yayaskitchen.com"
-            className="text-sm text-purple hover:text-gold transition-colors"
+            className="text-sm text-purple hover:text-green transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple focus-visible:ring-offset-2"
           >
             hello@yayaskitchen.com
           </a>

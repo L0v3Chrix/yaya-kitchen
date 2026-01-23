@@ -155,7 +155,7 @@ export default function OrderForm() {
         </p>
         <button
           onClick={() => setStatus('idle')}
-          className="text-[--color-gold] hover:text-[--color-orange] font-headline tracking-wider uppercase text-sm"
+          className="text-[--color-purple] hover:text-[--color-green] font-headline tracking-wider uppercase text-sm px-4 py-2 border-2 border-[--color-purple] hover:bg-[--color-purple] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-purple] focus-visible:ring-offset-2"
         >
           Place Another Order
         </button>
@@ -577,7 +577,7 @@ export default function OrderForm() {
       <button
         type="submit"
         disabled={status === 'submitting'}
-        className="w-full bg-[--color-gold] text-[--color-charcoal] font-headline text-lg tracking-widest uppercase px-8 py-5 hover:bg-[--color-orange] hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+        className="w-full bg-[--color-gold] text-[--color-charcoal] font-headline text-lg tracking-widest uppercase px-8 py-5 border-2 border-[--color-gold] hover:bg-[--color-purple] hover:border-[--color-purple] hover:text-[--color-green] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-purple] focus-visible:ring-offset-2"
       >
         {status === 'submitting' ? (
           <>
@@ -610,7 +610,7 @@ export default function OrderForm() {
 
       <p className="text-center text-sm text-[--color-charcoal]/60 mt-4">
         Questions? Email{' '}
-        <a href="mailto:hello@yayaskitchen.com" className="text-[--color-gold] hover:underline">
+        <a href="mailto:hello@yayaskitchen.com" className="text-[--color-purple] hover:text-[--color-green] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-purple] focus-visible:ring-offset-2">
           hello@yayaskitchen.com
         </a>
       </p>

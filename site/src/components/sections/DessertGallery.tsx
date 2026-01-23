@@ -94,7 +94,7 @@ export default function DessertGallery() {
         >
           <a
             href="#order"
-            className="inline-block bg-[--color-gold] text-[--color-charcoal] font-headline text-sm tracking-widest uppercase px-6 py-3 hover:bg-[--color-orange] hover:text-white transition-all duration-300"
+            className="inline-block bg-[--color-gold] text-[--color-charcoal] font-headline text-sm tracking-widest uppercase px-6 py-3 border-2 border-[--color-gold] hover:bg-[--color-purple] hover:border-[--color-purple] hover:text-[--color-green] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-purple] focus-visible:ring-offset-2"
           >
             Order a Custom Cake
           </a>
