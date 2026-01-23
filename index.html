@@ -98,88 +98,202 @@
     }
 
     /* ============================================
-       NAVIGATION - LPQ Style (Centered Logo + Split Links)
+       NAVIGATION - Two-Tier LPQ Style
     ============================================ */
+
+    /* Nav Wrapper - Contains both tiers */
     .nav-wrapper {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 1000;
-      padding: 20px 30px;
       transition: all 0.3s ease;
     }
 
     .nav-wrapper.scrolled {
-      padding: 10px 30px;
-      background: rgba(250, 248, 245, 0.95);
-      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1);
     }
 
-    .nav {
-      max-width: 1100px;
-      margin: 0 auto;
+    .nav-wrapper.scrolled .utility-bar {
+      display: none;
+    }
+
+    /* Tier A: Utility Bar (Black) */
+    .utility-bar {
+      background: var(--color-charcoal);
+      color: white;
+      padding: 8px 30px;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 15px 30px;
-      border: 1px solid var(--color-gray-light);
-      background: var(--color-cream);
+      gap: 15px;
+      font-family: var(--font-body);
+      font-size: 12px;
+    }
+
+    .utility-bar-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: var(--container-width);
+      width: 100%;
+      justify-content: center;
+    }
+
+    .utility-label {
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 300;
+    }
+
+    .utility-select {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 6px 30px 6px 12px;
+      font-family: var(--font-body);
+      font-size: 12px;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+
+    .utility-select:focus {
+      outline: none;
+      border-color: var(--color-gold);
+    }
+
+    .utility-select option {
+      background: var(--color-charcoal);
+      color: white;
+    }
+
+    .utility-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      color: white;
+      padding: 6px 16px;
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .utility-btn:hover {
+      background: white;
+      color: var(--color-charcoal);
+    }
+
+    /* Tier B: Primary Navigation (White with tabs) */
+    .nav {
+      background: white;
+      border-bottom: 1px solid var(--color-gray-light);
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      padding: 0;
       transition: all 0.3s ease;
     }
 
-    .nav-wrapper.scrolled .nav {
-      padding: 10px 25px;
-      box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+    .nav-inner {
+      max-width: var(--container-width);
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
     }
 
     .nav-left,
     .nav-right {
       display: flex;
-      align-items: center;
-      gap: 25px;
+      align-items: stretch;
     }
 
     .nav-logo {
-      margin: 0 40px;
       display: flex;
       align-items: center;
+      justify-content: center;
+      padding: 15px 35px;
+      border-left: 1px solid var(--color-gray-light);
+      border-right: 1px solid var(--color-gray-light);
     }
 
-    .nav-logo img {
-      height: 50px;
-      transition: height 0.3s ease;
+    .nav-logo a {
+      text-decoration: none;
     }
 
-    .nav-wrapper.scrolled .nav-logo img {
-      height: 40px;
+    .nav-brand-name {
+      font-family: var(--font-script);
+      font-size: 26px;
+      color: var(--color-charcoal);
+      line-height: 1.1;
+      white-space: nowrap;
+      transition: font-size 0.3s ease;
     }
 
+    .nav-wrapper.scrolled .nav-brand-name {
+      font-size: 22px;
+    }
+
+    /* Tab-style nav links with dividers */
     .nav-link {
       font-family: var(--font-body);
-      font-size: 13px;
-      font-weight: 400;
-      letter-spacing: 0.1em;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--color-charcoal);
-      padding: 8px 12px;
-      border: 1px solid transparent;
-      transition: all 0.3s ease;
+      padding: 18px 22px;
+      border: none;
+      border-right: 1px solid var(--color-gray-light);
+      background: transparent;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .nav-left .nav-link:first-child {
+      border-left: 1px solid var(--color-gray-light);
     }
 
     .nav-link:hover {
-      border-color: var(--color-charcoal);
+      background: rgba(47, 25, 87, 0.03);
+      color: var(--color-purple);
     }
 
+    /* Active state with gold underline */
+    .nav-link.active::after,
+    .nav-link:focus::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--color-gold);
+    }
+
+    .nav-link:focus {
+      outline: none;
+    }
+
+    /* CTA Button */
     .nav-cta {
       background: var(--color-charcoal);
       color: white;
-      border-color: var(--color-charcoal);
+      border-right: none;
+      font-weight: 600;
     }
 
     .nav-cta:hover {
       background: var(--color-purple);
-      border-color: var(--color-purple);
+      color: white;
     }
 
     /* Mobile Navigation */
@@ -193,13 +307,18 @@
       border: none;
     }
 
+    .nav-mobile-cta {
+      display: none;
+    }
+
     .nav-toggle span {
-      width: 25px;
+      width: 22px;
       height: 2px;
       background: var(--color-charcoal);
       transition: all 0.3s ease;
     }
 
+    /* Mobile Menu Drawer */
     .mobile-menu {
       display: none;
       position: fixed;
@@ -208,7 +327,7 @@
       right: 0;
       bottom: 0;
       background: var(--color-cream);
-      z-index: 999;
+      z-index: 1100;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -228,6 +347,25 @@
       font-size: 24px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
+      color: var(--color-charcoal);
+      padding: 10px 20px;
+      position: relative;
+    }
+
+    .mobile-menu a::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      left: 20px;
+      right: 20px;
+      height: 2px;
+      background: var(--color-gold);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .mobile-menu a:hover::after {
+      transform: scaleX(1);
     }
 
     .mobile-close {
@@ -238,6 +376,194 @@
       cursor: pointer;
       background: none;
       border: none;
+      color: var(--color-charcoal);
+    }
+
+    /* ============================================
+       BASKET DETAIL MODAL
+    ============================================ */
+    .basket-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .basket-modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .basket-modal {
+      background: var(--color-cream);
+      max-width: 550px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 4px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      transform: translateY(30px);
+      transition: transform 0.3s ease;
+    }
+
+    .basket-modal-overlay.open .basket-modal {
+      transform: translateY(0);
+    }
+
+    .basket-modal-header {
+      position: relative;
+      padding: 40px 30px 30px;
+      text-align: center;
+      border-bottom: 1px solid var(--color-gray-light);
+    }
+
+    .basket-modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 28px;
+      color: var(--color-charcoal);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 5px 10px;
+      transition: color 0.3s ease;
+    }
+
+    .basket-modal-close:hover {
+      color: var(--color-purple);
+    }
+
+    .basket-modal-label {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--color-gold);
+      margin-bottom: 10px;
+    }
+
+    .basket-modal-title {
+      font-family: var(--font-headline);
+      font-size: 28px;
+      color: var(--color-charcoal);
+      margin-bottom: 10px;
+    }
+
+    .basket-modal-price {
+      font-family: var(--font-headline);
+      font-size: 20px;
+      color: var(--color-purple);
+    }
+
+    .basket-modal-body {
+      padding: 30px;
+    }
+
+    .basket-modal-description {
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--color-charcoal);
+      line-height: 1.7;
+      margin-bottom: 25px;
+    }
+
+    .basket-modal-section {
+      margin-bottom: 25px;
+    }
+
+    .basket-modal-section-title {
+      font-family: var(--font-headline);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--color-charcoal);
+      margin-bottom: 12px;
+    }
+
+    .basket-modal-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .basket-modal-list li {
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--color-charcoal);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--color-gray-light);
+      display: flex;
+      align-items: center;
+    }
+
+    .basket-modal-list li:last-child {
+      border-bottom: none;
+    }
+
+    .basket-modal-list li::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--color-gold);
+      border-radius: 50%;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+
+    .basket-modal-note {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-style: italic;
+      color: rgba(0, 0, 0, 0.6);
+      line-height: 1.6;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.03);
+      border-radius: 4px;
+    }
+
+    .basket-modal-footer {
+      padding: 25px 30px 30px;
+      border-top: 1px solid var(--color-gray-light);
+      text-align: center;
+    }
+
+    .basket-modal-cta {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: var(--color-purple);
+      color: white;
+      padding: 16px 40px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .basket-modal-cta:hover {
+      background: var(--color-charcoal);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .basket-modal-overlay,
+      .basket-modal {
+        transition: none;
+      }
     }
 
     /* ============================================
@@ -250,7 +576,7 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 140px 20px 80px;
+      padding: 150px 20px 80px;
       position: relative;
       background: var(--color-cream);
     }
@@ -434,6 +760,24 @@
       transform: scale(1.02);
     }
 
+    /* Parallax enhancement for split images */
+    .split-image.parallax-container {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .split-image.parallax-container img {
+      will-change: transform;
+      transform: translateY(0) scale(1.1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .split-image.parallax-container img {
+        transform: none;
+        will-change: auto;
+      }
+    }
+
     .section-label {
       font-family: var(--font-script);
       font-style: italic;
@@ -533,6 +877,180 @@
     }
 
     /* ============================================
+       FLOWERS FEATURE SECTION
+    ============================================ */
+    .flowers-feature {
+      padding: 120px 20px;
+      background: var(--color-cream);
+    }
+
+    .flowers-intro {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 60px;
+    }
+
+    .flowers-gallery {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 30px;
+      max-width: var(--container-width);
+      margin: 0 auto 60px;
+    }
+
+    .flowers-gallery-main {
+      position: relative;
+    }
+
+    .flowers-gallery-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .flowers-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 30px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      color: white;
+      font-family: var(--font-script);
+      font-size: 1.25rem;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .flowers-gallery-secondary {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .flowers-gallery-item {
+      flex: 1;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+
+    .flowers-gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .flowers-gallery-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .flowers-details {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      max-width: var(--container-width);
+      margin: 0 auto;
+      padding-top: 40px;
+      border-top: 1px solid rgba(47, 25, 87, 0.1);
+    }
+
+    .flowers-detail-block h3 {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 15px;
+      color: var(--color-purple);
+    }
+
+    .flowers-detail-block p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--color-text);
+    }
+
+    @media (max-width: 900px) {
+      .flowers-gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .flowers-gallery-secondary {
+        flex-direction: row;
+      }
+
+      .flowers-details {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .flowers-gallery-secondary {
+        flex-direction: column;
+      }
+
+      .flowers-caption {
+        font-size: 1rem;
+        padding: 20px;
+      }
+    }
+
+    /* ============================================
+       GALLERY SECTION (Desserts)
+    ============================================ */
+    .gallery-section {
+      padding: 100px 20px;
+      background: var(--color-cream);
+    }
+
+    .gallery-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 60px;
+    }
+
+    .dessert-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: var(--container-width);
+      margin: 0 auto;
+    }
+
+    .dessert-item {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+
+    .dessert-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .dessert-item:hover img {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 900px) {
+      .dessert-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .dessert-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+      }
+    }
+
+    /* ============================================
        ABOUT SECTION
     ============================================ */
     .about-section {
@@ -564,6 +1082,75 @@
       max-width: 500px;
     }
 
+    /* Brand Heritage - Sauce Social Proof */
+    .brand-heritage {
+      margin-top: 80px;
+      padding-top: 60px;
+      border-top: 1px solid rgba(47, 25, 87, 0.1);
+    }
+
+    .heritage-content {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 50px;
+      max-width: var(--container-width);
+      margin: 0 auto;
+      align-items: center;
+    }
+
+    .heritage-image {
+      position: relative;
+    }
+
+    .heritage-image img {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 15px 40px rgba(47, 25, 87, 0.15);
+    }
+
+    .heritage-text {
+      max-width: 550px;
+    }
+
+    .heritage-title {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-purple);
+      margin-bottom: 20px;
+    }
+
+    .heritage-text p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--color-text);
+      margin-bottom: 15px;
+    }
+
+    .heritage-tagline {
+      font-family: var(--font-script);
+      font-size: 1.3rem !important;
+      color: var(--color-gold) !important;
+      margin-top: 25px !important;
+    }
+
+    @media (max-width: 900px) {
+      .heritage-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .heritage-image {
+        max-width: 250px;
+        margin: 0 auto;
+      }
+
+      .heritage-text {
+        max-width: 100%;
+      }
+    }
+
     /* ============================================
        ORDER FORM SECTION
     ============================================ */
@@ -582,8 +1169,14 @@
       margin-bottom: 60px;
     }
 
+    /* Form counter for step numbers */
+    #order-form {
+      counter-reset: form-step;
+    }
+
     .form-group {
       margin-bottom: 40px;
+      position: relative;
     }
 
     .form-group-title {
@@ -594,8 +1187,51 @@
       letter-spacing: 0.08em;
       margin-bottom: 25px;
       padding-bottom: 12px;
+      padding-left: 45px;
       border-bottom: 2px solid var(--color-cream-dark);
       color: var(--color-charcoal);
+      position: relative;
+      counter-increment: form-step;
+    }
+
+    .form-group-title::before {
+      content: counter(form-step);
+      position: absolute;
+      left: 0;
+      top: -2px;
+      width: 28px;
+      height: 28px;
+      background: var(--color-gold);
+      color: white;
+      border-radius: 50%;
+      font-family: var(--font-headline);
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Conditional field animation */
+    .form-group.conditional-visible {
+      animation: fadeSlideIn 0.4s ease forwards;
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .form-group.conditional-visible {
+        animation: none;
+      }
     }
 
     .form-row {
@@ -686,6 +1322,13 @@
 
     .conditional-field.visible {
       display: block;
+      animation: fadeSlideIn 0.4s ease forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .conditional-field.visible {
+        animation: none;
+      }
     }
 
     /* Form Submit */
@@ -718,48 +1361,136 @@
     }
 
     /* ============================================
-       FOOTER
+       FOOTER - Minimal, Brand-Consistent
     ============================================ */
     .footer {
-      background: var(--color-purple);
-      color: white;
-      padding: 100px 20px 50px;
+      background: var(--color-cream-dark);
+      border-top: 3px solid var(--color-purple);
+      color: var(--color-charcoal);
+      padding: 40px 20px;
+      padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .footer-brand {
       text-align: center;
+      margin-bottom: 35px;
+      padding-bottom: 25px;
+      border-bottom: 1px solid rgba(47, 25, 87, 0.1);
     }
 
     .footer-logo {
-      height: 90px;
-      margin: 0 auto 50px;
-      filter: brightness(0) invert(1);
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .footer-logo img {
+      max-width: 180px;
+      height: auto;
     }
 
     .footer-tagline {
       font-family: var(--font-script);
       font-style: italic;
-      font-size: 26px;
+      font-size: 16px;
       color: var(--color-gold);
-      margin-bottom: 25px;
     }
 
-    .footer-text {
+    .footer-nav {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 30px;
+      max-width: 900px;
+      margin: 0 auto 35px;
+    }
+
+    @media (min-width: 600px) {
+      .footer-nav {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 900px) {
+      .footer-nav {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .footer-nav-group {
+      text-align: center;
+    }
+
+    @media (min-width: 600px) {
+      .footer-nav-group {
+        text-align: left;
+      }
+    }
+
+    .footer-nav-title {
+      font-family: var(--font-headline);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--color-purple);
+      margin-bottom: 15px;
+    }
+
+    .footer-nav-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-nav-links li {
+      margin-bottom: 10px;
+    }
+
+    .footer-nav-links a {
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--color-gray);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      display: inline-block;
+      padding: 2px 0;
+    }
+
+    .footer-nav-links a:hover,
+    .footer-nav-links a:focus {
+      color: var(--color-purple);
+    }
+
+    .footer-nav-links a:focus {
+      outline: 2px solid var(--color-purple);
+      outline-offset: 4px;
+    }
+
+    .footer-closing {
+      text-align: center;
+      padding-top: 25px;
+      border-top: 1px solid rgba(47, 25, 87, 0.1);
+    }
+
+    .footer-closing-text {
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 15px;
-      color: rgba(255,255,255,0.7);
-      max-width: 450px;
-      margin: 0 auto 20px;
-      line-height: 1.8;
+      font-size: 13px;
+      color: var(--color-gray);
+      max-width: 400px;
+      margin: 0 auto 15px;
+      line-height: 1.7;
     }
 
     .footer-contact {
-      margin-top: 40px;
       font-family: var(--font-body);
-      font-size: 14px;
-      color: rgba(255,255,255,0.5);
+      font-size: 13px;
+      color: var(--color-gray);
+      margin-bottom: 20px;
     }
 
     .footer-contact a {
-      color: rgba(255,255,255,0.8);
+      color: var(--color-purple);
       transition: color 0.3s ease;
     }
 
@@ -768,11 +1499,19 @@
     }
 
     .footer-bottom {
-      margin-top: 60px;
-      padding-top: 30px;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      font-size: 13px;
-      color: rgba(255,255,255,0.4);
+      font-size: 11px;
+      color: var(--color-gray);
+    }
+
+    .footer-bottom a {
+      color: var(--color-gray);
+      text-decoration: none;
+      margin: 0 10px;
+      transition: color 0.3s ease;
+    }
+
+    .footer-bottom a:hover {
+      color: var(--color-purple);
     }
 
     /* ============================================
@@ -797,28 +1536,58 @@
        RESPONSIVE
     ============================================ */
     @media (max-width: 1024px) {
+      /* Hide utility bar on mobile */
+      .utility-bar {
+        display: none;
+      }
+
       .nav-left,
       .nav-right {
         display: none;
       }
 
+      .nav {
+        padding: 0;
+      }
+
+      .nav-inner {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        padding: 12px 20px;
+        gap: 15px;
+      }
+
+      .nav-logo {
+        border: none;
+        padding: 5px 0;
+        justify-self: center;
+      }
+
       .nav-toggle {
         display: flex;
-        position: absolute;
-        right: 20px;
+        justify-self: start;
+        border: 1px solid var(--color-gray-light);
+        border-radius: 3px;
+        padding: 10px 12px;
+      }
+
+      .nav-mobile-cta {
+        display: flex;
+        justify-self: end;
+        background: var(--color-charcoal);
+        color: white;
+        padding: 10px 16px;
+        font-family: var(--font-body);
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        text-decoration: none;
       }
 
       .mobile-menu {
         display: flex;
-      }
-
-      .nav {
-        justify-content: center;
-        position: relative;
-      }
-
-      .nav-logo {
-        margin: 0;
       }
 
       .split-section {
@@ -901,12 +1670,18 @@
         width: 100%;
       }
 
-      .nav-wrapper {
-        padding: 15px 15px;
+      .nav-inner {
+        padding: 10px 15px;
+        gap: 10px;
       }
 
-      .nav {
-        padding: 12px 20px;
+      .nav-brand-name {
+        font-size: 22px;
+      }
+
+      .nav-mobile-cta {
+        padding: 8px 12px;
+        font-size: 10px;
       }
     }
 
@@ -919,33 +1694,52 @@
 </head>
 <body>
 
-  <!-- Navigation - LPQ Style -->
-  <div class="nav-wrapper" id="nav-wrapper">
-    <nav class="nav">
-      <div class="nav-left">
-        <a href="#about" class="nav-link">About</a>
-        <a href="#basket" class="nav-link">The Basket</a>
-        <a href="#how-it-works" class="nav-link">How It Works</a>
+  <!-- Navigation - Two-Tier LPQ Style -->
+  <header class="nav-wrapper" id="nav-wrapper">
+    <!-- Tier A: Utility Bar -->
+    <div class="utility-bar">
+      <div class="utility-bar-content">
+        <span class="utility-label">Select your delivery area:</span>
+        <select class="utility-select" id="delivery-area" aria-label="Select delivery area">
+          <option value="orlando">Orlando</option>
+          <option value="winter-park">Winter Park</option>
+          <option value="maitland">Maitland</option>
+          <option value="college-park">College Park</option>
+        </select>
+        <button class="utility-btn" type="button">Confirm</button>
       </div>
+    </div>
 
-      <div class="nav-logo">
-        <a href="#home">
-          <img src="images/brand/logo-header.jpg" alt="YaYa's Kitchen">
-        </a>
+    <!-- Tier B: Primary Navigation -->
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+      <div class="nav-inner">
+        <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div class="nav-left">
+          <a href="#about" class="nav-link">About</a>
+          <a href="#basket" class="nav-link">The Basket</a>
+          <a href="#how-it-works" class="nav-link">How It Works</a>
+        </div>
+
+        <div class="nav-logo">
+          <a href="#home" aria-label="YaYa's Kitchen - Home">
+            <span class="nav-brand-name">YaYa's Kitchen</span>
+          </a>
+        </div>
+
+        <div class="nav-right">
+          <a href="#basket-details" class="nav-link">This Week</a>
+          <a href="#order" class="nav-link nav-cta">Order Now</a>
+        </div>
+
+        <a href="#order" class="nav-mobile-cta">Order</a>
       </div>
-
-      <div class="nav-right">
-        <a href="#menu" class="nav-link">This Week</a>
-        <a href="#order" class="nav-link nav-cta">Order Now</a>
-      </div>
-
-      <button class="nav-toggle" id="nav-toggle" aria-label="Open menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
     </nav>
-  </div>
+  </header>
 
   <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobile-menu">
@@ -953,7 +1747,7 @@
     <a href="#about">About</a>
     <a href="#basket">The Basket</a>
     <a href="#how-it-works">How It Works</a>
-    <a href="#menu">This Week</a>
+    <a href="#basket-details">This Week</a>
     <a href="#order">Order Now</a>
   </div>
 
@@ -973,7 +1767,10 @@
       </div>
 
       <div class="hero-image reveal">
-        <img src="images/hero/kitchen-hero.jpg" alt="YaYa's Kitchen - Fresh cooking on the stove">
+        <picture>
+          <source srcset="images/hero/hero-bread-web.webp" type="image/webp">
+          <img src="images/hero/hero-bread-web.jpg" alt="Freshly baked artisan bread loaves - the heart of YaYa's Kitchen" loading="eager">
+        </picture>
       </div>
 
       <p class="hero-subtitle reveal">
@@ -1002,15 +1799,18 @@
       <p class="section-text reveal">
         Food nourishes not only the body, but also the soul. Made fresh with clean ingredients always, organic when possible.
       </p>
-      <a href="#order" class="btn btn-outline reveal">See What's Inside</a>
+      <a href="#basket-details" class="btn btn-outline reveal">See What's Inside</a>
     </div>
-    <div class="split-image">
-      <img src="images/food/soup-elegant.jpg" alt="Elegant soup presentation">
+    <div class="split-image parallax-container">
+      <picture>
+        <source srcset="images/hero/hero-main-web.webp" type="image/webp">
+        <img src="images/hero/hero-main-web.jpg" alt="YaYa's Kitchen - Where every basket begins, copper pots simmering on a well-loved stove" loading="lazy">
+      </picture>
     </div>
   </section>
 
-  <!-- What's Included Section -->
-  <section class="split-section reverse alt-bg" id="menu">
+  <!-- What's Included Section (Basket Details) -->
+  <section class="split-section reverse alt-bg" id="basket-details">
     <div class="split-content">
       <span class="section-label reveal">What's inside</span>
       <h2 class="section-title reveal">Core Kitchen Basket</h2>
@@ -1027,8 +1827,11 @@
         <strong>$70–90 weekly</strong>
       </p>
     </div>
-    <div class="split-image">
-      <img src="images/food/chicken-dinner.jpg" alt="Fresh prepared meal">
+    <div class="split-image parallax-container">
+      <picture>
+        <source srcset="images/food/soup-tomato.webp" type="image/webp">
+        <img src="images/food/soup-tomato.jpg" alt="Elegant tomato soup in white bowl with gold charger" loading="lazy">
+      </picture>
     </div>
   </section>
 
@@ -1053,29 +1856,107 @@
         <strong>Add-on: $68–78 | Bundle with basket: $135–155</strong>
       </p>
     </div>
-    <div class="split-image">
-      <img src="images/food/dinner-plate.jpg" alt="Plated dinner">
+    <div class="split-image parallax-container">
+      <picture>
+        <source srcset="images/food/chicken-plum-web.webp" type="image/webp">
+        <img src="images/food/chicken-plum-web.jpg" alt="Chicken with plum sauce, broccoli, and potatoes" loading="lazy">
+      </picture>
     </div>
   </section>
 
-  <!-- Full Width Image -->
+  <!-- Full Width Image - Focaccia Art Bread -->
   <div class="full-image">
-    <img src="images/flowers/arrangement.jpg" alt="Fresh flower arrangements">
+    <picture>
+      <source srcset="images/food/focaccia-art-web.webp" type="image/webp">
+      <img src="images/food/focaccia-art-web.jpg" alt="Artisan focaccia bread with vegetable flower design" loading="lazy">
+    </picture>
   </div>
 
-  <!-- Flowers & Treats Section -->
-  <section class="centered-section">
-    <span class="section-label reveal">A little extra</span>
-    <h2 class="section-title reveal">Flowers & Treats</h2>
-    <p class="section-text reveal">
-      Small, seasonal flower arrangements for your home — kitchen, bedside, bathroom, or workspace. Along with food, flowers may also be ordered as gifts for others.
-    </p>
-    <p class="section-text reveal">
-      Weekly smoothies (~16 oz, $7–9). Rotating desserts like cobbler, cake, tart, or homemade ice cream ($16–30, serves 4–6).
-    </p>
-    <p class="section-text reveal">
-      Because sometimes, a small touch of beauty makes all the difference.
-    </p>
+  <!-- Flowers Section - Enhanced Multi-Image Experience -->
+  <section class="flowers-feature" id="flowers">
+    <div class="flowers-intro">
+      <span class="section-label script reveal">Beauty, Delivered</span>
+      <h2 class="section-title reveal">Flowers, Simply</h2>
+      <p class="section-text reveal">
+        We believe that flowers aren't a luxury — they're a quiet necessity. A small vase on the kitchen counter, a bloom by the bedside, a burst of color in the bathroom. These moments of beauty shift the entire feeling of a home.
+      </p>
+    </div>
+
+    <div class="flowers-gallery">
+      <div class="flowers-gallery-main reveal">
+        <picture>
+          <source srcset="images/flowers/arrangement-colorful.webp" type="image/webp">
+          <img src="images/flowers/arrangement-colorful.jpg" alt="Vibrant arrangement with sunflowers, red alstroemeria, and white daisies in a cobalt blue vase" loading="lazy">
+        </picture>
+        <p class="flowers-caption">Sunflowers bring warmth. Red blooms add depth. White daisies offer calm.</p>
+      </div>
+      <div class="flowers-gallery-secondary">
+        <div class="flowers-gallery-item reveal">
+          <picture>
+            <source srcset="images/flowers/arrangement-sunflower.webp" type="image/webp">
+            <img src="images/flowers/arrangement-sunflower.jpg" alt="Cheerful sunflower arrangement with soft roses and garden greenery" loading="lazy">
+          </picture>
+        </div>
+        <div class="flowers-gallery-item reveal">
+          <picture>
+            <source srcset="images/flowers/kitchen-interior.webp" type="image/webp">
+            <img src="images/flowers/kitchen-interior.jpg" alt="Flowers bringing life to a cozy kitchen space with warm candlelight" loading="lazy">
+          </picture>
+        </div>
+      </div>
+    </div>
+
+    <div class="flowers-details">
+      <div class="flowers-detail-block reveal">
+        <h3>For Your Home</h3>
+        <p>Small, seasonal arrangements sourced from local growers when possible. Designed to fit naturally into your spaces — not overwhelm them.</p>
+      </div>
+      <div class="flowers-detail-block reveal">
+        <h3>As a Gift</h3>
+        <p>Flowers can also be ordered as gifts for friends, family, or anyone who could use a small reminder that someone is thinking of them.</p>
+      </div>
+      <div class="flowers-detail-block reveal">
+        <h3>Pricing</h3>
+        <p><strong>Small arrangement:</strong> $15–18<br><strong>Medium arrangement:</strong> $25–30<br><strong>Generous bouquet:</strong> $35–45</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dessert Gallery -->
+  <section class="gallery-section" id="desserts">
+    <div class="gallery-header">
+      <span class="section-label script reveal">Something Sweet</span>
+      <h2 class="section-title reveal">Treats & Occasions</h2>
+      <p class="section-text reveal">
+        Weekly smoothies (~16 oz, $7–9). Rotating desserts like cobbler, cake, tart, or homemade ice cream ($16–30, serves 4–6).
+      </p>
+    </div>
+    <div class="dessert-grid">
+      <div class="dessert-item reveal">
+        <picture>
+          <source srcset="images/desserts/cake-chocolate-marigold-web.webp" type="image/webp">
+          <img src="images/desserts/cake-chocolate-marigold-web.jpg" alt="Chocolate cake with edible marigold flowers" loading="lazy">
+        </picture>
+      </div>
+      <div class="dessert-item reveal">
+        <picture>
+          <source srcset="images/desserts/cake-rainbow.webp" type="image/webp">
+          <img src="images/desserts/cake-rainbow.jpg" alt="Rainbow layer cake with colorful frosting" loading="lazy">
+        </picture>
+      </div>
+      <div class="dessert-item reveal">
+        <picture>
+          <source srcset="images/desserts/cake-red-velvet-web.webp" type="image/webp">
+          <img src="images/desserts/cake-red-velvet-web.jpg" alt="Red velvet cake with cream cheese frosting" loading="lazy">
+        </picture>
+      </div>
+      <div class="dessert-item reveal">
+        <picture>
+          <source srcset="images/desserts/raspberry-pavlova.webp" type="image/webp">
+          <img src="images/desserts/raspberry-pavlova.jpg" alt="Raspberry pavlova with whipped cream and chocolate" loading="lazy">
+        </picture>
+      </div>
+    </div>
   </section>
 
   <!-- For Travelers Section -->
@@ -1098,16 +1979,22 @@
       </p>
       <a href="#order" class="btn btn-outline reveal">Order an Arrival Basket</a>
     </div>
-    <div class="split-image">
-      <img src="images/food/cake-flowers.jpg" alt="Dessert with flowers">
+    <div class="split-image parallax-container">
+      <picture>
+        <source srcset="images/sections/arrival-basket.webp" type="image/webp">
+        <img src="images/sections/arrival-basket.jpg" alt="Fresh produce spread for arrival basket - radishes, peppers, citrus, and greens" loading="lazy">
+      </picture>
     </div>
   </section>
 
-  <!-- About Section -->
+  <!-- About Section - Brand Story with Social Proof -->
   <section class="about-section" id="about">
     <div class="about-content">
       <div class="about-image reveal">
-        <img src="images/about/yaya-portrait.jpg" alt="YaYa in her kitchen">
+        <picture>
+          <source srcset="images/hero/yaya-rain-portrait.webp" type="image/webp">
+          <img src="images/hero/yaya-rain-portrait.jpg" alt="YaYa and her husband walking in the rain with umbrella" loading="lazy">
+        </picture>
       </div>
       <div class="about-text-block">
         <span class="section-label reveal">Our story</span>
@@ -1121,6 +2008,21 @@
         <p class="section-text reveal">
           After many years of experience, learning, and refinement, we believe this version of YaYa's Kitchen — small, local, and relationship-centered — is a much better fit for our values, our energy, and the kind of care we want to offer.
         </p>
+      </div>
+    </div>
+
+    <!-- Brand Heritage - Sauce Product Social Proof -->
+    <div class="brand-heritage reveal">
+      <div class="heritage-content">
+        <div class="heritage-image">
+          <img src="images/brand/sauce-product.jpg" alt="YaYa's Original Pasta Sauce - Where our story began" loading="lazy">
+        </div>
+        <div class="heritage-text">
+          <h3 class="heritage-title">Where We Began</h3>
+          <p>Before there were weekly baskets, there was sauce. YaYa's Original Pasta Sauce became a beloved product in local stores and farmers markets — proof that people craved food made with real care.</p>
+          <p>That same philosophy — cook with intention, use quality ingredients, nourish the people you're feeding — now lives in every basket we prepare.</p>
+          <p class="heritage-tagline">Same values. Smaller scale. More personal.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -1286,22 +2188,109 @@
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <img src="images/brand/logo-full.jpg" alt="YaYa's Kitchen" class="footer-logo">
-    <p class="footer-tagline">A small exhale for your week.</p>
-    <p class="footer-text">
-      YaYa's Kitchen is a small project by design. It's meant to feel personal, calm, and cared for — for you and for us.
-    </p>
-    <p class="footer-text">
-      Thank you for being part of this experience.
-    </p>
-    <p class="footer-contact">
-      Questions? <a href="mailto:hello@yayaskitchen.com">hello@yayaskitchen.com</a>
-    </p>
-    <p class="footer-bottom">
-      &copy; 2025 YaYa's Kitchen. Orlando, Florida.
-    </p>
+  <!-- Basket Detail Modal -->
+  <div class="basket-modal-overlay" id="basket-modal" role="dialog" aria-modal="true" aria-labelledby="basket-modal-title">
+    <div class="basket-modal">
+      <div class="basket-modal-header">
+        <button class="basket-modal-close" id="basket-modal-close" aria-label="Close">&times;</button>
+        <p class="basket-modal-label">What's Inside</p>
+        <h2 class="basket-modal-title" id="basket-modal-title">Core Kitchen Basket</h2>
+        <p class="basket-modal-price">$70–90 weekly</p>
+      </div>
+      <div class="basket-modal-body">
+        <p class="basket-modal-description">
+          Each week, we prepare a limited number of kitchen baskets for our local community — designed to support several meals, reduce planning and prep, and help the week feel more spacious.
+        </p>
+
+        <div class="basket-modal-section">
+          <h3 class="basket-modal-section-title">Included Each Week</h3>
+          <ul class="basket-modal-list">
+            <li>Breakfast item</li>
+            <li>Soup (fresh, seasonal)</li>
+            <li>Sandwich-style salad</li>
+            <li>Freshly baked bread</li>
+          </ul>
+        </div>
+
+        <div class="basket-modal-section">
+          <h3 class="basket-modal-section-title">Good to Know</h3>
+          <p class="basket-modal-note">
+            Items rotate seasonally. Not all items appear every week. The basket is designed to support several meals — not replace grocery shopping entirely. Made fresh with clean ingredients always, organic when possible.
+          </p>
+        </div>
+      </div>
+      <div class="basket-modal-footer">
+        <a href="#order" class="basket-modal-cta" id="basket-modal-order">Start Your Order</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer - Mobile-First Grouped Navigation -->
+  <footer class="footer" role="contentinfo">
+    <!-- Brand Section with Logo -->
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <img src="images/brand/logo-full.png" alt="YaYa's Kitchen Logo" loading="lazy">
+      </div>
+      <p class="footer-tagline">A small exhale for your week.</p>
+    </div>
+
+    <!-- Navigation Groups -->
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <!-- THE BASKET -->
+      <div class="footer-nav-group">
+        <h3 class="footer-nav-title">The Basket</h3>
+        <ul class="footer-nav-links">
+          <li><a href="#basket">Weekly Basket</a></li>
+          <li><a href="#basket-details">What's Inside</a></li>
+          <li><a href="#dinner-anchor">Dinner Anchor</a></li>
+          <li><a href="#add-ons">Add-Ons</a></li>
+        </ul>
+      </div>
+
+      <!-- FOR VISITORS -->
+      <div class="footer-nav-group">
+        <h3 class="footer-nav-title">For Visitors</h3>
+        <ul class="footer-nav-links">
+          <li><a href="#order">Arrival Baskets</a></li>
+          <li><a href="#order">Pantry Starter</a></li>
+        </ul>
+      </div>
+
+      <!-- CONNECT -->
+      <div class="footer-nav-group">
+        <h3 class="footer-nav-title">Connect</h3>
+        <ul class="footer-nav-links">
+          <li><a href="#about">About YaYa's</a></li>
+          <li><a href="mailto:hello@yayaskitchen.com">Contact Us</a></li>
+          <li><a href="#order">Start Your Order</a></li>
+        </ul>
+      </div>
+
+      <!-- FOLLOW US -->
+      <div class="footer-nav-group">
+        <h3 class="footer-nav-title">Follow Us</h3>
+        <ul class="footer-nav-links">
+          <li><a href="https://instagram.com/yayaskitchen" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+          <li><a href="https://facebook.com/yayaskitchen" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Closing Section -->
+    <div class="footer-closing">
+      <p class="footer-closing-text">
+        YaYa's Kitchen is a small project by design. It's meant to feel personal, calm, and cared for — for you and for us.
+      </p>
+      <p class="footer-contact">
+        Questions? <a href="mailto:hello@yayaskitchen.com">hello@yayaskitchen.com</a>
+      </p>
+      <p class="footer-bottom">
+        &copy; 2025 YaYa's Kitchen. Orlando, Florida.
+        <br>
+        <a href="#privacy">Privacy</a> | <a href="#terms">Terms</a>
+      </p>
+    </div>
   </footer>
 
   <!-- JavaScript -->
@@ -1328,15 +2317,43 @@
       }
     });
 
+    // Active nav state tracking
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section[id]');
+
+    function updateActiveNav() {
+      const scrollPos = window.scrollY + 150;
+
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.offsetHeight;
+        const sectionId = section.getAttribute('id');
+
+        if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+          navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === '#' + sectionId) {
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveNav);
+    updateActiveNav();
+
     // Mobile menu toggle
     navToggle.addEventListener('click', () => {
       mobileMenu.classList.add('open');
       document.body.style.overflow = 'hidden';
+      navToggle.setAttribute('aria-expanded', 'true');
     });
 
     mobileClose.addEventListener('click', () => {
       mobileMenu.classList.remove('open');
       document.body.style.overflow = '';
+      navToggle.setAttribute('aria-expanded', 'false');
     });
 
     // Close mobile menu on link click
@@ -1344,7 +2361,88 @@
       link.addEventListener('click', () => {
         mobileMenu.classList.remove('open');
         document.body.style.overflow = '';
+        navToggle.setAttribute('aria-expanded', 'false');
       });
+    });
+
+    // ============================================
+    // BASKET DETAIL MODAL
+    // ============================================
+    const basketModal = document.getElementById('basket-modal');
+    const basketModalClose = document.getElementById('basket-modal-close');
+    const basketModalOrder = document.getElementById('basket-modal-order');
+    const seeWhatsInside = document.getElementById('see-whats-inside');
+    const footerWhatsInside = document.getElementById('footer-whats-inside');
+    let lastFocusedElement = null;
+
+    function openBasketModal() {
+      lastFocusedElement = document.activeElement;
+      basketModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      basketModalClose.focus();
+    }
+
+    function closeBasketModal() {
+      basketModal.classList.remove('open');
+      document.body.style.overflow = '';
+      if (lastFocusedElement) {
+        lastFocusedElement.focus();
+      }
+    }
+
+    // Open modal triggers
+    if (seeWhatsInside) {
+      seeWhatsInside.addEventListener('click', openBasketModal);
+    }
+
+    if (footerWhatsInside) {
+      footerWhatsInside.addEventListener('click', (e) => {
+        e.preventDefault();
+        openBasketModal();
+      });
+    }
+
+    // Close modal triggers
+    basketModalClose.addEventListener('click', closeBasketModal);
+
+    // Close on backdrop click
+    basketModal.addEventListener('click', (e) => {
+      if (e.target === basketModal) {
+        closeBasketModal();
+      }
+    });
+
+    // Close on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && basketModal.classList.contains('open')) {
+        closeBasketModal();
+      }
+    });
+
+    // Close modal and scroll to order when CTA clicked
+    basketModalOrder.addEventListener('click', (e) => {
+      e.preventDefault();
+      closeBasketModal();
+      document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Focus trap in modal
+    basketModal.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+
+      const focusableElements = basketModal.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey && document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      } else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
     });
 
     // ============================================
@@ -1387,8 +2485,10 @@
     function toggleDinnerAnchor() {
       if (basketYes.checked) {
         dinnerAnchorGroup.style.display = 'block';
+        dinnerAnchorGroup.classList.add('conditional-visible');
       } else {
         dinnerAnchorGroup.style.display = 'none';
+        dinnerAnchorGroup.classList.remove('conditional-visible');
       }
     }
 
@@ -1476,6 +2576,73 @@
       formMessage.textContent = text;
       formMessage.className = 'form-message ' + type;
       formMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // ============================================
+    // PARALLAX + DOUBLE MOTION EFFECT
+    // ============================================
+    const parallaxContainers = document.querySelectorAll('.parallax-container');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!prefersReducedMotion && parallaxContainers.length > 0) {
+      // Track which containers are in viewport
+      const activeContainers = new Set();
+
+      // Intersection Observer to activate/deactivate parallax
+      const parallaxObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            activeContainers.add(entry.target);
+          } else {
+            activeContainers.delete(entry.target);
+          }
+        });
+      }, {
+        rootMargin: '100px 0px',
+        threshold: 0
+      });
+
+      parallaxContainers.forEach(container => {
+        parallaxObserver.observe(container);
+      });
+
+      // Parallax scroll handler using requestAnimationFrame
+      let ticking = false;
+
+      function updateParallax() {
+        activeContainers.forEach(container => {
+          const img = container.querySelector('img');
+          if (!img) return;
+
+          const rect = container.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+
+          // Calculate how far through the viewport the element is
+          // 0 = just entering from bottom, 1 = just leaving from top
+          const progress = 1 - (rect.bottom / (windowHeight + rect.height));
+
+          // Parallax: move image at 0.3x speed relative to scroll
+          // Range: -30px to +30px translateY
+          const translateY = (progress - 0.5) * 60;
+
+          // Double motion: subtle scale effect (1.05 to 1.15)
+          const scale = 1.1 + (Math.abs(progress - 0.5) * 0.05);
+
+          img.style.transform = `translateY(${translateY}px) scale(${scale})`;
+        });
+
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!ticking && activeContainers.size > 0) {
+          requestAnimationFrame(updateParallax);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      // Initial update
+      updateParallax();
     }
 
     // ============================================
