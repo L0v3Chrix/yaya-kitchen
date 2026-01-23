@@ -3,7 +3,6 @@ import Footer from '@/components/layout/Footer'
 import Hero from '@/components/sections/Hero'
 import WeeklyBasket from '@/components/sections/WeeklyBasket'
 import BasketDetails from '@/components/sections/BasketDetails'
-import FullWidthImage from '@/components/sections/FullWidthImage'
 import CoreKitchen from '@/components/sections/CoreKitchen'
 import DinnerAnchor from '@/components/sections/DinnerAnchor'
 import Flowers from '@/components/sections/Flowers'
@@ -26,39 +25,25 @@ export default function Home() {
         {/* 2b. Basket Details (replaces modal) */}
         <BasketDetails />
 
-        {/* 3. Full-Width Image Break - Focaccia Art */}
-        <FullWidthImage
-          src="/images/food/focaccia-art-web.webp"
-          alt="Beautiful focaccia bread with vegetable art"
-          height="medium"
-        />
-
-        {/* 4. Core Kitchen (Image Left, Text Right) */}
+        {/* 3. Core Kitchen (Image Left, Text Right) */}
         <CoreKitchen />
 
-        {/* 5. Dinner Anchor (Text Left, Image Right) */}
+        {/* 4. Dinner Anchor (Text Left, Image Right) */}
         <DinnerAnchor />
 
-        {/* 6. Full-Width Image Break - Appetizers */}
-        <FullWidthImage
-          src="/images/food/appetizers-web.webp"
-          alt="Delicious appetizers spread"
-          height="short"
-        />
-
-        {/* 7. Flowers (Image Left, Text Right) */}
+        {/* 5. Flowers (Image Left, Text Right) */}
         <Flowers />
 
-        {/* 8. Dessert Gallery */}
+        {/* 6. Dessert Gallery */}
         <DessertGallery />
 
-        {/* 9. Arrival Baskets (Text Left, Image Right) */}
+        {/* 7. Arrival Baskets (Text Left, Image Right) */}
         <ArrivalBaskets />
 
-        {/* 10. About YaYa */}
+        {/* 8. About YaYa */}
         <AboutYaya />
 
-        {/* 11. Order Form Section */}
+        {/* 9. Order Form Section */}
         <section id="order" className="py-20 md:py-32 bg-[--color-cream-dark]">
           <div className="max-w-4xl mx-auto px-6">
             <div className="text-center mb-12">

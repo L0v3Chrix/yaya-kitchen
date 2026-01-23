@@ -6,8 +6,8 @@ export default function WeeklyBasket() {
       id="weekly-basket"
       imagePosition="right"
       image={{
-        src: '/images/food/sandwich-spread.webp',
-        alt: 'Weekly basket contents spread on cutting board',
+        src: '/images/food/focaccia-art-web.webp',
+        alt: 'Beautiful focaccia bread with vegetable art',
       }}
       scriptLabel="What's Inside"
       headline="THE WEEKLY BASKET"
