@@ -14,16 +14,18 @@ export default function WeeklyBasket() {
       content={
         <>
           <p>
-            Each week, YaYa&apos;s Kitchen delivers a thoughtfully curated basket of
-            homemade meals designed to simplify your week and nourish your family.
+            Each week, we prepare a limited number of kitchen baskets for our local 
+            community — designed to reduce planning and prep, and help the week feel 
+            more spacious. Food nourishes not only the body but also the soul.
           </p>
           <p>
-            Every basket includes breakfast items, lunch components, snacks, and
-            a complete dinner — all prepared with care using fresh, seasonal
-            ingredients.
+            YaYa&apos;s Kitchen delivers a thoughtfully curated basket of homemade meals 
+            designed to simplify your week and nourish your family.
           </p>
-          <p className="font-script italic text-lg text-[--color-gold]">
-            No meal planning. No grocery runs. Just delicious food, ready when you are.
+          <p>
+            Food is prepared with seasonal, clean ingredients and organic when possible, 
+            and is intended to replace fast food, frozen meals and processed food. 
+            Weekly delivery is included.
           </p>
         </>
       }

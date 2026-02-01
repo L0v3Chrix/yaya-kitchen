@@ -65,7 +65,7 @@ export default function Hero() {
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-20 md:py-32">
         <div className="max-w-2xl">
-          {/* Scroll-Reveal Text (LPQ Style) */}
+          {/* Scroll-Reveal Text */}
           <motion.div
             className="space-y-2 md:space-y-4"
             initial="hidden"
@@ -90,11 +90,11 @@ export default function Hero() {
               JUST FOOD.
             </motion.h1>
 
-            {/* Gold Script Line */}
+            {/* Gold Script Line - DARKENED */}
             <motion.p
               custom={2}
               variants={goldTextVariants}
-              className="font-script italic text-3xl md:text-4xl lg:text-5xl text-gold py-2"
+              className="font-script italic text-3xl md:text-4xl lg:text-5xl text-[#B8860B] py-2"
             >
               This is care.
             </motion.p>
@@ -117,11 +117,11 @@ export default function Hero() {
               SLOWING DOWN.
             </motion.h2>
 
-            {/* Gold Script Line 2 */}
+            {/* Gold Script Line 2 - DARKENED */}
             <motion.p
               custom={5}
               variants={goldTextVariants}
-              className="font-script italic text-2xl md:text-3xl lg:text-4xl text-gold py-2"
+              className="font-script italic text-2xl md:text-3xl lg:text-4xl text-[#B8860B] py-2"
             >
               A small exhale
             </motion.p>
@@ -134,6 +134,52 @@ export default function Hero() {
             >
               FOR YOUR WEEK.
             </motion.h2>
+          </motion.div>
+
+          {/* NEW: Subheadline */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.0, duration: 0.6 }}
+            viewport={{ once: true }}
+            className="mt-8 text-xl md:text-2xl font-headline tracking-wide text-charcoal"
+          >
+            YaYa&apos;s Kitchen exists to soften the edges of everyday life.
+          </motion.p>
+
+          {/* NEW: Supporting Text */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1, duration: 0.6 }}
+            viewport={{ once: true }}
+            className="mt-6 space-y-4 text-charcoal/80 text-base md:text-lg leading-relaxed max-w-xl"
+          >
+            <p>
+              We believe that the quality of food — and the way it is prepared — matters deeply. 
+              When food is made with quality ingredients, steady hands, and a sense of presence 
+              rather than rush, it becomes more than sustenance. It carries real nourishment. 
+              That care doesn&apos;t stop at the plate. It moves into the body, supports the nervous 
+              system, and quietly shapes how we feel as we move through our days.
+            </p>
+            <p>
+              This understanding is what guides how we cook — and why we offer this work to busy 
+              families. Many households are juggling full schedules, responsibilities, and constant 
+              decision-making. By taking care of some of the planning, prep, and cooking, we help 
+              create space for meals that feel grounding and weeks that feel a little easier to 
+              live inside.
+            </p>
+            <p>
+              Each week, we prepare a limited number of kitchen baskets for our local community — 
+              designed to support several meals, reduce mental load, and offer a sense that someone 
+              has gently taken care of a few things for you.
+            </p>
+            <p className="font-medium text-charcoal">
+              This is not meal delivery or catering.
+            </p>
+            <p className="font-script italic text-xl text-[#B8860B]">
+              It&apos;s a rhythm. A pause. A small exhale for your week.
+            </p>
           </motion.div>
 
           {/* CTA Button */}

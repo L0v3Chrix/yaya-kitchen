@@ -54,18 +54,18 @@ export default function AboutYaya() {
           className="text-[--color-charcoal]/80 leading-relaxed space-y-6 text-left md:text-center"
         >
           <p>
-            YaYa&apos;s Kitchen is a brand that originated in 2011, built around
-            nurturing and nourishing people — not just with food, but with care,
+            YaYa&apos;s Kitchen is a brand that originated in 2011, built around 
+            nurturing and nourishing people — not just with food, but with care, 
             warmth, and the belief that everyone deserves a moment to exhale.
           </p>
           <p>
-            What started as a passion for feeding family and friends has grown
-            into a weekly practice of care for the Wilmington community. Every
-            basket is prepared with the same love and attention YaYa would give
-            to her own family.
+            What started as a passion for feeding family and friends has grown 
+            into a weekly practice of care for the Longwood/Altamonte community 
+            and other parts of the Orlando area. Every basket is prepared with 
+            the same love and attention YaYa would give to her own family.
           </p>
           <p className="font-script italic text-xl text-[--color-gold]">
-            &ldquo;This isn&apos;t a business — it&apos;s a calling. Every meal is a chance
+            &ldquo;This isn&apos;t a business — it&apos;s a calling. Every meal is a chance 
             to show someone they matter.&rdquo;
           </p>
         </motion.div>

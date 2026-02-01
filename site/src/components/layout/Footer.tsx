@@ -57,7 +57,7 @@ export default function Footer() {
         {/* Contact Information */}
         <div className="text-center mb-8">
           <p className="text-sm text-charcoal/60 mb-1">
-            Serving Wilmington, NC and surrounding areas
+            Serving Longwood/Altamonte, FL areas
           </p>
           <a
             href="mailto:hello@yayaskitchen.com"
@@ -76,7 +76,7 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} YaYa&apos;s Kitchen. All rights reserved.
           </p>
           <p className="text-xs text-charcoal/40 mt-2 font-script italic">
-            Made with love in Wilmington
+            Made with love in Central Florida
           </p>
         </div>
       </div>

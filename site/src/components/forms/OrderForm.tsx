@@ -9,6 +9,8 @@ interface FormData {
   phone: string
   address: string
   weeklyBasket: 'Yes' | 'No'
+  giftBasket: 'Yes' | 'No'
+  giftBasketRecipient: string
   dinnerAnchor: 'None' | 'Add-On' | 'Bundle'
   smoothieQty: '0' | '1' | '2' | '3'
   dessert: boolean
@@ -17,6 +19,7 @@ interface FormData {
   giftRecipient: string
   arrivalBasket: boolean
   pantryStarter: boolean
+  deliveryDay: 'Friday' | 'Other'
   containerDeposit: boolean
   specialNotes: string
 }
@@ -29,6 +32,8 @@ const initialFormData: FormData = {
   phone: '',
   address: '',
   weeklyBasket: 'Yes',
+  giftBasket: 'No',
+  giftBasketRecipient: '',
   dinnerAnchor: 'None',
   smoothieQty: '0',
   dessert: false,
@@ -37,6 +42,7 @@ const initialFormData: FormData = {
   giftRecipient: '',
   arrivalBasket: false,
   pantryStarter: false,
+  deliveryDay: 'Friday',
   containerDeposit: false,
   specialNotes: '',
 }
@@ -63,6 +69,9 @@ export default function OrderForm() {
     }
     if (formData.address.length < 10) {
       newErrors.address = 'Please enter your full delivery address'
+    }
+    if (formData.giftBasket === 'Yes' && formData.giftBasketRecipient.length < 10) {
+      newErrors.giftBasketRecipient = 'Please enter the recipient\'s name and delivery address'
     }
     if (!formData.containerDeposit) {
       newErrors.containerDeposit = 'Please acknowledge the container deposit'
@@ -279,7 +288,7 @@ export default function OrderForm() {
               className="w-5 h-5 accent-[--color-gold]"
             />
             <span className="flex-1">Yes, include the Weekly Basket</span>
-            <span className="font-headline text-[--color-gold]">$70–90</span>
+            <span className="font-headline text-[--color-gold]">$100–155</span>
           </label>
 
           <label className="flex items-center gap-3 p-4 border-2 border-[--color-charcoal]/20 cursor-pointer hover:border-[--color-gold] transition-colors">
@@ -293,6 +302,68 @@ export default function OrderForm() {
             />
             <span className="flex-1">Not this week</span>
           </label>
+        </div>
+
+        {/* Gift Basket for Friend or Relative */}
+        <div className="mt-6 pt-6 border-t border-[--color-charcoal]/10">
+          <p className="text-[--color-charcoal]/70 mb-4">
+            Would you like to send a weekly basket to a friend or relative?
+          </p>
+
+          <div className="space-y-3">
+            <label className="flex items-center gap-3 p-4 border-2 border-[--color-charcoal]/20 cursor-pointer hover:border-[--color-gold] transition-colors">
+              <input
+                type="radio"
+                name="giftBasket"
+                value="Yes"
+                checked={formData.giftBasket === 'Yes'}
+                onChange={handleChange}
+                className="w-5 h-5 accent-[--color-gold]"
+              />
+              <span className="flex-1">Yes, send a basket as a gift</span>
+              <span className="font-headline text-[--color-gold]">$100–155</span>
+            </label>
+
+            <label className="flex items-center gap-3 p-4 border-2 border-[--color-charcoal]/20 cursor-pointer hover:border-[--color-gold] transition-colors">
+              <input
+                type="radio"
+                name="giftBasket"
+                value="No"
+                checked={formData.giftBasket === 'No'}
+                onChange={handleChange}
+                className="w-5 h-5 accent-[--color-gold]"
+              />
+              <span className="flex-1">No gift basket</span>
+            </label>
+          </div>
+
+          {/* Gift Basket Recipient Details (Conditional) */}
+          <AnimatePresence>
+            {formData.giftBasket === 'Yes' && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mt-4 ml-6 pl-4 border-l-2 border-[--color-gold]"
+              >
+                <label htmlFor="giftBasketRecipient" className={labelClasses}>
+                  Friend/Relative Name & Delivery Address *
+                </label>
+                <textarea
+                  id="giftBasketRecipient"
+                  name="giftBasketRecipient"
+                  value={formData.giftBasketRecipient}
+                  onChange={handleChange}
+                  rows={3}
+                  className={inputClasses('giftBasketRecipient')}
+                  placeholder="Recipient name, street address, city, zip code, and phone number"
+                />
+                {errors.giftBasketRecipient && (
+                  <p className="text-red-500 text-sm mt-1">{errors.giftBasketRecipient}</p>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
@@ -309,7 +380,7 @@ export default function OrderForm() {
               <span className="w-8 h-8 bg-[--color-purple] text-white flex items-center justify-center text-sm">
                 3
               </span>
-              DINNER ANCHOR
+              DINNER OPTIONS
             </h3>
 
             <div className="space-y-3">
@@ -322,7 +393,7 @@ export default function OrderForm() {
                   onChange={handleChange}
                   className="w-5 h-5 accent-[--color-gold]"
                 />
-                <span className="flex-1">No dinner anchor this week</span>
+                <span className="flex-1">No additional dinner options this week</span>
               </label>
 
               <label className="flex items-center gap-3 p-4 border-2 border-[--color-charcoal]/20 cursor-pointer hover:border-[--color-gold] transition-colors">
@@ -334,7 +405,7 @@ export default function OrderForm() {
                   onChange={handleChange}
                   className="w-5 h-5 accent-[--color-gold]"
                 />
-                <span className="flex-1">Add Dinner Anchor</span>
+                <span className="flex-1">Add extra dinner options</span>
                 <span className="font-headline text-[--color-gold]">$68–78</span>
               </label>
 
@@ -348,7 +419,7 @@ export default function OrderForm() {
                   className="w-5 h-5 accent-[--color-gold]"
                 />
                 <span className="flex-1">
-                  <span className="block">Bundle: Core Basket + Dinner Anchor</span>
+                  <span className="block">Bundle: Core Basket + Extra Dinners</span>
                   <span className="text-sm text-[--color-green]">Recommended — Save $15+</span>
                 </span>
                 <span className="font-headline text-[--color-gold]">$135–155</span>
@@ -380,11 +451,11 @@ export default function OrderForm() {
             className={`${inputClasses('smoothieQty')} cursor-pointer`}
           >
             <option value="0">No smoothies</option>
-            <option value="1">1 smoothie ($7–9)</option>
-            <option value="2">2 smoothies ($14–18)</option>
-            <option value="3">3 smoothies ($21–27)</option>
+            <option value="1">1 smoothie ($15)</option>
+            <option value="2">2 smoothies ($30)</option>
+            <option value="3">3 smoothies ($45)</option>
           </select>
-          <p className="text-sm text-[--color-charcoal]/60 mt-1">~16 oz each</p>
+          <p className="text-sm text-[--color-charcoal]/60 mt-1">16 oz each — protein forward, greens, fruit, collagen, almond milk, monkfruit (NO SUGAR ADDED)</p>
         </div>
 
         {/* Dessert */}
@@ -400,10 +471,10 @@ export default function OrderForm() {
             <span className="flex-1">
               <span className="block">Add weekly dessert</span>
               <span className="text-sm text-[--color-charcoal]/60">
-                Rotates: cobbler, cake, tart, ice cream (serves 4–6)
+                Cakes, pies, cobblers, pavlova, cheesecake (serves 4–6)
               </span>
             </span>
-            <span className="font-headline text-[--color-gold]">$16–30</span>
+            <span className="font-headline text-[--color-gold]">$20–45</span>
           </label>
         </div>
 
@@ -420,8 +491,8 @@ export default function OrderForm() {
             className={`${inputClasses('flowersHome')} cursor-pointer`}
           >
             <option value="None">No flowers</option>
-            <option value="1 arrangement">1 arrangement ($15–18)</option>
-            <option value="2-3 arrangements">2–3 arrangements ($30–45)</option>
+            <option value="1 arrangement">1 arrangement ($25)</option>
+            <option value="2-3 arrangements">2–3 arrangements ($50+)</option>
           </select>
         </div>
 
@@ -470,14 +541,23 @@ export default function OrderForm() {
         </AnimatePresence>
       </div>
 
-      {/* Section 5: One-Time & Traveler Options */}
+      {/* Section 5: Delivery Preferences */}
       <div className={sectionClasses}>
         <h3 className="font-headline text-xl tracking-wide text-[--color-charcoal] mb-6 flex items-center gap-3">
           <span className="w-8 h-8 bg-[--color-purple] text-white flex items-center justify-center text-sm">
             5
           </span>
-          ONE-TIME & TRAVELER OPTIONS
+          DELIVERY PREFERENCES
         </h3>
+
+        <div className="bg-[--color-gold]/10 p-4 mb-6 border-l-4 border-[--color-gold]">
+          <p className="text-[--color-charcoal] font-medium">
+            Regular delivery is on Fridays
+          </p>
+          <p className="text-sm text-[--color-charcoal]/70 mt-1">
+            Baskets are delivered each Friday to start your weekend right.
+          </p>
+        </div>
 
         <div className="space-y-4">
           <label className="flex items-center gap-3 p-4 border-2 border-[--color-charcoal]/20 cursor-pointer hover:border-[--color-gold] transition-colors">

@@ -5,9 +5,10 @@ import { motion } from 'framer-motion'
 
 const desserts = [
   {
-    src: '/images/desserts/cake-chocolate-marigold-web.webp',
-    alt: 'Chocolate cake with edible marigold flowers',
-    name: 'Chocolate Marigold',
+    // TODO: Replace with client image #0236 when provided
+    src: '/images/desserts/cake-white-sesame-web.webp',
+    alt: 'Cake with flowers',
+    name: 'Special Occasion',
   },
   {
     src: '/images/desserts/cake-rainbow.webp',

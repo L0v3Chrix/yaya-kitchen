@@ -6,41 +6,39 @@ export default function CoreKitchen() {
       id="core-kitchen"
       imagePosition="left"
       image={{
-        src: '/images/food/soup-tomato.webp',
-        alt: 'Elegant tomato soup with gold charger',
+        src: '/images/sections/arrival-basket.webp',
+        alt: 'YaYa\'s Kitchen Basket',
       }}
-      scriptLabel="Comfort, Weekly"
-      headline="CORE KITCHEN"
+      scriptLabel="See What's Inside"
+      headline="CORE KITCHEN BASKET"
       backgroundColor="cream-dark"
       content={
         <>
-          <p>
-            The heart of every basket: warming soups, fresh salads, artisan breads,
-            and wholesome breakfast options that turn ordinary mornings into
-            something special.
-          </p>
-          <p>
-            Each item is crafted to bring comfort and convenience to your daily
-            routine — because even the simplest meals deserve care.
-          </p>
-          <ul className="list-none space-y-2 mt-4">
+          <ul className="list-none space-y-3 mb-6">
             <li className="flex items-center gap-2">
               <span className="text-[--color-gold]">&#8226;</span>
-              Seasonal soups & stews
+              A loaf of Homemade Bread
             </li>
             <li className="flex items-center gap-2">
               <span className="text-[--color-gold]">&#8226;</span>
-              Fresh-baked breads
+              Friday Night Board
             </li>
             <li className="flex items-center gap-2">
               <span className="text-[--color-gold]">&#8226;</span>
-              Garden salads & dressings
+              Bowls
             </li>
             <li className="flex items-center gap-2">
               <span className="text-[--color-gold]">&#8226;</span>
-              Breakfast favorites
+              Classic Family Meal
             </li>
           </ul>
+          <p className="text-sm text-[--color-charcoal]/70 mb-4">
+            <strong>Note:</strong> Portions are sized for 2 adults and 2 children, 
+            with an option to increase portions for older children or up to 4 adults.
+          </p>
+          <p className="font-headline text-lg text-[--color-charcoal]">
+            Price Range: <span className="text-[--color-gold]">$100 - $155</span>
+          </p>
         </>
       }
     />
