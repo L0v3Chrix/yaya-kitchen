@@ -5,14 +5,13 @@ import { motion } from 'framer-motion'
 
 const desserts = [
   {
-    // TODO: Replace with client image #0236 when provided
-    src: '/images/desserts/cake-white-sesame-web.webp',
-    alt: 'Cake with flowers',
-    name: 'Special Occasion',
+    src: '/images/desserts/dinner-plate-special.webp',
+    alt: 'Stuffed meat with green puree and potatoes',
+    name: 'Special Dinner',
   },
   {
     src: '/images/desserts/cake-rainbow.webp',
-    alt: 'Colorful rainbow layer cake',
+    alt: 'Rainbow layer cake',
     name: 'Rainbow Cake',
   },
   {
