@@ -90,11 +90,12 @@ export default function Hero() {
               JUST FOOD.
             </motion.h1>
 
-            {/* Gold Script Line - DARKENED */}
+            {/* Gold Script Line - DARKENED with shadow for contrast */}
             <motion.p
               custom={2}
               variants={goldTextVariants}
-              className="font-script italic text-3xl md:text-4xl lg:text-5xl text-[#B8860B] py-2"
+              className="font-script italic text-3xl md:text-4xl lg:text-5xl text-[#996515] py-2"
+              style={{ textShadow: '0 1px 2px rgba(0,0,0,0.15)' }}
             >
               This is care.
             </motion.p>
@@ -117,11 +118,12 @@ export default function Hero() {
               SLOWING DOWN.
             </motion.h2>
 
-            {/* Gold Script Line 2 - DARKENED */}
+            {/* Gold Script Line 2 - DARKENED with shadow for contrast */}
             <motion.p
               custom={5}
               variants={goldTextVariants}
-              className="font-script italic text-2xl md:text-3xl lg:text-4xl text-[#B8860B] py-2"
+              className="font-script italic text-2xl md:text-3xl lg:text-4xl text-[#996515] py-2"
+              style={{ textShadow: '0 1px 2px rgba(0,0,0,0.15)' }}
             >
               A small exhale
             </motion.p>
@@ -177,7 +179,7 @@ export default function Hero() {
             <p className="font-medium text-charcoal">
               This is not meal delivery or catering.
             </p>
-            <p className="font-script italic text-xl text-[#B8860B]">
+            <p className="font-script italic text-xl text-[#996515]" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)' }}>
               It&apos;s a rhythm. A pause. A small exhale for your week.
             </p>
           </motion.div>

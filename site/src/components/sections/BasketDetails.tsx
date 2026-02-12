@@ -4,30 +4,30 @@ import { motion } from 'framer-motion'
 
 const basketContents = {
   coreKitchen: [
-    'Seasonal soup (quart)',
-    'Fresh-baked artisan bread',
-    'Garden salad with house dressing',
-    'Breakfast pastry or muffins',
-    'Granola or overnight oats',
+    'A loaf of Homemade Bread',
+    'Friday Night Board',
+    'Bowls — warm composed meals',
+    'Classic Family Meal',
   ],
-  dinnerAnchor: [
-    'Complete dinner entree (serves 2-4)',
-    'Two complementary sides',
-    'Reheating instructions included',
+  weeklyDinners: [
+    'Boards — themed gather-and-eat style',
+    'Bowls — protein, grain/starch, veggies & sauce',
+    'Classic Dinner — entree, side, grain/starch or veggies',
   ],
   extras: [
-    'Homemade smoothie (optional add-on)',
-    'Fresh-cut flowers (optional add-on)',
-    'Dessert selection (optional add-on)',
+    'Smoothies — 16 oz, protein forward, NO SUGAR ADDED',
+    'Dessert — cakes, pies, cobblers, pavlova',
+    'Granola — housemade (occasionally)',
+    'Soup — housemade (occasionally)',
+    'Fresh-cut flowers',
   ],
 }
 
 const pricing = [
-  { name: 'Weekly Basket (Core Kitchen)', price: '$85/week' },
-  { name: 'Weekly Basket + Dinner Anchor', price: '$125/week' },
+  { name: 'Weekly Basket (Core Kitchen) 2 or 3 choices', price: '$100–155/week' },
   { name: 'Flower Add-On', price: '$25/week' },
   { name: 'Smoothie Add-On', price: '$15/week' },
-  { name: 'Dessert Add-On', price: '$20-45' },
+  { name: 'Dessert Add-On', price: '$20–45' },
 ]
 
 export default function BasketDetails() {
@@ -78,14 +78,14 @@ export default function BasketDetails() {
               </ul>
             </div>
 
-            {/* Dinner Anchor */}
+            {/* Weekly Dinners */}
             <div className="mb-8">
               <h3 className="font-headline text-xl tracking-wide text-[--color-charcoal] mb-4 flex items-center gap-2">
                 <span className="w-8 h-px bg-[--color-gold]"></span>
-                DINNER ANCHOR
+                WEEKLY DINNERS
               </h3>
               <ul className="space-y-3">
-                {basketContents.dinnerAnchor.map((item) => (
+                {basketContents.weeklyDinners.map((item) => (
                   <li
                     key={item}
                     className="flex items-start gap-3 text-[--color-charcoal]/80"
@@ -159,7 +159,7 @@ export default function BasketDetails() {
                 <li className="flex gap-4">
                   <span className="font-headline text-[--color-gold] text-xl">2.</span>
                   <span className="text-white/80">
-                    Pick up every Wednesday or schedule delivery
+                    Delivery every Friday to start your weekend right
                   </span>
                 </li>
                 <li className="flex gap-4">
@@ -171,7 +171,7 @@ export default function BasketDetails() {
               </ol>
               <div className="mt-6 pt-6 border-t border-white/20">
                 <p className="text-sm text-white/60">
-                  Containers are reusable — $15 deposit, returned when you bring them back.
+                  Containers are reusable — $30–40 deposit, returned when you bring them back.
                 </p>
               </div>
             </div>
