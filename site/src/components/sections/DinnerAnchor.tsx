@@ -8,8 +8,8 @@ export default function DinnerAnchor() {
         id="dinner-anchor"
         imagePosition="right"
         image={{
-          src: '/images/food/dinner-plate.webp', // TODO: Replace with image #1571 when provided
-          alt: 'Weekly Dinner Basket',
+          src: '/images/desserts/dinner-plate-special.webp',
+          alt: 'Plated dinner with stuffed meat, green puree and roasted potatoes',
         }}
         scriptLabel="Comfort delivered"
         headline="WEEKLY DINNER BASKET"
