@@ -78,25 +78,6 @@ export default function BasketDetails() {
               </ul>
             </div>
 
-            {/* Weekly Dinners */}
-            <div className="mb-8">
-              <h3 className="font-headline text-xl tracking-wide text-[--color-charcoal] mb-4 flex items-center gap-2">
-                <span className="w-8 h-px bg-[--color-gold]"></span>
-                WEEKLY DINNERS
-              </h3>
-              <ul className="space-y-3">
-                {basketContents.weeklyDinners.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-start gap-3 text-[--color-charcoal]/80"
-                  >
-                    <span className="text-[--color-gold] mt-1">&#10003;</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
             {/* Optional Extras */}
             <div>
               <h3 className="font-headline text-xl tracking-wide text-[--color-charcoal] mb-4 flex items-center gap-2">

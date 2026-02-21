@@ -43,12 +43,16 @@
 - [x] Sheet schema documented
 - [x] Setup guide written
 
-### Manual Setup Required 🔧
-- [ ] Chrix: Create Google Sheet from schema
-- [ ] Chrix: Deploy Apps Script as web app
-- [ ] Chrix: Add URL to Vercel env var
+### Manual Setup ✅ Complete
+- [x] Chrix: Create Google Sheet from schema
+- [x] Chrix: Deploy Apps Script as web app
+- [x] Daniel: Add URL to Vercel env var
+- [x] Vercel redeployed with env var
 - [ ] Test end-to-end
-- [ ] Go live
+- [ ] Confirm live
+
+**Google Sheet:** https://docs.google.com/spreadsheets/d/1hrM88kkeYrzedNDRcInCzsXLS8He_DC0HrY65KC_y1k/
+**Apps Script URL:** https://script.google.com/macros/s/AKfycbyoh5cBfBiczz-TlCcZ5oSpXiram7tggrEMOMUUry5E0xpvb0mccbR7D5Uo_V8sL83uUQ/exec
 
 ### Deferred to V2
 - Dynamic menu from sheet
