@@ -1,16 +1,26 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+
+// ZIP codes with free delivery (8-mile radius from 32779 Longwood)
+const FREE_DELIVERY_ZIPS = ['32779', '32750', '32714', '32701', '32746', '32703', '32791', '32708']
+
+type ContactPreference = 'Text' | 'Email' | 'Both'
 
 interface FormData {
   name: string
   email: string
   phone: string
   address: string
+  zipCode: string
+  deliveryWeek: string
+  deliveryInstructions: string
+  contactPreference: ContactPreference | ''
   weeklyBasket: 'Yes' | 'No'
   giftBasket: 'Yes' | 'No'
   giftBasketRecipient: string
+  giftMessage: string
   dinnerAnchor: 'None' | 'Add-On' | 'Bundle'
   smoothieQty: '0' | '1' | '2' | '3'
   dessert: boolean
@@ -21,19 +31,61 @@ interface FormData {
   pantryStarter: boolean
   deliveryDay: 'Friday' | 'Other'
   containerDeposit: boolean
+  subscriptionInterest: boolean
   specialNotes: string
 }
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
+
+/**
+ * Get the next 4 Fridays from today
+ * Returns array of { value: ISO date string, label: "Friday, Feb 28" }
+ */
+function getNextFourFridays(): Array<{ value: string; label: string }> {
+  const fridays: Array<{ value: string; label: string }> = []
+  const today = new Date()
+  const dayOfWeek = today.getDay()
+  
+  // Calculate days until next Friday (Friday = 5)
+  let daysUntilFriday = (5 - dayOfWeek + 7) % 7
+  if (daysUntilFriday === 0) {
+    // If today is Friday, check if it's before 9am Tuesday cutoff
+    // For simplicity, always start from next Friday if today is Friday
+    daysUntilFriday = 7
+  }
+  
+  for (let i = 0; i < 4; i++) {
+    const friday = new Date(today)
+    friday.setDate(today.getDate() + daysUntilFriday + (i * 7))
+    
+    const label = friday.toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'short',
+      day: 'numeric'
+    })
+    
+    fridays.push({
+      value: friday.toISOString().split('T')[0],
+      label
+    })
+  }
+  
+  return fridays
+}
 
 const initialFormData: FormData = {
   name: '',
   email: '',
   phone: '',
   address: '',
+  zipCode: '',
+  deliveryWeek: '',
+  deliveryInstructions: '',
+  contactPreference: '',
   weeklyBasket: 'Yes',
   giftBasket: 'No',
   giftBasketRecipient: '',
+  giftMessage: '',
   dinnerAnchor: 'None',
   smoothieQty: '0',
   dessert: false,
@@ -44,6 +96,7 @@ const initialFormData: FormData = {
   pantryStarter: false,
   deliveryDay: 'Friday',
   containerDeposit: false,
+  subscriptionInterest: false,
   specialNotes: '',
 }
 
@@ -54,6 +107,23 @@ export default function OrderForm() {
   const [formData, setFormData] = useState<FormData>(initialFormData)
   const [status, setStatus] = useState<FormStatus>('idle')
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
+
+  // Compute delivery weeks once
+  const deliveryWeeks = useMemo(() => getNextFourFridays(), [])
+
+  // Set default delivery week on first render
+  useState(() => {
+    if (deliveryWeeks.length > 0 && !formData.deliveryWeek) {
+      setFormData(prev => ({ ...prev, deliveryWeek: deliveryWeeks[0].value }))
+    }
+  })
+
+  // Check if ZIP is in free delivery zone
+  const isZipInZone = FREE_DELIVERY_ZIPS.includes(formData.zipCode.trim())
+  const showDeliveryFeeWarning = formData.zipCode.trim().length === 5 && !isZipInZone
+
+  // Check if gift message should be shown
+  const showGiftMessage = formData.giftBasket === 'Yes' || formData.flowersGift
 
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
@@ -69,6 +139,15 @@ export default function OrderForm() {
     }
     if (formData.address.length < 10) {
       newErrors.address = 'Please enter your full delivery address'
+    }
+    if (!/^\d{5}$/.test(formData.zipCode.trim())) {
+      newErrors.zipCode = 'Please enter a valid 5-digit ZIP code'
+    }
+    if (!formData.deliveryWeek) {
+      newErrors.deliveryWeek = 'Please select a delivery week'
+    }
+    if (!formData.contactPreference) {
+      newErrors.contactPreference = 'Please select how you\'d like us to contact you'
     }
     if (formData.giftBasket === 'Yes' && formData.giftBasketRecipient.length < 10) {
       newErrors.giftBasketRecipient = 'Please enter the recipient\'s name and delivery address'
@@ -89,14 +168,21 @@ export default function OrderForm() {
     setStatus('submitting')
 
     try {
+      // Format delivery week label for submission
+      const selectedWeek = deliveryWeeks.find(w => w.value === formData.deliveryWeek)
+      
       // Prepare data for submission
       const submitData = {
         ...formData,
+        deliveryWeekLabel: selectedWeek?.label || formData.deliveryWeek,
+        isInDeliveryZone: isZipInZone ? 'Yes' : 'No',
+        deliveryFee: isZipInZone ? '$0' : '$10',
         dessert: formData.dessert ? 'Yes' : 'No',
         flowersGift: formData.flowersGift ? 'Yes' : 'No',
         arrivalBasket: formData.arrivalBasket ? 'Yes' : 'No',
         pantryStarter: formData.pantryStarter ? 'Yes' : 'No',
         containerDeposit: formData.containerDeposit ? 'Yes' : 'No',
+        subscriptionInterest: formData.subscriptionInterest ? 'Yes' : 'No',
       }
 
       if (GOOGLE_SCRIPT_URL) {
@@ -247,6 +333,40 @@ export default function OrderForm() {
           {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
         </div>
 
+        {/* Contact Preference */}
+        <div className="mt-4">
+          <label className={labelClasses}>
+            Preferred Contact Method *
+          </label>
+          <div className="grid grid-cols-3 gap-3">
+            {(['Text', 'Email', 'Both'] as const).map((option) => (
+              <label
+                key={option}
+                className={`flex items-center justify-center gap-2 p-3 border-2 cursor-pointer transition-colors ${
+                  formData.contactPreference === option
+                    ? 'border-[--color-gold] bg-[--color-gold]/10'
+                    : errors.contactPreference
+                    ? 'border-red-400 bg-red-50'
+                    : 'border-[--color-charcoal]/20 hover:border-[--color-gold]'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="contactPreference"
+                  value={option}
+                  checked={formData.contactPreference === option}
+                  onChange={handleChange}
+                  className="sr-only"
+                />
+                <span className="font-headline text-sm tracking-wider">{option}</span>
+              </label>
+            ))}
+          </div>
+          {errors.contactPreference && (
+            <p className="text-red-500 text-sm mt-1">{errors.contactPreference}</p>
+          )}
+        </div>
+
         <div className="mt-4">
           <label htmlFor="address" className={labelClasses}>
             Delivery Address *
@@ -258,17 +378,128 @@ export default function OrderForm() {
             onChange={handleChange}
             rows={2}
             className={inputClasses('address')}
-            placeholder="Street address, city, zip code"
+            placeholder="Street address, city"
           />
           {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
         </div>
+
+        {/* ZIP Code */}
+        <div className="mt-4">
+          <label htmlFor="zipCode" className={labelClasses}>
+            ZIP Code *
+          </label>
+          <input
+            type="text"
+            id="zipCode"
+            name="zipCode"
+            value={formData.zipCode}
+            onChange={handleChange}
+            maxLength={5}
+            className={`${inputClasses('zipCode')} max-w-[150px]`}
+            placeholder="32779"
+          />
+          {errors.zipCode && <p className="text-red-500 text-sm mt-1">{errors.zipCode}</p>}
+          
+          {/* Out of zone delivery fee notice */}
+          <AnimatePresence>
+            {showDeliveryFeeWarning && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mt-2 p-3 bg-amber-50 border-l-4 border-amber-400 text-amber-800"
+              >
+                <p className="text-sm font-medium">
+                  +$10 delivery fee applies to your area
+                </p>
+                <p className="text-xs mt-1 text-amber-700">
+                  We deliver! Your ZIP is outside our free delivery zone.
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          
+          {/* In zone confirmation */}
+          <AnimatePresence>
+            {formData.zipCode.trim().length === 5 && isZipInZone && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="mt-2 text-sm text-[--color-green] flex items-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                Free delivery to your area!
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Delivery Instructions */}
+        <div className="mt-4">
+          <label htmlFor="deliveryInstructions" className={labelClasses}>
+            Delivery Instructions
+          </label>
+          <textarea
+            id="deliveryInstructions"
+            name="deliveryInstructions"
+            value={formData.deliveryInstructions}
+            onChange={handleChange}
+            rows={2}
+            className={inputClasses('deliveryInstructions')}
+            placeholder="Gate codes, door codes, leave at door, or place in refrigerator..."
+          />
+          <p className="text-sm text-[--color-charcoal]/60 mt-1">
+            Optional — help us deliver smoothly
+          </p>
+        </div>
       </div>
 
-      {/* Section 2: Weekly Basket */}
+      {/* Section 2: Delivery Week */}
       <div className={sectionClasses}>
         <h3 className="font-headline text-xl tracking-wide text-[--color-charcoal] mb-6 flex items-center gap-3">
           <span className="w-8 h-8 bg-[--color-purple] text-white flex items-center justify-center text-sm">
             2
+          </span>
+          DELIVERY WEEK
+        </h3>
+
+        <div className="bg-[--color-gold]/10 p-4 mb-6 border-l-4 border-[--color-gold]">
+          <p className="text-[--color-charcoal] font-medium">
+            Order by Tuesday 9am for Friday delivery
+          </p>
+          <p className="text-sm text-[--color-charcoal]/70 mt-1">
+            Baskets are delivered each Friday between 9am–11am.
+          </p>
+        </div>
+
+        <label htmlFor="deliveryWeek" className={labelClasses}>
+          Select Delivery Friday *
+        </label>
+        <select
+          id="deliveryWeek"
+          name="deliveryWeek"
+          value={formData.deliveryWeek}
+          onChange={handleChange}
+          className={`${inputClasses('deliveryWeek')} cursor-pointer`}
+        >
+          <option value="">Choose a delivery date...</option>
+          {deliveryWeeks.map((week) => (
+            <option key={week.value} value={week.value}>
+              {week.label}
+            </option>
+          ))}
+        </select>
+        {errors.deliveryWeek && <p className="text-red-500 text-sm mt-1">{errors.deliveryWeek}</p>}
+      </div>
+
+      {/* Section 3: Weekly Basket */}
+      <div className={sectionClasses}>
+        <h3 className="font-headline text-xl tracking-wide text-[--color-charcoal] mb-6 flex items-center gap-3">
+          <span className="w-8 h-8 bg-[--color-purple] text-white flex items-center justify-center text-sm">
+            3
           </span>
           WEEKLY BASKET
         </h3>
@@ -367,7 +598,7 @@ export default function OrderForm() {
         </div>
       </div>
 
-      {/* Section 3: Dinner Anchor (Conditional) */}
+      {/* Section 4: Dinner Anchor (Conditional) */}
       <AnimatePresence>
         {formData.weeklyBasket === 'Yes' && (
           <motion.div
@@ -378,7 +609,7 @@ export default function OrderForm() {
           >
             <h3 className="font-headline text-xl tracking-wide text-[--color-charcoal] mb-6 flex items-center gap-3">
               <span className="w-8 h-8 bg-[--color-purple] text-white flex items-center justify-center text-sm">
-                3
+                4
               </span>
               DINNER OPTIONS
             </h3>
@@ -429,11 +660,11 @@ export default function OrderForm() {
         )}
       </AnimatePresence>
 
-      {/* Section 4: Optional Add-Ons */}
+      {/* Section 5: Optional Add-Ons */}
       <div className={sectionClasses}>
         <h3 className="font-headline text-xl tracking-wide text-[--color-charcoal] mb-6 flex items-center gap-3">
           <span className="w-8 h-8 bg-[--color-purple] text-white flex items-center justify-center text-sm">
-            4
+            5
           </span>
           OPTIONAL ADD-ONS
         </h3>
@@ -534,30 +765,58 @@ export default function OrderForm() {
                 onChange={handleChange}
                 rows={2}
                 className={inputClasses('giftRecipient')}
-                placeholder="Recipient name, address, and any special message"
+                placeholder="Recipient name, address, and phone number"
               />
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* Section 5: Delivery Preferences */}
+      {/* Gift Message (Conditional - shown when gift basket OR flowers gift) */}
+      <AnimatePresence>
+        {showGiftMessage && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className={sectionClasses}
+          >
+            <h3 className="font-headline text-xl tracking-wide text-[--color-charcoal] mb-6 flex items-center gap-3">
+              <span className="w-8 h-8 bg-[--color-purple] text-white flex items-center justify-center text-sm">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                </svg>
+              </span>
+              GIFT MESSAGE
+            </h3>
+
+            <label htmlFor="giftMessage" className={labelClasses}>
+              Personal Message for Recipient
+            </label>
+            <textarea
+              id="giftMessage"
+              name="giftMessage"
+              value={formData.giftMessage}
+              onChange={handleChange}
+              rows={3}
+              className={inputClasses('giftMessage')}
+              placeholder="Your gift message..."
+            />
+            <p className="text-sm text-[--color-charcoal]/60 mt-1">
+              We&apos;ll include this with your gift delivery
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Section 6: Delivery Preferences */}
       <div className={sectionClasses}>
         <h3 className="font-headline text-xl tracking-wide text-[--color-charcoal] mb-6 flex items-center gap-3">
           <span className="w-8 h-8 bg-[--color-purple] text-white flex items-center justify-center text-sm">
-            5
+            6
           </span>
-          DELIVERY PREFERENCES
+          ADDITIONAL OPTIONS
         </h3>
-
-        <div className="bg-[--color-gold]/10 p-4 mb-6 border-l-4 border-[--color-gold]">
-          <p className="text-[--color-charcoal] font-medium">
-            Regular delivery is on Fridays
-          </p>
-          <p className="text-sm text-[--color-charcoal]/70 mt-1">
-            Baskets are delivered each Friday to start your weekend right.
-          </p>
-        </div>
 
         <div className="space-y-4">
           <label className="flex items-center gap-3 p-4 border-2 border-[--color-charcoal]/20 cursor-pointer hover:border-[--color-gold] transition-colors">
@@ -596,11 +855,11 @@ export default function OrderForm() {
         </div>
       </div>
 
-      {/* Section 6: Container Deposit */}
+      {/* Section 7: Container Deposit */}
       <div className={sectionClasses}>
         <h3 className="font-headline text-xl tracking-wide text-[--color-charcoal] mb-6 flex items-center gap-3">
           <span className="w-8 h-8 bg-[--color-purple] text-white flex items-center justify-center text-sm">
-            6
+            7
           </span>
           CONTAINER DEPOSIT
         </h3>
@@ -633,11 +892,42 @@ export default function OrderForm() {
         )}
       </div>
 
-      {/* Section 7: Special Notes */}
+      {/* Section 8: Subscription Interest */}
+      <div className={sectionClasses}>
+        <h3 className="font-headline text-xl tracking-wide text-[--color-charcoal] mb-6 flex items-center gap-3">
+          <span className="w-8 h-8 bg-[--color-purple] text-white flex items-center justify-center text-sm">
+            8
+          </span>
+          SUBSCRIPTION
+        </h3>
+
+        <label className="flex items-start gap-3 p-4 border-2 border-[--color-gold] bg-[--color-gold]/5 cursor-pointer hover:bg-[--color-gold]/10 transition-colors">
+          <input
+            type="checkbox"
+            name="subscriptionInterest"
+            checked={formData.subscriptionInterest}
+            onChange={handleChange}
+            className="w-5 h-5 accent-[--color-gold] mt-0.5"
+          />
+          <span className="flex-1">
+            <span className="block font-medium">
+              I&apos;m interested in a weekly subscription
+            </span>
+            <span className="text-sm text-[--color-green] font-medium">
+              Save 15% on every order
+            </span>
+            <span className="text-sm text-[--color-charcoal]/60 block mt-1">
+              We&apos;ll reach out with details — no commitment required
+            </span>
+          </span>
+        </label>
+      </div>
+
+      {/* Section 9: Special Notes */}
       <div className="mb-10">
         <h3 className="font-headline text-xl tracking-wide text-[--color-charcoal] mb-6 flex items-center gap-3">
           <span className="w-8 h-8 bg-[--color-purple] text-white flex items-center justify-center text-sm">
-            7
+            9
           </span>
           SPECIAL NOTES
         </h3>
@@ -649,7 +939,7 @@ export default function OrderForm() {
           onChange={handleChange}
           rows={4}
           className={inputClasses('specialNotes')}
-          placeholder="Dietary needs, allergies, delivery instructions, or anything else we should know"
+          placeholder="Dietary needs, allergies, or anything else we should know"
         />
       </div>
 
