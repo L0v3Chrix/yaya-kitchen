@@ -9,11 +9,6 @@ const basketContents = {
     'Bowls — warm composed meals',
     'Classic Family Meal',
   ],
-  weeklyDinners: [
-    'Boards — themed gather-and-eat style',
-    'Bowls — protein, grain/starch, veggies & sauce',
-    'Classic Dinner — entree, side, grain/starch or veggies',
-  ],
   extras: [
     'Smoothies — 16 oz, protein forward, NO SUGAR ADDED',
     'Dessert — cakes, pies, cobblers, pavlova',
