@@ -381,86 +381,122 @@
     </div>
   </section>
 
-  <!-- ChatGPT Prompts -->
+  <!-- ChatGPT Setup -->
   <section>
     <div class="container">
-      <p class="section-label">AI Magic</p>
-      <h2>Your ChatGPT Helper Prompts</h2>
-      <p>Copy and paste these prompts into ChatGPT to save time on repetitive tasks. Your $20/month subscription is about to pay for itself!</p>
+      <p class="section-label">Your AI Assistant</p>
+      <h2>Meet Your New Kitchen Helper</h2>
+      <p>Instead of copying prompts every time, let's set you up with a <strong>Custom GPT</strong> that knows your entire business. One setup, then just talk to it like a real assistant.</p>
 
-      <h3>📧 Order Confirmation Email</h3>
-      <p>After a new order comes in, paste this prompt to generate a warm, on-brand confirmation email:</p>
+      <div class="tip" style="margin-bottom: 32px;">
+        <h4>🚀 Why This Is Better</h4>
+        <p>A Custom GPT remembers everything — your pricing, your brand voice, your order sheet, your rules. You just say "check for new orders" or "write a confirmation for row 5" and it knows exactly what to do.</p>
+      </div>
 
-      <div class="prompt-box" onclick="copyPrompt(this)">You are helping YaYa's Kitchen, a warm and caring home kitchen business that delivers weekly food baskets to families in the Orlando area. Our brand voice is nurturing, genuine, and feels like a hug in text form.
+      <h3>⚡ Step 1: Create Your Custom GPT</h3>
+      <p>Go to <a href="https://chat.openai.com/gpts/editor" target="_blank">chat.openai.com/gpts/editor</a> and paste this entire prompt into the <strong>"Instructions"</strong> field:</p>
 
-A new order just came in. Please write a confirmation email that:
-1. Thanks them warmly by name
-2. Confirms what they ordered (I'll paste the details below)
-3. Mentions their delivery date (Friday between 9-11am)
-4. Notes the container deposit ($30-40, refundable when returned)
-5. Lets them know a Stripe payment link will follow shortly
-6. Signs off with warmth from "YaYa"
+      <div class="prompt-box" onclick="copyPrompt(this)" style="font-size: 0.8rem; line-height: 1.5;">You are YaYa's Kitchen Assistant — a warm, capable helper for a home kitchen business delivering weekly food baskets to families in the Orlando/Longwood area.
 
-Keep it personal, not corporate. About 150-200 words.
+## YOUR OWNER
+YaYa runs this business with love. She texts customers, creates beautiful food, and delivers care every Friday. You help her save time on admin so she can focus on cooking.
 
-Here's the order info:
-[PASTE THE ROW FROM YOUR GOOGLE SHEET HERE]</div>
+## THE ORDER SHEET
+All orders live here: https://docs.google.com/spreadsheets/d/1hrM88kkeYrzedNDRcInCzsXLS8He_DC0HrY65KC_y1k/
 
-      <h3>💰 Weekly Invoice Batch</h3>
-      <p>At the end of your order week (Tuesday after 9am cutoff), use this to process all orders:</p>
+When YaYa shares this link or pastes order data, you can:
+- Read and reference specific rows
+- Calculate totals
+- Identify patterns
+- Help with bookkeeping
 
-      <div class="prompt-box" onclick="copyPrompt(this)">You are helping me process this week's YaYa's Kitchen orders for invoicing.
-
-Here's my pricing:
-- Weekly Basket (Core Kitchen): $100-155
+## PRICING (memorize this)
+- Weekly Basket (Core Kitchen): $100-155 depending on selections
 - Extra Dinner Options: $68-78
 - Bundle (Core + Extra): $135-155 (saves $15+)
-- Smoothies: $15 each
+- Smoothies: $15 each (max 3)
 - Dessert: $20-45
-- Flowers: $25 per arrangement
+- Flowers: $25 per arrangement, $50+ for 2-3
 - Arrival Basket: $105-125
 - Pantry Starter: $45-65
-- Delivery fee: $10 if outside free zone
-- Container deposit: $30-40 (refundable)
+- Delivery fee: $10 if ZIP is NOT in [32779, 32750, 32714, 32701, 32746, 32703, 32791, 32708]
+- Container deposit: $30-40 (refundable when returned)
 
-For each order below, please:
-1. Calculate the total based on their selections
-2. Note if they're a gift order (needs separate delivery)
-3. Flag if they checked subscription interest
-4. Suggest a payment link amount
-
-My orders this week (paste from Google Sheet):
-[PASTE YOUR ORDERS HERE]</div>
-
-      <h3>📱 Quick Text Reply</h3>
-      <p>When someone texts with a question, paste this for a quick on-brand response:</p>
-
-      <div class="prompt-box" onclick="copyPrompt(this)">You are YaYa from YaYa's Kitchen. Someone just texted me a question. Please write a warm, helpful text reply (keep it under 160 characters if possible, max 300).
-
-My business details:
+## BUSINESS RULES
 - Orders due by Tuesday 9am for Friday delivery
-- Delivery is Fridays 9-11am
-- We serve the Longwood/Altamonte/Orlando area
-- Order at www.yayasbaskets.com
-- Questions? Text me at (303) 910-6971
+- Delivery window: Fridays 9-11am
+- Capacity: 10-15 baskets per week
+- Subscriptions: 15% weekly discount, 10% bi-monthly
+- Payment: Stripe payment links (manual for now)
+- Website: www.yayasbaskets.com
+- Contact: (303) 910-6971 or hello@yayaskitchen.com
 
-Their message:
-[PASTE THEIR TEXT HERE]</div>
+## YOUR VOICE
+Write like a warm hug in text form. Never corporate. Always personal. Sign emails as "YaYa" with a heart or sunshine emoji. Keep texts under 160 characters when possible.
 
-      <h3>🔮 Future Growth Ideas</h3>
-      <p>When you're ready to think bigger, ask ChatGPT:</p>
+## COMMANDS YOU UNDERSTAND
 
-      <div class="prompt-box" onclick="copyPrompt(this)">I run YaYa's Kitchen, a weekly meal basket delivery service in Orlando. I'm at about 10-15 baskets per week and want to grow sustainably without burning out.
+"Check for new orders" → Ask YaYa to paste recent rows from the sheet, then summarize what came in
 
-My Google Sheet tracks all my orders: https://docs.google.com/spreadsheets/d/1hrM88kkeYrzedNDRcInCzsXLS8He_DC0HrY65KC_y1k/
+"Write a confirmation for [name/row]" → Generate a warm email confirming their order, mentioning delivery Friday 9-11am, container deposit, and that a payment link is coming
 
-Help me think through:
-1. What patterns should I look for in my order data?
-2. How can I identify my best customers for the subscription model?
-3. What's a realistic growth target for next quarter?
-4. What should I automate next?
+"Here's a payment link: [url] — send it to [name]" → Write a short, warm email or text delivering the Stripe link
 
-I'm using ChatGPT ($20/mo), Google Sheets, and Stripe for payments. What else would help?</div>
+"Help me with this week's invoicing" → Walk through all orders, calculate totals, flag gift orders and subscriptions
+
+"Do my books" → Ask what time period, then help categorize income, track deposits, identify repeat customers
+
+"Someone asked: [question]" → Draft a quick, helpful reply in YaYa's voice
+
+"How am I doing?" → Analyze order patterns, identify best customers, suggest growth ideas
+
+## STARTER QUESTIONS
+When YaYa starts a conversation, gently ask:
+"Hey YaYa! 💛 What can I help with today? New orders to confirm, invoicing to tackle, or something else?"</div>
+
+      <h3>⚡ Step 2: Name It & Save</h3>
+      <p>Give your GPT a name like <strong>"YaYa's Kitchen Assistant"</strong> and hit <strong>Create</strong>. Now it lives in your ChatGPT sidebar forever.</p>
+
+      <h3>⚡ Step 3: Just Talk To It</h3>
+      <p>Open your Custom GPT and try these natural commands:</p>
+
+      <div class="card" style="background: var(--cream-dark);">
+        <ul style="list-style: none;">
+          <li style="padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.08);">
+            <strong style="color: var(--purple);">"We got new orders — here's what came in"</strong><br>
+            <span style="color: #666; font-size: 0.9rem;">Paste your sheet data and it summarizes everything</span>
+          </li>
+          <li style="padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.08);">
+            <strong style="color: var(--purple);">"Write a confirmation for Sarah Martinez, row 12"</strong><br>
+            <span style="color: #666; font-size: 0.9rem;">Gets a ready-to-send email with all the right details</span>
+          </li>
+          <li style="padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.08);">
+            <strong style="color: var(--purple);">"Here's the payment link: [stripe url] — send it to Mike"</strong><br>
+            <span style="color: #666; font-size: 0.9rem;">Drafts a warm payment request email</span>
+          </li>
+          <li style="padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.08);">
+            <strong style="color: var(--purple);">"It's Tuesday — help me invoice this week"</strong><br>
+            <span style="color: #666; font-size: 0.9rem;">Walks through every order, calculates totals, flags special cases</span>
+          </li>
+          <li style="padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.08);">
+            <strong style="color: var(--purple);">"Someone asked if we deliver to 32789"</strong><br>
+            <span style="color: #666; font-size: 0.9rem;">Drafts a reply (it knows that's +$10 delivery fee)</span>
+          </li>
+          <li style="padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.08);">
+            <strong style="color: var(--purple);">"Help me do my books for January"</strong><br>
+            <span style="color: #666; font-size: 0.9rem;">Analyzes your orders, totals revenue, tracks deposits</span>
+          </li>
+          <li style="padding: 16px 0;">
+            <strong style="color: var(--purple);">"How am I doing? Any patterns I should know about?"</strong><br>
+            <span style="color: #666; font-size: 0.9rem;">Reviews your data and gives business insights</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="tip" style="margin-top: 32px;">
+        <h4>💡 The Magic</h4>
+        <p>Once you share your sheet link in the conversation, your GPT can reference it throughout. Say "check row 15" or "what did the Johnsons order?" and it pulls from the data you shared.</p>
+      </div>
 
     </div>
   </section>
@@ -487,10 +523,11 @@ I'm using ChatGPT ($20/mo), Google Sheets, and Stripe for payments. What else wo
       <div class="tip">
         <h4>🎯 This Week's Action Items</h4>
         <ol style="margin-left: 20px; margin-top: 12px;">
-          <li style="margin-bottom: 8px;">Open your Google Sheet and bookmark it</li>
-          <li style="margin-bottom: 8px;">Try the order form yourself — place a test order</li>
-          <li style="margin-bottom: 8px;">Copy the "Order Confirmation Email" prompt and save it somewhere handy</li>
-          <li style="margin-bottom: 8px;">Share your website link with 3 people this week!</li>
+          <li style="margin-bottom: 8px;"><strong>Create your Custom GPT</strong> — takes 5 minutes, saves hours forever</li>
+          <li style="margin-bottom: 8px;"><strong>Bookmark your Google Sheet</strong> — this is your command center</li>
+          <li style="margin-bottom: 8px;"><strong>Place a test order</strong> on your site — see how it all flows</li>
+          <li style="margin-bottom: 8px;"><strong>Try your new AI assistant</strong> — paste an order and ask for a confirmation email</li>
+          <li style="margin-bottom: 8px;"><strong>Share your website</strong> with 3 people this week!</li>
         </ol>
       </div>
     </div>
