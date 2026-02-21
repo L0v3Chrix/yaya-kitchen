@@ -356,7 +356,7 @@ export default function OrderForm() {
                   value={option}
                   checked={formData.contactPreference === option}
                   onChange={handleChange}
-                  className="sr-only"
+                  className="w-4 h-4 accent-[--color-gold]"
                 />
                 <span className="font-headline text-sm tracking-wider">{option}</span>
               </label>

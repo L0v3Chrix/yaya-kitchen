@@ -20,8 +20,8 @@
 // ============================================
 
 const CONFIG = {
-  // YaYa's notification email (change this to YaYa's actual email later)
-  YAYA_EMAIL: 'chrix@theoneai.ai',
+  // YaYa's notification email
+  YAYA_EMAIL: 'hello@yayasbaskets.com',
   
   // Sheet tab names
   ORDERS_TAB: 'Orders',
