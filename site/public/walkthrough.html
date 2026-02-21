@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YaYa's Kitchen — Your Digital Kitchen is Ready!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Lato:wght@400;700&family=Oswald:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --purple: #2F1957;
+      --gold: #EEA421;
+      --green: #7C841D;
+      --orange: #D8491F;
+      --charcoal: #141412;
+      --cream: #FAF8F5;
+      --cream-dark: #F5F2ED;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      color: var(--charcoal);
+      background: var(--cream);
+      line-height: 1.7;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .script {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, var(--purple) 0%, #1a0d2e 100%);
+      color: white;
+      padding: 80px 24px;
+      text-align: center;
+    }
+
+    .hero .script {
+      color: var(--gold);
+      font-size: 1.5rem;
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      opacity: 0.9;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* Section */
+    section {
+      padding: 60px 24px;
+    }
+
+    section:nth-child(even) {
+      background: var(--cream-dark);
+    }
+
+    .section-label {
+      color: var(--gold);
+      font-size: 0.875rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    section h2 {
+      font-size: 1.75rem;
+      color: var(--purple);
+      margin-bottom: 24px;
+    }
+
+    section h3 {
+      font-size: 1.25rem;
+      color: var(--charcoal);
+      margin: 32px 0 16px;
+    }
+
+    section p {
+      margin-bottom: 16px;
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+
+    .card h4 {
+      font-size: 1rem;
+      color: var(--purple);
+    }
+
+    /* Links */
+    a {
+      color: var(--purple);
+      text-decoration: underline;
+      text-decoration-color: var(--gold);
+      text-underline-offset: 3px;
+    }
+
+    a:hover {
+      color: var(--green);
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--charcoal);
+      padding: 14px 28px;
+      text-decoration: none;
+      font-family: 'Oswald', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+      border: 2px solid var(--gold);
+    }
+
+    .btn:hover {
+      background: var(--purple);
+      border-color: var(--purple);
+      color: white;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--purple);
+      color: var(--purple);
+    }
+
+    .btn-outline:hover {
+      background: var(--purple);
+      color: white;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    /* Prompt Box */
+    .prompt-box {
+      background: var(--charcoal);
+      color: #f0f0f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 16px 0;
+      position: relative;
+      font-family: 'Monaco', 'Consolas', monospace;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .prompt-box::before {
+      content: 'ChatGPT Prompt — Click to Copy';
+      position: absolute;
+      top: -10px;
+      left: 16px;
+      background: var(--green);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .prompt-box:hover {
+      cursor: pointer;
+      background: #1a1a1a;
+    }
+
+    .prompt-box.copied::after {
+      content: '✓ Copied!';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--green);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-family: 'Oswald', sans-serif;
+    }
+
+    /* Checklist */
+    .checklist {
+      list-style: none;
+    }
+
+    .checklist li {
+      padding: 12px 0;
+      padding-left: 36px;
+      position: relative;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .checklist li::before {
+      content: '○';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      font-size: 1.25rem;
+    }
+
+    .checklist li.done::before {
+      content: '✓';
+      color: var(--green);
+    }
+
+    /* Tips */
+    .tip {
+      background: linear-gradient(135deg, var(--purple) 0%, #3d2070 100%);
+      color: white;
+      padding: 24px;
+      border-radius: 8px;
+      margin: 24px 0;
+    }
+
+    .tip h4 {
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--purple);
+      color: white;
+      text-align: center;
+      padding: 40px 24px;
+    }
+
+    footer .script {
+      color: var(--gold);
+      font-size: 1.25rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    footer p {
+      opacity: 0.8;
+      font-size: 0.875rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      .btn-group {
+        flex-direction: column;
+      }
+      .btn {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="container">
+      <span class="script">Congratulations!</span>
+      <h1>Your Digital Kitchen is Ready</h1>
+      <p>Everything you need to take orders, delight customers, and grow YaYa's Kitchen — all in one place.</p>
+    </div>
+  </header>
+
+  <!-- What's Delivered -->
+  <section>
+    <div class="container">
+      <p class="section-label">What We Built</p>
+      <h2>Your Complete Order System</h2>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🌐</div>
+          <h4>Your Beautiful Website</h4>
+        </div>
+        <p>A warm, inviting site that tells your story and makes ordering easy. Mobile-friendly, fast, and designed to convert visitors into customers.</p>
+        <a href="https://www.yayasbaskets.com" target="_blank" class="btn">Visit Your Live Site →</a>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📋</div>
+          <h4>Smart Order Form</h4>
+        </div>
+        <p>A 9-section order form that captures everything you need — contact info, delivery preferences, basket selections, add-ons, gift options, and subscription interest. ZIP code validation automatically applies delivery fees.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">📊</div>
+          <h4>Your Order Dashboard (Google Sheet)</h4>
+        </div>
+        <p>Every order flows directly into your Google Sheet in real-time. Three tabs: Orders (all submissions), Customers (contact database), and Settings (future config).</p>
+        <a href="https://docs.google.com/spreadsheets/d/1hrM88kkeYrzedNDRcInCzsXLS8He_DC0HrY65KC_y1k/" target="_blank" class="btn">Open Your Order Sheet →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section>
+    <div class="container">
+      <p class="section-label">The Flow</p>
+      <h2>How Orders Work</h2>
+
+      <ul class="checklist">
+        <li class="done"><strong>Customer visits your site</strong> — www.yayasbaskets.com</li>
+        <li class="done"><strong>They fill out the order form</strong> — all their preferences captured</li>
+        <li class="done"><strong>Order appears in your Google Sheet</strong> — instantly, with timestamp</li>
+        <li><strong>You send them a confirmation</strong> — use the ChatGPT prompts below!</li>
+        <li><strong>You send a Stripe payment link</strong> — manual for now, automated in V2</li>
+        <li><strong>Friday delivery!</strong> — delight another family</li>
+      </ul>
+
+      <div class="tip">
+        <h4>💡 Pro Tip</h4>
+        <p>Check your Google Sheet every morning. New orders appear automatically. The "submittedAt" column shows exactly when each order came in.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ChatGPT Prompts -->
+  <section>
+    <div class="container">
+      <p class="section-label">AI Magic</p>
+      <h2>Your ChatGPT Helper Prompts</h2>
+      <p>Copy and paste these prompts into ChatGPT to save time on repetitive tasks. Your $20/month subscription is about to pay for itself!</p>
+
+      <h3>📧 Order Confirmation Email</h3>
+      <p>After a new order comes in, paste this prompt to generate a warm, on-brand confirmation email:</p>
+
+      <div class="prompt-box" onclick="copyPrompt(this)">You are helping YaYa's Kitchen, a warm and caring home kitchen business that delivers weekly food baskets to families in the Orlando area. Our brand voice is nurturing, genuine, and feels like a hug in text form.
+
+A new order just came in. Please write a confirmation email that:
+1. Thanks them warmly by name
+2. Confirms what they ordered (I'll paste the details below)
+3. Mentions their delivery date (Friday between 9-11am)
+4. Notes the container deposit ($30-40, refundable when returned)
+5. Lets them know a Stripe payment link will follow shortly
+6. Signs off with warmth from "YaYa"
+
+Keep it personal, not corporate. About 150-200 words.
+
+Here's the order info:
+[PASTE THE ROW FROM YOUR GOOGLE SHEET HERE]</div>
+
+      <h3>💰 Weekly Invoice Batch</h3>
+      <p>At the end of your order week (Tuesday after 9am cutoff), use this to process all orders:</p>
+
+      <div class="prompt-box" onclick="copyPrompt(this)">You are helping me process this week's YaYa's Kitchen orders for invoicing.
+
+Here's my pricing:
+- Weekly Basket (Core Kitchen): $100-155
+- Extra Dinner Options: $68-78
+- Bundle (Core + Extra): $135-155 (saves $15+)
+- Smoothies: $15 each
+- Dessert: $20-45
+- Flowers: $25 per arrangement
+- Arrival Basket: $105-125
+- Pantry Starter: $45-65
+- Delivery fee: $10 if outside free zone
+- Container deposit: $30-40 (refundable)
+
+For each order below, please:
+1. Calculate the total based on their selections
+2. Note if they're a gift order (needs separate delivery)
+3. Flag if they checked subscription interest
+4. Suggest a payment link amount
+
+My orders this week (paste from Google Sheet):
+[PASTE YOUR ORDERS HERE]</div>
+
+      <h3>📱 Quick Text Reply</h3>
+      <p>When someone texts with a question, paste this for a quick on-brand response:</p>
+
+      <div class="prompt-box" onclick="copyPrompt(this)">You are YaYa from YaYa's Kitchen. Someone just texted me a question. Please write a warm, helpful text reply (keep it under 160 characters if possible, max 300).
+
+My business details:
+- Orders due by Tuesday 9am for Friday delivery
+- Delivery is Fridays 9-11am
+- We serve the Longwood/Altamonte/Orlando area
+- Order at www.yayasbaskets.com
+- Questions? Text me at (303) 910-6971
+
+Their message:
+[PASTE THEIR TEXT HERE]</div>
+
+      <h3>🔮 Future Growth Ideas</h3>
+      <p>When you're ready to think bigger, ask ChatGPT:</p>
+
+      <div class="prompt-box" onclick="copyPrompt(this)">I run YaYa's Kitchen, a weekly meal basket delivery service in Orlando. I'm at about 10-15 baskets per week and want to grow sustainably without burning out.
+
+My Google Sheet tracks all my orders: https://docs.google.com/spreadsheets/d/1hrM88kkeYrzedNDRcInCzsXLS8He_DC0HrY65KC_y1k/
+
+Help me think through:
+1. What patterns should I look for in my order data?
+2. How can I identify my best customers for the subscription model?
+3. What's a realistic growth target for next quarter?
+4. What should I automate next?
+
+I'm using ChatGPT ($20/mo), Google Sheets, and Stripe for payments. What else would help?</div>
+
+    </div>
+  </section>
+
+  <!-- Quick Reference -->
+  <section>
+    <div class="container">
+      <p class="section-label">Quick Reference</p>
+      <h2>Your Important Links</h2>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🔗</div>
+          <h4>Bookmark These</h4>
+        </div>
+        <ul style="list-style: none; margin-top: 16px;">
+          <li style="padding: 8px 0;"><strong>Your Website:</strong> <a href="https://www.yayasbaskets.com" target="_blank">www.yayasbaskets.com</a></li>
+          <li style="padding: 8px 0;"><strong>Order Sheet:</strong> <a href="https://docs.google.com/spreadsheets/d/1hrM88kkeYrzedNDRcInCzsXLS8He_DC0HrY65KC_y1k/" target="_blank">Google Sheet Dashboard</a></li>
+          <li style="padding: 8px 0;"><strong>Your Phone (for customers):</strong> (303) 910-6971</li>
+          <li style="padding: 8px 0;"><strong>Your Email:</strong> hello@yayaskitchen.com</li>
+        </ul>
+      </div>
+
+      <div class="tip">
+        <h4>🎯 This Week's Action Items</h4>
+        <ol style="margin-left: 20px; margin-top: 12px;">
+          <li style="margin-bottom: 8px;">Open your Google Sheet and bookmark it</li>
+          <li style="margin-bottom: 8px;">Try the order form yourself — place a test order</li>
+          <li style="margin-bottom: 8px;">Copy the "Order Confirmation Email" prompt and save it somewhere handy</li>
+          <li style="margin-bottom: 8px;">Share your website link with 3 people this week!</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coming Soon -->
+  <section>
+    <div class="container">
+      <p class="section-label">The Roadmap</p>
+      <h2>What's Coming in V2</h2>
+      <p>Your system will grow with you. Here's what we're planning next:</p>
+
+      <div class="card">
+        <ul style="list-style: none;">
+          <li style="padding: 12px 0; border-bottom: 1px solid #eee;">
+            <strong style="color: var(--purple);">Stripe Integration</strong><br>
+            <span style="color: #666;">Automatic payment links sent with confirmations</span>
+          </li>
+          <li style="padding: 12px 0; border-bottom: 1px solid #eee;">
+            <strong style="color: var(--purple);">Dynamic Menu</strong><br>
+            <span style="color: #666;">Update your weekly menu from the Google Sheet</span>
+          </li>
+          <li style="padding: 12px 0; border-bottom: 1px solid #eee;">
+            <strong style="color: var(--purple);">Subscription Billing</strong><br>
+            <span style="color: #666;">Automatic weekly charges for subscribers</span>
+          </li>
+          <li style="padding: 12px 0;">
+            <strong style="color: var(--purple);">Email Notifications</strong><br>
+            <span style="color: #666;">Automatic confirmations when orders come in</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <span class="script">Built with care by</span>
+      <h3 style="font-size: 1.5rem; margin-bottom: 8px;">Raize The Vibe</h3>
+      <p>Questions? Reach out to Chrix anytime.</p>
+      <p style="margin-top: 24px; opacity: 0.6;">© 2026 YaYa's Kitchen. This document is for your eyes only.</p>
+    </div>
+  </footer>
+
+  <script>
+    function copyPrompt(element) {
+      const text = element.innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        element.classList.add('copied');
+        setTimeout(() => {
+          element.classList.remove('copied');
+        }, 1500);
+      });
+    }
+  </script>
+
+</body>
+</html>
