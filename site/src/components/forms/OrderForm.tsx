@@ -168,10 +168,17 @@ export default function OrderForm() {
     setStatus('submitting')
 
     try {
+      // Validate that Google Script URL is configured
+      if (!GOOGLE_SCRIPT_URL) {
+        console.error('Order form: GOOGLE_SCRIPT_URL not configured')
+        setStatus('error')
+        return
+      }
+
       // Format delivery week label for submission
       const selectedWeek = deliveryWeeks.find(w => w.value === formData.deliveryWeek)
       
-      // Prepare data for submission
+      // Prepare data for submission with timestamp
       const submitData = {
         ...formData,
         deliveryWeekLabel: selectedWeek?.label || formData.deliveryWeek,
@@ -183,21 +190,28 @@ export default function OrderForm() {
         pantryStarter: formData.pantryStarter ? 'Yes' : 'No',
         containerDeposit: formData.containerDeposit ? 'Yes' : 'No',
         subscriptionInterest: formData.subscriptionInterest ? 'Yes' : 'No',
+        submittedAt: new Date().toISOString(),
       }
 
-      if (GOOGLE_SCRIPT_URL) {
-        await fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(submitData),
-        })
-      }
+      // Submit to Google Apps Script
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(submitData),
+      })
 
-      // Since no-cors doesn't return response, assume success
-      setStatus('success')
-      setFormData(initialFormData)
-    } catch {
+      // no-cors returns opaque response, but if we got here without throwing, 
+      // the request was sent. Network errors will throw.
+      // Note: This doesn't guarantee the sheet received it, but confirms network delivery.
+      if (response.type === 'opaque' || response.ok) {
+        setStatus('success')
+        setFormData(initialFormData)
+      } else {
+        setStatus('error')
+      }
+    } catch (err) {
+      console.error('Order submission failed:', err)
       setStatus('error')
     }
   }
@@ -267,9 +281,16 @@ export default function OrderForm() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="bg-red-100 border-2 border-red-400 text-red-700 px-6 py-4 mb-8"
+            className="bg-red-100 border-2 border-red-400 text-red-700 px-6 py-6 mb-8 text-center"
           >
-            <p className="font-medium">Something went wrong. Please try again or email us directly.</p>
+            <p className="font-headline text-lg mb-2">Uh oh, looks like there&apos;s a problem!</p>
+            <p className="mb-3">Please text YaYa directly so we can help you out:</p>
+            <a 
+              href="sms:3039106971" 
+              className="inline-block bg-[--color-purple] text-white font-headline tracking-wider px-6 py-3 hover:bg-[--color-green] transition-colors"
+            >
+              Text YaYa: (303) 910-6971
+            </a>
           </motion.div>
         )}
       </AnimatePresence>
