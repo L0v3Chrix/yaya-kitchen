@@ -19,7 +19,7 @@ const basketContents = {
 }
 
 const pricing = [
-  { name: 'Weekly Basket (Core Kitchen) 2 or 3 choices', price: '$100–155/week' },
+  { name: 'Core Weekly Basket', price: '$175' },
   { name: 'Flower Add-On', price: '$25/week' },
   { name: 'Smoothie Add-On', price: '$15/week' },
   { name: 'Dessert Add-On', price: '$20–45' },

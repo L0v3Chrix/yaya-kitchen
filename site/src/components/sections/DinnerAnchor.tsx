@@ -40,8 +40,8 @@ export default function DinnerAnchor() {
           <div className="grid md:grid-cols-2 gap-4">
             <div className="bg-white/50 p-6 rounded-lg">
               <p className="flex justify-between items-center">
-                <span>Weekly Basket (Core Kitchen) 2 or 3 choices</span>
-                <span className="font-headline text-[--color-gold]">$100 - $155/week</span>
+                <span>Core Weekly Basket</span>
+                <span className="font-headline text-[--color-gold]">$175</span>
               </p>
             </div>
             <div className="bg-white/50 p-6 rounded-lg">

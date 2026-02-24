@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 
 export default function AboutYaya() {
   return (
-    <section id="about" className="py-20 md:py-32 bg-[--color-cream]">
+    <section id="about" className="pt-20 pb-12 md:pt-32 md:pb-16 bg-[--color-cream]">
       <div className="max-w-4xl mx-auto px-6 text-center">
         {/* Portrait */}
         <motion.div

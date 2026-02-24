@@ -9,6 +9,7 @@ import Flowers from '@/components/sections/Flowers'
 import DessertGallery from '@/components/sections/DessertGallery'
 import ArrivalBaskets from '@/components/sections/ArrivalBaskets'
 import AboutYaya from '@/components/sections/AboutYaya'
+import MonthlyMenu from '@/components/sections/MonthlyMenu'
 import OrderForm from '@/components/forms/OrderForm'
 
 export default function Home() {
@@ -43,15 +44,15 @@ export default function Home() {
         {/* 8. About YaYa */}
         <AboutYaya />
 
-        {/* 9. Order Form Section */}
-        <section id="order" className="py-20 md:py-32 bg-[--color-cream-dark]">
+        {/* 9. Monthly Menu */}
+        <MonthlyMenu />
+
+        {/* 10. Order Form Section */}
+        <section id="order" className="pt-10 pb-20 md:pt-14 md:pb-32 bg-[--color-cream-dark]">
           <div className="max-w-4xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <span className="font-script italic text-2xl text-[--color-gold] block mb-4">
+            <div className="text-center mb-10">
+              <h2 className="font-script italic text-2xl md:text-3xl text-[--color-gold] mb-3">
                 Ready to Order?
-              </span>
-              <h2 className="font-headline text-3xl md:text-4xl tracking-wide text-[--color-charcoal] mb-4">
-                START YOUR ORDER
               </h2>
               <p className="text-[--color-charcoal]/70">
                 Fill out the form below and we&apos;ll prepare your basket with care.

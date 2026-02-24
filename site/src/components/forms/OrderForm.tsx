@@ -539,8 +539,8 @@ export default function OrderForm() {
               onChange={handleChange}
               className="w-5 h-5 accent-[--color-gold]"
             />
-            <span className="flex-1">Yes, include the Weekly Basket</span>
-            <span className="font-headline text-[--color-gold]">$100–155</span>
+            <span className="flex-1">Yes, include the Core Weekly Basket</span>
+            <span className="font-headline text-[--color-gold]">$175</span>
           </label>
 
           <label className="flex items-center gap-3 p-4 border-2 border-[--color-charcoal]/20 cursor-pointer hover:border-[--color-gold] transition-colors">
@@ -572,8 +572,8 @@ export default function OrderForm() {
                 onChange={handleChange}
                 className="w-5 h-5 accent-[--color-gold]"
               />
-              <span className="flex-1">Yes, send a basket as a gift</span>
-              <span className="font-headline text-[--color-gold]">$100–155</span>
+              <span className="flex-1">Yes, send a Core Weekly Basket as a gift</span>
+              <span className="font-headline text-[--color-gold]">$175</span>
             </label>
 
             <label className="flex items-center gap-3 p-4 border-2 border-[--color-charcoal]/20 cursor-pointer hover:border-[--color-gold] transition-colors">
@@ -671,10 +671,10 @@ export default function OrderForm() {
                   className="w-5 h-5 accent-[--color-gold]"
                 />
                 <span className="flex-1">
-                  <span className="block">Bundle: Core Basket + Extra Dinners</span>
-                  <span className="text-sm text-[--color-green]">Recommended — Save $15+</span>
+                  <span className="block">Core Weekly Basket + Extra Dinners</span>
+                  <span className="text-sm text-[--color-green]">Most Popular</span>
                 </span>
-                <span className="font-headline text-[--color-gold]">$135–155</span>
+                <span className="font-headline text-[--color-gold]">$175+</span>
               </label>
             </div>
           </motion.div>

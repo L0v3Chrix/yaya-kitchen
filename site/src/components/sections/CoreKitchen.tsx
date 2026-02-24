@@ -37,7 +37,7 @@ export default function CoreKitchen() {
             with an option to increase portions for older children or up to 4 adults.
           </p>
           <p className="font-headline text-lg text-[--color-charcoal]">
-            Price Range: <span className="text-[--color-gold]">$100 - $155</span>
+            Price: <span className="text-[--color-gold]">$175 for the Core Weekly Basket</span>
           </p>
         </>
       }
