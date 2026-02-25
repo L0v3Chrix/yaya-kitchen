@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yaya's Stripe Setup Guide</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-size: 20px;
+            line-height: 1.8;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #faf9f7;
+        }
+        
+        h1 {
+            color: #635bff;
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+        
+        h2 {
+            color: #1a1a1a;
+            font-size: 28px;
+            margin-top: 50px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #635bff;
+        }
+        
+        h3 {
+            color: #635bff;
+            font-size: 22px;
+            margin-top: 30px;
+        }
+        
+        .step-box {
+            background: white;
+            border-radius: 12px;
+            padding: 25px 30px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-left: 5px solid #635bff;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #635bff;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            font-size: 20px;
+            margin-right: 15px;
+        }
+        
+        .step-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1a1a1a;
+            display: inline;
+        }
+        
+        .step-content {
+            margin-top: 15px;
+            padding-left: 55px;
+        }
+        
+        .important {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .important-title {
+            font-weight: bold;
+            color: #856404;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .info-to-send {
+            background: #e7f3ff;
+            border: 2px solid #0066cc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .info-to-send h4 {
+            color: #0066cc;
+            margin-top: 0;
+            font-size: 20px;
+        }
+        
+        ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        
+        li {
+            margin: 12px 0;
+        }
+        
+        .click-path {
+            background: #f0f0f0;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 18px;
+            white-space: nowrap;
+        }
+        
+        .button-look {
+            display: inline-block;
+            background: #635bff;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        
+        .screenshot-placeholder {
+            background: #e9ecef;
+            border: 2px dashed #adb5bd;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            color: #6c757d;
+            margin: 20px 0;
+            font-style: italic;
+        }
+        
+        .checklist {
+            background: white;
+            border-radius: 12px;
+            padding: 25px 30px;
+            margin: 30px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .checklist h3 {
+            margin-top: 0;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .checkbox {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #635bff;
+            border-radius: 4px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .final-section {
+            background: linear-gradient(135deg, #635bff 0%, #7c3aed 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        .final-section h2 {
+            color: white;
+            border: none;
+            margin-top: 0;
+        }
+        
+        hr {
+            border: none;
+            height: 2px;
+            background: #e9ecef;
+            margin: 40px 0;
+        }
+        
+        .tip {
+            background: #f0fff4;
+            border-left: 4px solid #28a745;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning {
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                font-size: 14px;
+            }
+            .step-box {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>🍳 Yaya's Stripe Setup Guide</h1>
+    <p class="subtitle">Everything you need to do to accept payments for your cooking classes</p>
+    
+    <div class="important">
+        <div class="important-title">📋 What This Guide Will Help You Do:</div>
+        <ul>
+            <li>Make sure your Stripe account is fully set up</li>
+            <li>Find the special codes Chrix needs to connect your checkout</li>
+            <li>Set up your first product (the cooking class)</li>
+        </ul>
+        <p><strong>Time needed:</strong> About 30-45 minutes</p>
+    </div>
+
+    <hr>
+
+    <h2>Part 1: Log Into Your Stripe Account</h2>
+    
+    <div class="step-box">
+        <span class="step-number">1</span>
+        <span class="step-title">Open Stripe in Your Web Browser</span>
+        <div class="step-content">
+            <p>Go to: <strong><a href="https://dashboard.stripe.com" target="_blank">dashboard.stripe.com</a></strong></p>
+            <p>You can click the link above, or type it into your browser's address bar at the top.</p>
+        </div>
+    </div>
+    
+    <div class="step-box">
+        <span class="step-number">2</span>
+        <span class="step-title">Sign In</span>
+        <div class="step-content">
+            <p>Enter your email address and password that you used when you created your Stripe account.</p>
+            <div class="tip">
+                <strong>💡 Tip:</strong> If you forgot your password, click "Forgot your password?" and Stripe will email you a reset link.
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>Part 2: Complete Your Account Setup</h2>
+    
+    <p>Before you can accept real payments, Stripe needs some information about you and your business. Let's make sure everything is filled in.</p>
+    
+    <div class="step-box">
+        <span class="step-number">3</span>
+        <span class="step-title">Check If Your Account Is Complete</span>
+        <div class="step-content">
+            <p>Look at the top of your Stripe dashboard. Do you see any:</p>
+            <ul>
+                <li>Yellow or orange banners saying "Complete your account"?</li>
+                <li>A progress bar that isn't at 100%?</li>
+                <li>Any warnings or "Action required" messages?</li>
+            </ul>
+            <p>If you see any of these, click on them and follow Stripe's instructions to complete each section.</p>
+        </div>
+    </div>
+    
+    <div class="step-box">
+        <span class="step-number">4</span>
+        <span class="step-title">Go to Settings</span>
+        <div class="step-content">
+            <p>Look in the <strong>bottom-left corner</strong> of the screen. You'll see a gear icon ⚙️ or the word <span class="click-path">Settings</span>. Click it.</p>
+        </div>
+    </div>
+    
+    <div class="step-box">
+        <span class="step-number">5</span>
+        <span class="step-title">Check Your Business Details</span>
+        <div class="step-content">
+            <p>In Settings, look for <span class="click-path">Business details</span> or <span class="click-path">Account details</span> and click it.</p>
+            <p>Make sure these are filled in:</p>
+            <ul>
+                <li>✅ <strong>Business name</strong> (can be "Yaya's Kitchen" or your legal name)</li>
+                <li>✅ <strong>Business address</strong></li>
+                <li>✅ <strong>Phone number</strong></li>
+                <li>✅ <strong>Business type</strong> (probably "Individual" or "Sole proprietor")</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="step-box">
+        <span class="step-number">6</span>
+        <span class="step-title">Add Your Bank Account</span>
+        <div class="step-content">
+            <p>This is where Stripe will send your money!</p>
+            <p>In Settings, look for <span class="click-path">Bank accounts and scheduling</span> or <span class="click-path">Payouts</span>. Click it.</p>
+            <p>If you haven't added a bank account yet:</p>
+            <ol>
+                <li>Click <span class="button-look">+ Add bank account</span></li>
+                <li>Enter your bank's routing number (9 digits)</li>
+                <li>Enter your account number</li>
+                <li>Confirm by entering the account number again</li>
+            </ol>
+            <div class="tip">
+                <strong>💡 Where to find these numbers:</strong> Look at the bottom of one of your checks. The routing number is the first set of 9 numbers. The account number is the second set.
+            </div>
+        </div>
+    </div>
+    
+    <div class="step-box">
+        <span class="step-number">7</span>
+        <span class="step-title">Verify Your Identity</span>
+        <div class="step-content">
+            <p>Stripe may ask you to verify your identity. This is normal and required by law.</p>
+            <p>Look in Settings for <span class="click-path">Identity verification</span> or check if there's a banner asking for this.</p>
+            <p>You may need to provide:</p>
+            <ul>
+                <li>Your Social Security Number (last 4 digits or full)</li>
+                <li>A photo of your driver's license or ID</li>
+                <li>Your date of birth</li>
+            </ul>
+            <div class="warning">
+                <strong>⚠️ This is safe:</strong> Stripe is a major payment company trusted by millions of businesses. They need this info to comply with banking laws.
+            </div>
+        </div>
+    </div>
+
+    <div class="success">
+        <strong>✅ How to know Part 2 is complete:</strong>
+        <p>When you go to your main dashboard, you should NOT see any warning banners at the top. If everything is green/clear at the top, you're good!</p>
+    </div>
+
+    <hr>
+
+    <h2>Part 3: Create Your Cooking Class Product</h2>
+    
+    <p>Now let's set up your cooking class as a product in Stripe so people can pay for it.</p>
+    
+    <div class="step-box">
+        <span class="step-number">8</span>
+        <span class="step-title">Go to Products</span>
+        <div class="step-content">
+            <p>Look on the <strong>left side</strong> of your screen for the menu.</p>
+            <p>Click on <span class="click-path">Product catalog</span> or just <span class="click-path">Products</span></p>
+            <p>(It might be under a section called "More" — click "More" if you don't see it)</p>
+        </div>
+    </div>
+    
+    <div class="step-box">
+        <span class="step-number">9</span>
+        <span class="step-title">Add Your First Product</span>
+        <div class="step-content">
+            <p>Click the <span class="button-look">+ Add product</span> button (usually in the top right)</p>
+            <p>Fill in these details:</p>
+            <ul>
+                <li><strong>Name:</strong> Yaya's Cooking Class</li>
+                <li><strong>Description:</strong> (optional) A fun, hands-on cooking class where you'll learn authentic family recipes!</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="step-box">
+        <span class="step-number">10</span>
+        <span class="step-title">Set the Price</span>
+        <div class="step-content">
+            <p>Under "Pricing" fill in:</p>
+            <ul>
+                <li><strong>Price:</strong> Enter the amount (example: 75.00 for $75)</li>
+                <li><strong>Currency:</strong> Make sure it says USD (US Dollars)</li>
+                <li><strong>Type:</strong> Select "One time" (not recurring/subscription)</li>
+            </ul>
+            <p>Then click <span class="button-look">Save product</span></p>
+        </div>
+    </div>
+
+    <div class="success">
+        <strong>✅ Your product is now created!</strong>
+        <p>You should see "Yaya's Cooking Class" in your product list.</p>
+    </div>
+
+    <hr>
+
+    <h2>Part 4: Get the Information Chrix Needs</h2>
+    
+    <p>Now for the most important part — getting the special codes that let Chrix connect your website checkout to your Stripe account.</p>
+    
+    <div class="important">
+        <div class="important-title">🔐 About These "Keys"</div>
+        <p>Stripe uses special codes called "API Keys" to securely connect your account to your website. Think of them like special passwords that let the website talk to Stripe.</p>
+        <p><strong>You'll need to find 2 keys:</strong></p>
+        <ul>
+            <li>The "Publishable key" (this one is okay to share)</li>
+            <li>The "Secret key" (keep this private — only share with Chrix)</li>
+        </ul>
+    </div>
+    
+    <div class="step-box">
+        <span class="step-number">11</span>
+        <span class="step-title">Go to the Developers Section</span>
+        <div class="step-content">
+            <p>Look on the <strong>left side menu</strong> for <span class="click-path">Developers</span></p>
+            <p>Click it to expand the menu, then click <span class="click-path">API keys</span></p>
+            <p><em>Alternative path:</em> You can also click the gear ⚙️ (Settings) → then look for "Developers" → "API keys"</p>
+        </div>
+    </div>
+    
+    <div class="step-box">
+        <span class="step-number">12</span>
+        <span class="step-title">Make Sure You're in LIVE Mode (Not Test Mode)</span>
+        <div class="step-content">
+            <p>This is <strong>very important!</strong></p>
+            <p>Look at the top of your Stripe dashboard. You might see a toggle or switch that says:</p>
+            <ul>
+                <li><strong>"Test mode"</strong> (with an orange/yellow indicator) — ❌ NOT this one</li>
+                <li><strong>"Live mode"</strong> (no special color) — ✅ This is what we want</li>
+            </ul>
+            <p>If you see "Test mode" is on, click the toggle to switch to <strong>Live mode</strong>.</p>
+            <div class="warning">
+                <strong>⚠️ Why this matters:</strong> Test mode keys won't accept real payments. We need the live keys!
+            </div>
+        </div>
+    </div>
+    
+    <div class="step-box">
+        <span class="step-number">13</span>
+        <span class="step-title">Find and Copy Your Publishable Key</span>
+        <div class="step-content">
+            <p>On the API keys page, you'll see a section called <strong>"Standard keys"</strong></p>
+            <p>Look for <strong>"Publishable key"</strong> — it starts with <code>pk_live_</code></p>
+            <p>Click the <strong>copy button</strong> (looks like two overlapping squares 📋) next to it.</p>
+            <p>Paste it somewhere safe (like a note on your phone or a text message to yourself).</p>
+        </div>
+    </div>
+    
+    <div class="step-box">
+        <span class="step-number">14</span>
+        <span class="step-title">Find and Copy Your Secret Key</span>
+        <div class="step-content">
+            <p>Look for <strong>"Secret key"</strong> — it will say "Reveal live key" or show <code>sk_live_</code></p>
+            <p>Click <span class="button-look">Reveal live key</span> (you might need to re-enter your password)</p>
+            <p>Once revealed, click the <strong>copy button</strong> 📋 next to it.</p>
+            <p>Paste it somewhere safe with the publishable key.</p>
+            <div class="warning">
+                <strong>🔒 Keep this secret!</strong> Never post this key publicly or share it with anyone except Chrix. It gives full access to your Stripe account.
+            </div>
+        </div>
+    </div>
+    
+    <div class="step-box">
+        <span class="step-number">15</span>
+        <span class="step-title">Get Your Product Price ID</span>
+        <div class="step-content">
+            <p>Go back to <span class="click-path">Product catalog</span> → <span class="click-path">Products</span></p>
+            <p>Click on <strong>"Yaya's Cooking Class"</strong> (the product you created)</p>
+            <p>Scroll down to the <strong>"Pricing"</strong> section</p>
+            <p>You'll see your price listed. Look for a code that starts with <code>price_</code></p>
+            <p>It looks something like: <code>price_1ABC123def456...</code></p>
+            <p>Click to copy this Price ID.</p>
+            <div class="tip">
+                <strong>💡 Can't find it?</strong> Click on the price row itself — a side panel might open showing the Price ID.
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>Part 5: Send Everything to Chrix</h2>
+    
+    <div class="info-to-send">
+        <h4>📤 Copy and Send These 3 Things to Chrix:</h4>
+        <p>Send a message to Chrix with:</p>
+        <ol>
+            <li><strong>Publishable Key</strong> (starts with pk_live_)</li>
+            <li><strong>Secret Key</strong> (starts with sk_live_)</li>
+            <li><strong>Price ID</strong> (starts with price_)</li>
+        </ol>
+        <p><em>You can text these, or send via WhatsApp — however you normally communicate.</em></p>
+    </div>
+    
+    <div class="tip">
+        <strong>💡 Easy way to organize your message:</strong>
+        <p style="font-family: monospace; background: white; padding: 15px; border-radius: 6px; margin-top: 10px;">
+            Here are my Stripe keys for the checkout:<br><br>
+            Publishable Key: pk_live_xxxxx<br>
+            Secret Key: sk_live_xxxxx<br>
+            Price ID: price_xxxxx
+        </p>
+    </div>
+
+    <hr>
+
+    <h2>✅ Final Checklist</h2>
+    
+    <div class="checklist">
+        <h3>Before You're Done, Make Sure:</h3>
+        
+        <div class="checklist-item">
+            <div class="checkbox"></div>
+            <div><strong>Account is fully verified</strong> — No warning banners at the top of your dashboard</div>
+        </div>
+        
+        <div class="checklist-item">
+            <div class="checkbox"></div>
+            <div><strong>Bank account is connected</strong> — So you can receive your money!</div>
+        </div>
+        
+        <div class="checklist-item">
+            <div class="checkbox"></div>
+            <div><strong>Product is created</strong> — "Yaya's Cooking Class" shows in your products</div>
+        </div>
+        
+        <div class="checklist-item">
+            <div class="checkbox"></div>
+            <div><strong>You copied the LIVE keys</strong> — Not test keys! (pk_live and sk_live, not pk_test)</div>
+        </div>
+        
+        <div class="checklist-item">
+            <div class="checkbox"></div>
+            <div><strong>All 3 items sent to Chrix</strong> — Publishable key, Secret key, and Price ID</div>
+        </div>
+    </div>
+
+    <div class="final-section">
+        <h2>🎉 You Did It!</h2>
+        <p>Once Chrix receives your keys, he'll connect everything and you'll be ready to start accepting payments for your cooking classes!</p>
+        <p style="font-size: 18px; opacity: 0.9;">Questions? Just text or call Chrix.</p>
+    </div>
+
+    <hr>
+    
+    <p style="text-align: center; color: #666; font-size: 16px;">
+        Guide created for Yaya's Kitchen • February 2026<br>
+        Made with ❤️ by the Raize The Vibe team
+    </p>
+
+</body>
+</html>
