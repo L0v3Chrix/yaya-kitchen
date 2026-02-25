@@ -196,10 +196,12 @@ export default function OrderForm() {
       }
 
       // Submit to Google Apps Script
+      // Using text/plain instead of application/json because no-cors mode
+      // strips application/json content type (requires CORS preflight)
       const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify(submitData),
       })
 
