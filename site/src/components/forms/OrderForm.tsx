@@ -181,6 +181,8 @@ export default function OrderForm() {
       // Prepare data for submission with timestamp
       const submitData = {
         ...formData,
+        // Map zipCode to zip for Apps Script compatibility
+        zip: formData.zipCode,
         deliveryWeekLabel: selectedWeek?.label || formData.deliveryWeek,
         isInDeliveryZone: isZipInZone ? 'Yes' : 'No',
         deliveryFee: isZipInZone ? '$0' : '$10',
