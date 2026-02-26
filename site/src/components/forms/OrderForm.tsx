@@ -2,6 +2,9 @@
 
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import OrderSummary from './OrderSummary'
+import MenuWeekSelector from './MenuWeekSelector'
+import { calculateOrderTotal } from '@/lib/calculate-order'
 
 // ZIP codes with free delivery (8-mile radius from 32779 Longwood)
 const FREE_DELIVERY_ZIPS = ['32779', '32750', '32714', '32701', '32746', '32703', '32791', '32708']
@@ -15,6 +18,7 @@ interface FormData {
   address: string
   zipCode: string
   deliveryWeek: string
+  menuWeek: '1' | '2' | '3' | '4' | ''
   deliveryInstructions: string
   contactPreference: ContactPreference | ''
   weeklyBasket: 'Yes' | 'No'
@@ -24,6 +28,7 @@ interface FormData {
   dinnerEntree: 'None' | '1' | '2' | '3' | '4'
   smoothieQty: '0' | '1' | '2' | '4'
   dessert: boolean
+  portionBoost: boolean
   flowersHome: 'None' | '1 arrangement' | '2-3 arrangements'
   flowersGift: boolean
   giftRecipient: string
@@ -80,6 +85,7 @@ const initialFormData: FormData = {
   address: '',
   zipCode: '',
   deliveryWeek: '',
+  menuWeek: '1',
   deliveryInstructions: '',
   contactPreference: '',
   weeklyBasket: 'Yes',
@@ -89,6 +95,7 @@ const initialFormData: FormData = {
   dinnerEntree: 'None',
   smoothieQty: '0',
   dessert: false,
+  portionBoost: false,
   flowersHome: 'None',
   flowersGift: false,
   giftRecipient: '',
@@ -125,6 +132,14 @@ export default function OrderForm() {
   // Check if gift message should be shown
   const showGiftMessage = formData.giftBasket === 'Yes' || formData.flowersGift
 
+  // Calculate order total
+  const orderTotal = useMemo(() => {
+    return calculateOrderTotal({
+      ...formData,
+      isFirstOrder: true, // Assume first order for now
+    }, true)
+  }, [formData])
+
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
 
@@ -160,62 +175,56 @@ export default function OrderForm() {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
+  const handleSubmit = async () => {
     if (!validateForm()) return
 
     setStatus('submitting')
 
     try {
-      // Validate that Google Script URL is configured
-      if (!GOOGLE_SCRIPT_URL) {
-        console.error('Order form: GOOGLE_SCRIPT_URL not configured')
-        setStatus('error')
-        return
-      }
-
       // Format delivery week label for submission
       const selectedWeek = deliveryWeeks.find(w => w.value === formData.deliveryWeek)
       
-      // Prepare data for submission with timestamp
-      const submitData = {
-        ...formData,
-        // Map zipCode to zip for Apps Script compatibility
-        zip: formData.zipCode,
-        deliveryWeekLabel: selectedWeek?.label || formData.deliveryWeek,
-        isInDeliveryZone: isZipInZone ? 'Yes' : 'No',
-        deliveryFee: isZipInZone ? '$0' : '$10',
-        dessert: formData.dessert ? 'Yes' : 'No',
-        flowersGift: formData.flowersGift ? 'Yes' : 'No',
-        arrivalBasket: formData.arrivalBasket ? 'Yes' : 'No',
-        pantryStarter: formData.pantryStarter ? 'Yes' : 'No',
-        containerDeposit: formData.containerDeposit ? 'Yes' : 'No',
-        subscriptionInterest: formData.subscriptionInterest ? 'Yes' : 'No',
-        submittedAt: new Date().toISOString(),
+      // Prepare order data for checkout session
+      const checkoutData = {
+        orderData: {
+          ...formData,
+          // Map zipCode to zip for Apps Script compatibility
+          zip: formData.zipCode,
+          deliveryWeekLabel: selectedWeek?.label || formData.deliveryWeek,
+          isInDeliveryZone: isZipInZone ? 'Yes' : 'No',
+          deliveryFee: isZipInZone ? '$0' : '$10',
+          dessert: formData.dessert ? 'Yes' : 'No',
+          flowersGift: formData.flowersGift ? 'Yes' : 'No',
+          arrivalBasket: formData.arrivalBasket ? 'Yes' : 'No',
+          pantryStarter: formData.pantryStarter ? 'Yes' : 'No',
+          containerDeposit: formData.containerDeposit ? 'Yes' : 'No',
+          subscriptionInterest: formData.subscriptionInterest ? 'Yes' : 'No',
+          submittedAt: new Date().toISOString(),
+        },
+        lineItems: orderTotal.lineItems,
       }
 
-      // Submit to Google Apps Script
-      // Using text/plain instead of application/json because no-cors mode
-      // strips application/json content type (requires CORS preflight)
-      const response = await fetch(GOOGLE_SCRIPT_URL, {
+      // Call checkout session API
+      const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(submitData),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(checkoutData),
       })
 
-      // no-cors returns opaque response, but if we got here without throwing, 
-      // the request was sent. Network errors will throw.
-      // Note: This doesn't guarantee the sheet received it, but confirms network delivery.
-      if (response.type === 'opaque' || response.ok) {
-        setStatus('success')
-        setFormData(initialFormData)
+      if (!response.ok) {
+        throw new Error('Failed to create checkout session')
+      }
+
+      const { url } = await response.json()
+
+      // Redirect to Stripe Checkout
+      if (url) {
+        window.location.href = url
       } else {
-        setStatus('error')
+        throw new Error('No checkout URL returned')
       }
     } catch (err) {
-      console.error('Order submission failed:', err)
+      console.error('Checkout failed:', err)
       setStatus('error')
     }
   }
@@ -518,6 +527,15 @@ export default function OrderForm() {
           ))}
         </select>
         {errors.deliveryWeek && <p className="text-red-500 text-sm mt-1">{errors.deliveryWeek}</p>}
+
+        {/* Menu Week Selector */}
+        <div className="mt-6">
+          <MenuWeekSelector
+            selectedWeek={formData.menuWeek}
+            onWeekChange={(week) => setFormData(prev => ({ ...prev, menuWeek: week as '1' | '2' | '3' | '4' }))}
+            disabled={status === 'submitting'}
+          />
+        </div>
       </div>
 
       {/* Section 3: Weekly Basket */}
@@ -951,40 +969,13 @@ export default function OrderForm() {
         />
       </div>
 
-      {/* Submit Button */}
-      <button
-        type="submit"
+      {/* Order Summary & Checkout */}
+      <OrderSummary
+        total={orderTotal}
+        isLoading={status === 'submitting'}
+        onCheckout={handleSubmit}
         disabled={status === 'submitting'}
-        className="w-full bg-[--color-gold] text-[--color-charcoal] font-headline text-lg tracking-widest uppercase px-8 py-5 border-2 border-[--color-gold] hover:bg-[--color-purple] hover:border-[--color-purple] hover:text-[--color-green] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-purple] focus-visible:ring-offset-2"
-      >
-        {status === 'submitting' ? (
-          <>
-            <svg
-              className="animate-spin h-5 w-5"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              />
-            </svg>
-            Submitting...
-          </>
-        ) : (
-          'Place My Order'
-        )}
-      </button>
+      />
 
       <p className="text-center text-sm text-[--color-charcoal]/60 mt-4">
         Questions? Email{' '}

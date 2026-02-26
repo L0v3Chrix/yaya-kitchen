@@ -8,11 +8,21 @@
  * - Order storage in Google Sheets
  * - Customer tracking
  * - Email notifications to YaYa and customers
+ * - Payment status tracking via Stripe integration
+ * - Webhook support for payment status updates
  * 
  * Deploy as Web App: Anyone can access (for form submission)
  * 
- * @version 1.0
+ * @version 1.1
  * @date 2026-02-21
+ * 
+ * Changelog:
+ * v1.1 (2026-02-21) - Added Stripe payment tracking
+ *   - Added paymentStatus, stripeSessionId, stripePaymentIntentId fields
+ *   - Created updatePaymentStatus() function for webhook support
+ *   - Added action='updatePaymentStatus' handler in doPost
+ *   - Updated sheet columns to include Stripe transaction IDs
+ * v1.0 (2026-02-21) - Initial release
  */
 
 // ============================================
@@ -61,6 +71,14 @@ function doPost(e) {
   try {
     // Parse incoming JSON data
     const data = JSON.parse(e.postData.contents);
+    
+    // Handle payment status update action
+    if (data.action === 'updatePaymentStatus') {
+      return updatePaymentStatus(data.orderId, data.paymentStatus, {
+        stripeSessionId: data.stripeSessionId,
+        stripePaymentIntentId: data.stripePaymentIntentId
+      });
+    }
     
     // Validate required fields
     const validation = validateOrderData(data);
@@ -116,7 +134,9 @@ function doPost(e) {
       subscriptionInterest: data.subscriptionInterest || 'None',
       contactPreference: data.contactPreference || 'Email',
       specialNotes: data.specialNotes || '',
-      paymentStatus: 'Pending',
+      paymentStatus: data.paymentStatus || 'Pending Payment',
+      stripeSessionId: data.stripeSessionId || '',
+      stripePaymentIntentId: data.stripePaymentIntentId || '',
       delivered: 'No'
     };
     
@@ -253,10 +273,70 @@ function addOrderToSheet(orderData) {
     orderData.contactPreference,
     orderData.specialNotes,
     orderData.paymentStatus,
-    orderData.delivered
+    orderData.delivered,
+    orderData.stripeSessionId,
+    orderData.stripePaymentIntentId
   ];
   
   sheet.appendRow(row);
+}
+
+/**
+ * Update payment status for an existing order
+ * @param {string} orderId - Order ID to update
+ * @param {string} status - New payment status
+ * @param {Object} stripeData - Stripe transaction IDs
+ * @returns {TextOutput} JSON response
+ */
+function updatePaymentStatus(orderId, status, stripeData) {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName(CONFIG.ORDERS_TAB);
+    const data = sheet.getDataRange().getValues();
+    
+    // Find the order by orderId (column B, index 1)
+    let orderRow = -1;
+    for (let i = 1; i < data.length; i++) {
+      if (data[i][1] && data[i][1].toString() === orderId) {
+        orderRow = i + 1; // 1-indexed for sheet
+        break;
+      }
+    }
+    
+    if (orderRow === -1) {
+      return createJsonResponse({
+        success: false,
+        error: 'Order not found: ' + orderId
+      });
+    }
+    
+    // Update payment status (column 27, index 26)
+    sheet.getRange(orderRow, 27).setValue(status);
+    
+    // Update stripePaymentIntentId if provided (column 30, index 29)
+    if (stripeData && stripeData.stripePaymentIntentId) {
+      sheet.getRange(orderRow, 30).setValue(stripeData.stripePaymentIntentId);
+    }
+    
+    // Update stripeSessionId if provided (column 29, index 28)
+    if (stripeData && stripeData.stripeSessionId) {
+      sheet.getRange(orderRow, 29).setValue(stripeData.stripeSessionId);
+    }
+    
+    return createJsonResponse({
+      success: true,
+      orderId: orderId,
+      paymentStatus: status,
+      message: 'Payment status updated successfully'
+    });
+    
+  } catch (error) {
+    console.error('updatePaymentStatus Error:', error.toString());
+    return createJsonResponse({
+      success: false,
+      error: 'Failed to update payment status: ' + error.toString()
+    });
+  }
 }
 
 // ============================================
@@ -792,7 +872,8 @@ function initializeSheets() {
       'Gift Basket', 'Gift Recipient', 'Dinner Anchor', 'Smoothie Qty', 'Dessert',
       'Flowers Home', 'Flowers Gift', 'Gift Message', 'Arrival Basket', 'Pantry Starter',
       'Delivery Instructions', 'Container Deposit', 'Subscription Interest', 
-      'Contact Preference', 'Special Notes', 'Payment Status', 'Delivered'
+      'Contact Preference', 'Special Notes', 'Payment Status', 'Delivered',
+      'Stripe Session ID', 'Stripe Payment Intent ID'
     ]);
   }
   
