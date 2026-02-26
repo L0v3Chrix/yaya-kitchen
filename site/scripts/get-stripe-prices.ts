@@ -1,5 +1,5 @@
 import Stripe from 'stripe';
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '!STRIPE_SECRET_KEY_PLACEHOLDER!');
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 async function main() {
   const products = await stripe.products.list({ limit: 50, active: true });

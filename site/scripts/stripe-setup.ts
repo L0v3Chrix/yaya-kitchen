@@ -12,7 +12,7 @@
 
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '!STRIPE_SECRET_KEY_PLACEHOLDER!');
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 // Existing product IDs from Chrix
 const EXISTING_PRODUCTS = {
