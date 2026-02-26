@@ -186,7 +186,7 @@ export default function OrderForm() {
       
       // Prepare order data for checkout session
       const checkoutData = {
-        orderData: {
+        order: {
           ...formData,
           // Map zipCode to zip for Apps Script compatibility
           zip: formData.zipCode,
@@ -202,6 +202,7 @@ export default function OrderForm() {
           submittedAt: new Date().toISOString(),
         },
         lineItems: orderTotal.lineItems,
+        total: orderTotal.total,
       }
 
       // Call checkout session API
@@ -286,7 +287,7 @@ export default function OrderForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto">
+    <form onSubmit={(e) => e.preventDefault()} className="max-w-2xl mx-auto">
       {/* Error Banner */}
       <AnimatePresence>
         {status === 'error' && (
