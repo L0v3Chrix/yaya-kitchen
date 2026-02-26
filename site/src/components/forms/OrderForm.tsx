@@ -21,8 +21,8 @@ interface FormData {
   giftBasket: 'Yes' | 'No'
   giftBasketRecipient: string
   giftMessage: string
-  dinnerAnchor: 'None' | 'Add-On' | 'Bundle'
-  smoothieQty: '0' | '1' | '2' | '3'
+  dinnerEntree: 'None' | '1' | '2' | '3' | '4'
+  smoothieQty: '0' | '1' | '2' | '4'
   dessert: boolean
   flowersHome: 'None' | '1 arrangement' | '2-3 arrangements'
   flowersGift: boolean
@@ -86,7 +86,7 @@ const initialFormData: FormData = {
   giftBasket: 'No',
   giftBasketRecipient: '',
   giftMessage: '',
-  dinnerAnchor: 'None',
+  dinnerEntree: 'None',
   smoothieQty: '0',
   dessert: false,
   flowersHome: 'None',
@@ -623,7 +623,7 @@ export default function OrderForm() {
         </div>
       </div>
 
-      {/* Section 4: Dinner Anchor (Conditional) */}
+      {/* Section 4: Dinner Entrée Add-Ons (Conditional) */}
       <AnimatePresence>
         {formData.weeklyBasket === 'Yes' && (
           <motion.div
@@ -636,50 +636,33 @@ export default function OrderForm() {
               <span className="w-8 h-8 bg-[--color-purple] text-white flex items-center justify-center text-sm">
                 4
               </span>
-              DINNER OPTIONS
+              DINNER ENTRÉES
             </h3>
 
-            <div className="space-y-3">
-              <label className="flex items-center gap-3 p-4 border-2 border-[--color-charcoal]/20 cursor-pointer hover:border-[--color-gold] transition-colors">
-                <input
-                  type="radio"
-                  name="dinnerAnchor"
-                  value="None"
-                  checked={formData.dinnerAnchor === 'None'}
-                  onChange={handleChange}
-                  className="w-5 h-5 accent-[--color-gold]"
-                />
-                <span className="flex-1">No additional dinner options this week</span>
-              </label>
+            <p className="text-[--color-charcoal]/70 mb-4">
+              Add extra dinner entrées to your basket. Each entrée serves 2-4.
+            </p>
 
-              <label className="flex items-center gap-3 p-4 border-2 border-[--color-charcoal]/20 cursor-pointer hover:border-[--color-gold] transition-colors">
-                <input
-                  type="radio"
-                  name="dinnerAnchor"
-                  value="Add-On"
-                  checked={formData.dinnerAnchor === 'Add-On'}
-                  onChange={handleChange}
-                  className="w-5 h-5 accent-[--color-gold]"
-                />
-                <span className="flex-1">Add extra dinner options</span>
-                <span className="font-headline text-[--color-gold]">$68–78</span>
+            <div className="mb-4">
+              <label htmlFor="dinnerEntree" className={labelClasses}>
+                Additional Dinner Entrées
               </label>
-
-              <label className="flex items-center gap-3 p-4 border-2 border-[--color-gold] bg-[--color-gold]/5 cursor-pointer hover:bg-[--color-gold]/10 transition-colors">
-                <input
-                  type="radio"
-                  name="dinnerAnchor"
-                  value="Bundle"
-                  checked={formData.dinnerAnchor === 'Bundle'}
-                  onChange={handleChange}
-                  className="w-5 h-5 accent-[--color-gold]"
-                />
-                <span className="flex-1">
-                  <span className="block">Core Weekly Basket + Extra Dinners</span>
-                  <span className="text-sm text-[--color-green]">Most Popular</span>
-                </span>
-                <span className="font-headline text-[--color-gold]">$175+</span>
-              </label>
+              <select
+                id="dinnerEntree"
+                name="dinnerEntree"
+                value={formData.dinnerEntree}
+                onChange={handleChange}
+                className={`${inputClasses('dinnerEntree' as keyof FormData)} cursor-pointer`}
+              >
+                <option value="None">No additional entrées</option>
+                <option value="1">1 entrée ($25)</option>
+                <option value="2">2 entrées ($50)</option>
+                <option value="3">3 entrées ($75)</option>
+                <option value="4">4 entrées ($100)</option>
+              </select>
+              <p className="text-sm text-[--color-charcoal]/60 mt-1">
+                $25 per entrée — perfect for larger families or meal prep
+              </p>
             </div>
           </motion.div>
         )}
@@ -708,8 +691,8 @@ export default function OrderForm() {
           >
             <option value="0">No smoothies</option>
             <option value="1">1 smoothie ($15)</option>
-            <option value="2">2 smoothies ($30)</option>
-            <option value="3">3 smoothies ($45)</option>
+            <option value="2">2 smoothies ($18)</option>
+            <option value="4">4 smoothies - Family Set ($32)</option>
           </select>
           <p className="text-sm text-[--color-charcoal]/60 mt-1">16 oz each — protein forward, greens, fruit, collagen, almond milk, monkfruit (NO SUGAR ADDED)</p>
         </div>
@@ -730,7 +713,7 @@ export default function OrderForm() {
                 Cakes, pies, cobblers, pavlova, cheesecake (serves 4–6)
               </span>
             </span>
-            <span className="font-headline text-[--color-gold]">$20–45</span>
+            <span className="font-headline text-[--color-gold]">$24</span>
           </label>
         </div>
 
@@ -858,7 +841,7 @@ export default function OrderForm() {
                 Perfect for vacation rentals — stock your kitchen before you arrive
               </span>
             </span>
-            <span className="font-headline text-[--color-gold]">$105–125</span>
+            <span className="font-headline text-[--color-gold]">$125</span>
           </label>
 
           <label className="flex items-center gap-3 p-4 border-2 border-[--color-charcoal]/20 cursor-pointer hover:border-[--color-gold] transition-colors">
@@ -875,7 +858,7 @@ export default function OrderForm() {
                 Coffee/tea, eggs, milk, olive oil, salt & pepper
               </span>
             </span>
-            <span className="font-headline text-[--color-gold]">$45–65</span>
+            <span className="font-headline text-[--color-gold]">$45</span>
           </label>
         </div>
       </div>
@@ -905,7 +888,7 @@ export default function OrderForm() {
           />
           <span className="flex-1">
             <span className="block font-medium">
-              I understand a refundable container deposit applies ($30–40)
+              I understand a refundable container deposit applies ($35)
             </span>
             <span className="text-sm text-[--color-charcoal]/60">
               Deposit is returned when you bring back the containers

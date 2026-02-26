@@ -16,7 +16,7 @@
 | Google Sheet | ⏳ Manual Setup | Chrix needs to create in Google |
 | Script Deployment | ⏳ Manual Setup | Chrix needs to deploy |
 | Vercel Env Var | ⏳ Manual Setup | Add NEXT_PUBLIC_GOOGLE_SCRIPT_URL |
-| Stripe Integration | 🔴 V2 | After MVP adoption |
+| Stripe Integration | 🟡 Starting | Payment Gateway phase beginning |
 | Admin Dashboard | 🔴 V2 | After MVP adoption |
 
 ## Sub-Agent Results
