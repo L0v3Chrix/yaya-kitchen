@@ -652,16 +652,21 @@ export default function OrderForm() {
               <span className="w-8 h-8 bg-[--color-purple] text-white flex items-center justify-center text-sm">
                 4
               </span>
-              DINNER ENTRÉES
+              ADDITIONAL PORTIONS
             </h3>
 
-            <p className="text-[--color-charcoal]/70 mb-4">
-              Add extra dinner entrées to your basket. Each entrée serves 2-4.
-            </p>
+            <div className="p-4 bg-[--color-cream] rounded-lg mb-4">
+              <p className="text-[--color-charcoal]/80 text-sm">
+                <strong>The weekly basket feeds 3 adults</strong> or 2 adults + 2 small children.
+              </p>
+              <p className="text-[--color-charcoal]/70 text-sm mt-2">
+                Having guests? Add extra portions. Example: in-laws visiting = add 2 portions for that week.
+              </p>
+            </div>
 
             <div className="mb-4">
               <label htmlFor="dinnerEntree" className={labelClasses}>
-                Additional Dinner Entrées
+                Extra Portions This Week
               </label>
               <select
                 id="dinnerEntree"
@@ -670,14 +675,14 @@ export default function OrderForm() {
                 onChange={handleChange}
                 className={`${inputClasses('dinnerEntree' as keyof FormData)} cursor-pointer`}
               >
-                <option value="None">No additional entrées</option>
-                <option value="1">1 entrée ($25)</option>
-                <option value="2">2 entrées ($50)</option>
-                <option value="3">3 entrées ($75)</option>
-                <option value="4">4 entrées ($100)</option>
+                <option value="None">No extra portions</option>
+                <option value="1">+1 portion ($25)</option>
+                <option value="2">+2 portions ($50)</option>
+                <option value="3">+3 portions ($75)</option>
+                <option value="4">+4 portions ($100)</option>
               </select>
               <p className="text-sm text-[--color-charcoal]/60 mt-1">
-                $25 per entrée — perfect for larger families or meal prep
+                $25 per additional portion
               </p>
             </div>
           </motion.div>

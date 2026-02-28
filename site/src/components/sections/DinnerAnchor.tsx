@@ -59,7 +59,7 @@ export default function DinnerAnchor() {
             <div className="bg-white/50 p-6 rounded-lg">
               <p className="flex justify-between items-center">
                 <span>Dessert Add-On</span>
-                <span className="font-headline text-[--color-gold]">$20 - $45</span>
+                <span className="font-headline text-[--color-gold]">$24</span>
               </p>
             </div>
           </div>

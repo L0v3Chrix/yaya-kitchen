@@ -22,7 +22,7 @@ const pricing = [
   { name: 'Core Weekly Basket', price: '$175' },
   { name: 'Flower Add-On', price: '$25/week' },
   { name: 'Smoothie Add-On', price: '$15/week' },
-  { name: 'Dessert Add-On', price: '$20–45' },
+  { name: 'Dessert Add-On', price: '$24' },
 ]
 
 export default function BasketDetails() {

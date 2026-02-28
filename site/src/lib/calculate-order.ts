@@ -78,16 +78,16 @@ export function calculateOrderTotal(
     breakdown.push({ label: `Core Weekly Basket (Week ${order.menuWeek})`, amount: 175 });
   }
 
-  // Dinner Entrée Add-Ons ($25 each)
-  const dinnerEntreeQty = order.dinnerEntree !== 'None' ? parseInt(order.dinnerEntree) : 0;
-  if (dinnerEntreeQty > 0) {
+  // Additional Portions ($25 each)
+  const portionQty = order.dinnerEntree !== 'None' ? parseInt(order.dinnerEntree) : 0;
+  if (portionQty > 0) {
     lineItems.push({ 
       priceId: STRIPE_PRODUCTS.DINNER_ENTREE_ADD_ON.priceId, 
-      quantity: dinnerEntreeQty 
+      quantity: portionQty 
     });
-    const entreeTotal = dinnerEntreeQty * 25;
-    subtotal += entreeTotal;
-    breakdown.push({ label: `Dinner Entrée × ${dinnerEntreeQty}`, amount: entreeTotal });
+    const portionTotal = portionQty * 25;
+    subtotal += portionTotal;
+    breakdown.push({ label: `Additional Portion × ${portionQty}`, amount: portionTotal });
   }
 
   // Portion Boost
