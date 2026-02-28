@@ -152,16 +152,14 @@ export default async function handler(
     const orderId = generateOrderId();
     console.log(`[${orderId}] Creating checkout session for ${order.email}`);
 
-    // Step 2: Submit to Sheet FIRST (critical - ensures order is never lost)
+    // Step 2: Submit to Sheet (best effort - don't block checkout if sheet fails)
     try {
       await submitToSheet(order, orderId);
       console.log(`[${orderId}] Order saved to Sheet with status "Pending Payment"`);
     } catch (sheetError: any) {
-      console.error(`[${orderId}] Sheet submission failed:`, sheetError);
-      return res.status(500).json({ 
-        error: 'Failed to save order. Please try again or contact YaYa directly.',
-        code: 'SHEET_ERROR'
-      });
+      // Log but don't block - Stripe metadata will have all order details
+      console.error(`[${orderId}] Sheet submission failed (non-blocking):`, sheetError);
+      // Continue to Stripe checkout - order data preserved in Stripe metadata
     }
 
     // Step 3: Create Stripe Checkout session
@@ -181,8 +179,14 @@ export default async function handler(
         orderId,
         customerName: order.name,
         customerEmail: order.email,
-        deliveryWeek: order.deliveryWeek,
+        customerPhone: order.phone,
+        deliveryAddress: order.address,
+        deliveryZip: order.zipCode,
+        deliveryWeek: order.deliveryWeek || '',
         menuWeek: order.menuWeek,
+        contactPreference: order.contactPreference,
+        weeklyBasket: order.weeklyBasket,
+        specialNotes: order.specialNotes || '',
       },
       payment_intent_data: {
         description: `YaYa's Kitchen Order ${orderId} - ${order.deliveryWeek}`,
