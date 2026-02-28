@@ -1,18 +1,17 @@
 /**
  * YaYa's Kitchen — Create Stripe Checkout Session
  * 
- * CRITICAL: This API writes to Google Sheet FIRST, then creates Stripe session.
- * This ensures orders are never lost even if Stripe fails.
+ * Stripe is the single source of truth for orders.
+ * All order details stored in Stripe metadata.
  * 
  * Flow:
  * 1. Validate order data
  * 2. Generate order ID
- * 3. Submit to Apps Script (Sheet write with status "Pending Payment")
- * 4. Create Stripe Checkout session with orderId in metadata
- * 5. Return session URL for redirect
+ * 3. Create Stripe Checkout session with full order metadata
+ * 4. Return session URL for redirect
  * 
- * If Step 3 fails → Return error, no Stripe session created
- * If Step 4 fails → Order exists in Sheet with "Pending Payment" (manual recovery possible)
+ * View orders: Stripe Dashboard → Payments
+ * Export: Stripe Dashboard → Reports
  */
 
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -91,48 +90,6 @@ function generateOrderId(): string {
   return `YAYA-${dateStr}-${random}`;
 }
 
-/**
- * Submit order to Google Apps Script
- * Returns orderId on success, throws on failure
- */
-async function submitToSheet(order: OrderData, orderId: string): Promise<boolean> {
-  const scriptUrl = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL;
-  
-  if (!scriptUrl) {
-    throw new Error('Google Script URL not configured');
-  }
-
-  const submitData = {
-    ...order,
-    orderId,
-    zip: order.zipCode,
-    paymentStatus: 'Pending Payment',
-    stripeSessionId: '', // Will be updated by webhook
-    stripePaymentIntentId: '',
-    submittedAt: new Date().toISOString(),
-  };
-
-  try {
-    const response = await fetch(scriptUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(submitData),
-    });
-
-    // Apps Script returns JSON
-    const result = await response.json();
-    
-    if (!result.success) {
-      throw new Error(result.error || 'Failed to save order');
-    }
-
-    return true;
-  } catch (error: any) {
-    console.error('Sheet submission error:', error);
-    throw new Error(`Failed to save order: ${error.message}`);
-  }
-}
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<CreateCheckoutResponse | ErrorResponse>
@@ -158,21 +115,11 @@ export default async function handler(
       return res.status(400).json({ error: 'Customer email required', code: 'MISSING_EMAIL' });
     }
 
-    // Step 1: Generate order ID
+    // Generate order ID
     const orderId = generateOrderId();
     console.log(`[${orderId}] Creating checkout session for ${order.email}`);
 
-    // Step 2: Submit to Sheet (best effort - don't block checkout if sheet fails)
-    try {
-      await submitToSheet(order, orderId);
-      console.log(`[${orderId}] Order saved to Sheet with status "Pending Payment"`);
-    } catch (sheetError: any) {
-      // Log but don't block - Stripe metadata will have all order details
-      console.error(`[${orderId}] Sheet submission failed (non-blocking):`, sheetError);
-      // Continue to Stripe checkout - order data preserved in Stripe metadata
-    }
-
-    // Step 3: Create Stripe Checkout session
+    // Create Stripe Checkout session (Stripe is the source of truth)
     const stripeLineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = lineItems.map(item => ({
       price: item.priceId,
       quantity: item.quantity,
@@ -225,25 +172,6 @@ export default async function handler(
     }
 
     console.log(`[${orderId}] Stripe session created: ${session.id}`);
-
-    // Step 4: Update Sheet with Stripe session ID (best effort - don't fail if this fails)
-    try {
-      const scriptUrl = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL;
-      if (scriptUrl) {
-        await fetch(scriptUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            action: 'updateStripeSession',
-            orderId,
-            stripeSessionId: session.id,
-          }),
-        });
-      }
-    } catch (updateError) {
-      // Log but don't fail - order and session both exist
-      console.warn(`[${orderId}] Failed to update Sheet with session ID (non-critical)`);
-    }
 
     return res.status(200).json({
       sessionId: session.id,

@@ -1,14 +1,9 @@
 /**
  * YaYa's Kitchen — Stripe Webhook Handler
  * 
- * CRITICAL: This webhook updates EXISTING orders in the Sheet.
- * It does NOT create new orders - orders are created before Stripe redirect.
- * 
- * Flow:
- * 1. Verify webhook signature
- * 2. Extract orderId from session metadata
- * 3. Call Apps Script to update order status to "Paid"
- * 4. Log completion
+ * Handles Stripe payment events.
+ * Stripe is the source of truth — this webhook logs events
+ * and can trigger notifications as needed.
  */
 
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -24,49 +19,6 @@ export const config = {
     bodyParser: false,
   },
 };
-
-/**
- * Update order status in Google Sheet via Apps Script
- */
-async function updateOrderInSheet(
-  orderId: string, 
-  paymentStatus: string,
-  stripePaymentIntentId: string
-): Promise<boolean> {
-  const scriptUrl = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL;
-  
-  if (!scriptUrl) {
-    console.error('Google Script URL not configured');
-    return false;
-  }
-
-  try {
-    const response = await fetch(scriptUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'updatePaymentStatus',
-        orderId,
-        paymentStatus,
-        stripePaymentIntentId,
-        paidAt: new Date().toISOString(),
-      }),
-    });
-
-    const result = await response.json();
-    
-    if (result.success) {
-      console.log(`[${orderId}] Sheet updated: ${paymentStatus}`);
-      return true;
-    } else {
-      console.error(`[${orderId}] Sheet update failed:`, result.error);
-      return false;
-    }
-  } catch (error: any) {
-    console.error(`[${orderId}] Sheet update error:`, error);
-    return false;
-  }
-}
 
 export default async function handler(
   req: NextApiRequest,
@@ -106,67 +58,43 @@ export default async function handler(
   switch (event.type) {
     case 'checkout.session.completed': {
       const session = event.data.object as Stripe.Checkout.Session;
+      const { orderId, customerName, customerEmail, deliveryWeek } = session.metadata || {};
       
-      const { orderId } = session.metadata || {};
-      const paymentIntentId = session.payment_intent as string;
-
-      console.log(`[WEBHOOK] checkout.session.completed`, {
-        sessionId: session.id,
+      console.log(`[WEBHOOK] ✅ Payment received`, {
         orderId,
-        paymentIntent: paymentIntentId,
-        customerEmail: session.customer_email,
+        customer: customerName,
+        email: customerEmail,
+        deliveryWeek,
+        amount: session.amount_total ? `$${(session.amount_total / 100).toFixed(2)}` : 'unknown',
       });
 
-      if (orderId) {
-        // Update Google Sheet with payment confirmation
-        const updated = await updateOrderInSheet(orderId, 'Paid', paymentIntentId);
-        
-        if (!updated) {
-          // Log error but return 200 - we don't want Stripe to retry endlessly
-          // The order exists, payment succeeded, just status needs manual update
-          console.error(`[${orderId}] MANUAL ACTION NEEDED: Update payment status to Paid`);
-        }
-      } else {
-        console.error('[WEBHOOK] No orderId in session metadata - cannot update Sheet');
-      }
-
+      // Future: Send confirmation email, SMS notification, etc.
       break;
     }
 
     case 'checkout.session.expired': {
       const session = event.data.object as Stripe.Checkout.Session;
-      const { orderId } = session.metadata || {};
+      const { orderId, customerName } = session.metadata || {};
 
-      console.log(`[WEBHOOK] checkout.session.expired`, {
-        sessionId: session.id,
+      console.log(`[WEBHOOK] ⏰ Checkout expired`, {
         orderId,
+        customer: customerName,
       });
-
-      if (orderId) {
-        // Mark order as expired
-        await updateOrderInSheet(orderId, 'Payment Expired', '');
-      }
-
       break;
     }
 
     case 'payment_intent.payment_failed': {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
       
-      console.log(`[WEBHOOK] payment_intent.payment_failed`, {
+      console.log(`[WEBHOOK] ❌ Payment failed`, {
         paymentIntentId: paymentIntent.id,
         error: paymentIntent.last_payment_error?.message,
       });
-
-      // Note: We may not have orderId here - payment_intent doesn't always have checkout metadata
-      // The order remains in "Pending Payment" status in the Sheet
-      
       break;
     }
 
     default:
-      // Unexpected event type - log but don't fail
-      console.log(`[WEBHOOK] Unhandled event type: ${event.type}`);
+      console.log(`[WEBHOOK] Unhandled event: ${event.type}`);
   }
 
   // Return 200 to acknowledge receipt
