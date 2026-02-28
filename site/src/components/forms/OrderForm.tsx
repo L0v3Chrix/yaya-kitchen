@@ -4,12 +4,14 @@ import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import OrderSummary from './OrderSummary'
 import MenuWeekSelector from './MenuWeekSelector'
+import DeliveryWeekSelector from './DeliveryWeekSelector'
 import { calculateOrderTotal } from '@/lib/calculate-order'
 
 // ZIP codes with free delivery (8-mile radius from 32779 Longwood)
 const FREE_DELIVERY_ZIPS = ['32779', '32750', '32714', '32701', '32746', '32703', '32791', '32708']
 
 type ContactPreference = 'Text' | 'Email' | 'Both'
+type DeliveryMode = 'single' | 'multi' | 'every'
 
 interface FormData {
   name: string
@@ -17,7 +19,8 @@ interface FormData {
   phone: string
   address: string
   zipCode: string
-  deliveryWeek: string
+  deliveryWeeks: string[] // Changed from deliveryWeek to support multi-week
+  deliveryMode: DeliveryMode // New field for delivery frequency
   menuWeek: '1' | '2' | '3' | '4' | ''
   deliveryInstructions: string
   contactPreference: ContactPreference | ''
@@ -42,49 +45,14 @@ interface FormData {
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 
-/**
- * Get the next 4 Fridays from today
- * Returns array of { value: ISO date string, label: "Friday, Feb 28" }
- */
-function getNextFourFridays(): Array<{ value: string; label: string }> {
-  const fridays: Array<{ value: string; label: string }> = []
-  const today = new Date()
-  const dayOfWeek = today.getDay()
-  
-  // Calculate days until next Friday (Friday = 5)
-  let daysUntilFriday = (5 - dayOfWeek + 7) % 7
-  if (daysUntilFriday === 0) {
-    // If today is Friday, check if it's before 9am Tuesday cutoff
-    // For simplicity, always start from next Friday if today is Friday
-    daysUntilFriday = 7
-  }
-  
-  for (let i = 0; i < 4; i++) {
-    const friday = new Date(today)
-    friday.setDate(today.getDate() + daysUntilFriday + (i * 7))
-    
-    const label = friday.toLocaleDateString('en-US', {
-      weekday: 'long',
-      month: 'short',
-      day: 'numeric'
-    })
-    
-    fridays.push({
-      value: friday.toISOString().split('T')[0],
-      label
-    })
-  }
-  
-  return fridays
-}
-
 const initialFormData: FormData = {
   name: '',
   email: '',
   phone: '',
   address: '',
   zipCode: '',
-  deliveryWeek: '',
+  deliveryWeeks: [],
+  deliveryMode: 'single',
   menuWeek: '1',
   deliveryInstructions: '',
   contactPreference: '',
@@ -115,16 +83,6 @@ export default function OrderForm() {
   const [status, setStatus] = useState<FormStatus>('idle')
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({})
 
-  // Compute delivery weeks once
-  const deliveryWeeks = useMemo(() => getNextFourFridays(), [])
-
-  // Set default delivery week on first render
-  useState(() => {
-    if (deliveryWeeks.length > 0 && !formData.deliveryWeek) {
-      setFormData(prev => ({ ...prev, deliveryWeek: deliveryWeeks[0].value }))
-    }
-  })
-
   // Check if ZIP is in free delivery zone
   const isZipInZone = FREE_DELIVERY_ZIPS.includes(formData.zipCode.trim())
   const showDeliveryFeeWarning = formData.zipCode.trim().length === 5 && !isZipInZone
@@ -132,13 +90,41 @@ export default function OrderForm() {
   // Check if gift message should be shown
   const showGiftMessage = formData.giftBasket === 'Yes' || formData.flowersGift
 
-  // Calculate order total
-  const orderTotal = useMemo(() => {
+  // Calculate if this qualifies for subscription discount
+  const isSubscription = formData.deliveryMode === 'every'
+  const numberOfWeeks = formData.deliveryWeeks.length || 1
+
+  // Calculate order total (per week, then multiply)
+  const weeklyTotal = useMemo(() => {
     return calculateOrderTotal({
       ...formData,
-      isFirstOrder: true, // Assume first order for now
+      isFirstOrder: true,
     }, true)
   }, [formData])
+
+  // Apply subscription discount if applicable
+  const orderTotal = useMemo(() => {
+    if (!isSubscription) return weeklyTotal
+
+    // 15% off subtotal for subscription (not deposits/fees)
+    const discountAmount = Math.round(weeklyTotal.subtotal * 0.15)
+    const discountedSubtotal = weeklyTotal.subtotal - discountAmount
+    const discountedTotal = discountedSubtotal + weeklyTotal.deliveryFee + weeklyTotal.containerDeposit
+
+    // Update breakdown to show discounted prices
+    const discountedBreakdown = weeklyTotal.breakdown.map(item => ({
+      ...item,
+      amount: Math.round(item.amount * 0.85),
+    }))
+
+    return {
+      ...weeklyTotal,
+      subtotal: discountedSubtotal,
+      total: discountedTotal,
+      discount: discountAmount,
+      breakdown: discountedBreakdown,
+    }
+  }, [weeklyTotal, isSubscription])
 
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof FormData, string>> = {}
@@ -158,8 +144,8 @@ export default function OrderForm() {
     if (!/^\d{5}$/.test(formData.zipCode.trim())) {
       newErrors.zipCode = 'Please enter a valid 5-digit ZIP code'
     }
-    if (!formData.deliveryWeek) {
-      newErrors.deliveryWeek = 'Please select a delivery week'
+    if (formData.deliveryWeeks.length === 0) {
+      newErrors.deliveryWeeks = 'Please select at least one delivery week'
     }
     if (!formData.contactPreference) {
       newErrors.contactPreference = 'Please select how you\'d like us to contact you'
@@ -181,8 +167,15 @@ export default function OrderForm() {
     setStatus('submitting')
 
     try {
-      // Format delivery week label for submission
-      const selectedWeek = deliveryWeeks.find(w => w.value === formData.deliveryWeek)
+      // Format delivery weeks for submission
+      const deliveryDatesFormatted = formData.deliveryWeeks.map(dateStr => {
+        const date = new Date(dateStr + 'T12:00:00')
+        return date.toLocaleDateString('en-US', {
+          weekday: 'long',
+          month: 'short',
+          day: 'numeric'
+        })
+      }).join(', ')
       
       // Prepare order data for checkout session
       const checkoutData = {
@@ -190,7 +183,13 @@ export default function OrderForm() {
           ...formData,
           // Map zipCode to zip for Apps Script compatibility
           zip: formData.zipCode,
-          deliveryWeekLabel: selectedWeek?.label || formData.deliveryWeek,
+          // Multi-week support
+          deliveryWeeksLabel: deliveryDatesFormatted,
+          deliveryMode: formData.deliveryMode,
+          numberOfWeeks: formData.deliveryWeeks.length,
+          isSubscription: formData.deliveryMode === 'every' ? 'Yes' : 'No',
+          // Legacy field for compatibility
+          deliveryWeek: formData.deliveryWeeks[0] || '',
           isInDeliveryZone: isZipInZone ? 'Yes' : 'No',
           deliveryFee: isZipInZone ? '$0' : '$10',
           dessert: formData.dessert ? 'Yes' : 'No',
@@ -198,11 +197,15 @@ export default function OrderForm() {
           arrivalBasket: formData.arrivalBasket ? 'Yes' : 'No',
           pantryStarter: formData.pantryStarter ? 'Yes' : 'No',
           containerDeposit: formData.containerDeposit ? 'Yes' : 'No',
-          subscriptionInterest: formData.subscriptionInterest ? 'Yes' : 'No',
+          subscriptionInterest: formData.deliveryMode === 'every' ? 'Yes' : formData.subscriptionInterest ? 'Yes' : 'No',
           submittedAt: new Date().toISOString(),
         },
         lineItems: orderTotal.lineItems,
-        total: orderTotal.total,
+        total: orderTotal.total * numberOfWeeks, // Total for all weeks
+        weeklyTotal: orderTotal.total,
+        numberOfWeeks,
+        isSubscription,
+        discount: isSubscription ? weeklyTotal.total - orderTotal.total : 0,
       }
 
       // Call checkout session API
@@ -492,51 +495,50 @@ export default function OrderForm() {
         </div>
       </div>
 
-      {/* Section 2: Delivery Week */}
-      <div className={sectionClasses}>
+      {/* Section 2: Delivery Schedule */}
+      <div id="delivery-section" className={sectionClasses}>
         <h3 className="font-headline text-xl tracking-wide text-[--color-charcoal] mb-6 flex items-center gap-3">
           <span className="w-8 h-8 bg-[--color-purple] text-white flex items-center justify-center text-sm">
             2
           </span>
-          DELIVERY WEEK
+          DELIVERY SCHEDULE
         </h3>
 
-        <div className="bg-[--color-gold]/10 p-4 mb-6 border-l-4 border-[--color-gold]">
-          <p className="text-[--color-charcoal] font-medium">
-            Order by Tuesday 9am for Friday delivery
-          </p>
-          <p className="text-sm text-[--color-charcoal]/70 mt-1">
-            Baskets are delivered each Friday between 9am–11am.
-          </p>
-        </div>
+        <DeliveryWeekSelector
+          selectedWeeks={formData.deliveryWeeks}
+          onWeeksChange={(weeks) => setFormData(prev => ({ ...prev, deliveryWeeks: weeks }))}
+          mode={formData.deliveryMode}
+          onModeChange={(mode) => setFormData(prev => ({ ...prev, deliveryMode: mode }))}
+          disabled={status === 'submitting'}
+        />
+        {errors.deliveryWeeks && <p className="text-red-500 text-sm mt-2">{errors.deliveryWeeks}</p>}
 
-        <label htmlFor="deliveryWeek" className={labelClasses}>
-          Select Delivery Friday *
-        </label>
-        <select
-          id="deliveryWeek"
-          name="deliveryWeek"
-          value={formData.deliveryWeek}
-          onChange={handleChange}
-          className={`${inputClasses('deliveryWeek')} cursor-pointer`}
-        >
-          <option value="">Choose a delivery date...</option>
-          {deliveryWeeks.map((week) => (
-            <option key={week.value} value={week.value}>
-              {week.label}
-            </option>
-          ))}
-        </select>
-        {errors.deliveryWeek && <p className="text-red-500 text-sm mt-1">{errors.deliveryWeek}</p>}
+        {/* Menu Week Selector - Only show for single/multi week orders */}
+        {formData.deliveryMode !== 'every' && (
+          <div className="mt-8">
+            <MenuWeekSelector
+              selectedWeek={formData.menuWeek}
+              onWeekChange={(week) => setFormData(prev => ({ ...prev, menuWeek: week as '1' | '2' | '3' | '4' }))}
+              disabled={status === 'submitting'}
+            />
+          </div>
+        )}
 
-        {/* Menu Week Selector */}
-        <div className="mt-6">
-          <MenuWeekSelector
-            selectedWeek={formData.menuWeek}
-            onWeekChange={(week) => setFormData(prev => ({ ...prev, menuWeek: week as '1' | '2' | '3' | '4' }))}
-            disabled={status === 'submitting'}
-          />
-        </div>
+        {/* For subscription, show rotating menu message */}
+        {formData.deliveryMode === 'every' && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-6 p-4 bg-[--color-cream] border border-[--color-charcoal]/10"
+          >
+            <p className="font-headline text-sm tracking-wider text-[--color-charcoal] mb-2">
+              ROTATING WEEKLY MENUS
+            </p>
+            <p className="text-sm text-[--color-charcoal]/70">
+              With your subscription, you'll receive a different themed menu each week — Italian, Comfort Classics, Global Flavors, and Southern Soul — on rotation. Fresh variety, no decisions needed.
+            </p>
+          </motion.div>
+        )}
       </div>
 
       {/* Section 3: Weekly Basket */}
@@ -919,36 +921,68 @@ export default function OrderForm() {
         )}
       </div>
 
-      {/* Section 8: Subscription Interest */}
-      <div className={sectionClasses}>
-        <h3 className="font-headline text-xl tracking-wide text-[--color-charcoal] mb-6 flex items-center gap-3">
-          <span className="w-8 h-8 bg-[--color-purple] text-white flex items-center justify-center text-sm">
-            8
-          </span>
-          SUBSCRIPTION
-        </h3>
+      {/* Section 8: Subscription Note (only show if not already on subscription) */}
+      {formData.deliveryMode !== 'every' && (
+        <div className={sectionClasses}>
+          <h3 className="font-headline text-xl tracking-wide text-[--color-charcoal] mb-6 flex items-center gap-3">
+            <span className="w-8 h-8 bg-[--color-purple] text-white flex items-center justify-center text-sm">
+              8
+            </span>
+            SAVE WITH WEEKLY DELIVERY
+          </h3>
 
-        <label className="flex items-start gap-3 p-4 border-2 border-[--color-gold] bg-[--color-gold]/5 cursor-pointer hover:bg-[--color-gold]/10 transition-colors">
-          <input
-            type="checkbox"
-            name="subscriptionInterest"
-            checked={formData.subscriptionInterest}
-            onChange={handleChange}
-            className="w-5 h-5 accent-[--color-gold] mt-0.5"
-          />
-          <span className="flex-1">
-            <span className="block font-medium">
-              I&apos;m interested in a weekly subscription
-            </span>
-            <span className="text-sm text-[--color-green] font-medium">
-              Save 15% on every order
-            </span>
-            <span className="text-sm text-[--color-charcoal]/60 block mt-1">
-              We&apos;ll reach out with details — no commitment required
-            </span>
-          </span>
-        </label>
-      </div>
+          <div 
+            onClick={() => {
+              setFormData(prev => ({ ...prev, deliveryMode: 'every' }))
+              // Scroll back to delivery section
+              document.getElementById('delivery-section')?.scrollIntoView({ behavior: 'smooth' })
+            }}
+            className="p-4 border-2 border-[--color-green] bg-[--color-green]/5 cursor-pointer hover:bg-[--color-green]/10 transition-colors"
+          >
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 bg-[--color-green] rounded-full flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <p className="font-headline text-[--color-green] tracking-wider">
+                  SWITCH TO EVERY WEEK & SAVE 15%
+                </p>
+                <p className="text-sm text-[--color-charcoal]/70 mt-1">
+                  Get automatic weekly delivery with 15% off every basket. Pause or skip anytime with a text.
+                </p>
+                <p className="text-sm text-[--color-green] font-medium mt-2">
+                  Tap to switch →
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Subscription Confirmation (shown when on subscription) */}
+      {formData.deliveryMode === 'every' && (
+        <div className={sectionClasses}>
+          <div className="p-4 bg-[--color-green]/10 border border-[--color-green]">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-[--color-green] rounded-full flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <p className="font-headline text-[--color-green] tracking-wider">
+                  WEEKLY SUBSCRIPTION ACTIVE
+                </p>
+                <p className="text-sm text-[--color-charcoal]/70">
+                  You're getting 15% off! Automatic weekly delivery, easy pause anytime.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Section 9: Special Notes */}
       <div className="mb-10">

@@ -19,7 +19,10 @@ export interface OrderFormData {
   phone: string;
   address: string;
   zipCode: string;
-  deliveryWeek: string;
+  // Support both single and multi-week
+  deliveryWeek?: string;
+  deliveryWeeks?: string[];
+  deliveryMode?: 'single' | 'multi' | 'every';
   menuWeek: '1' | '2' | '3' | '4' | '';
   weeklyBasket: 'Yes' | 'No';
   giftBasket: 'Yes' | 'No';
