@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useMemo } from 'react'
+import { useMemo, useEffect } from 'react'
 
 type DeliveryMode = 'single' | 'multi' | 'every'
 
@@ -65,6 +65,13 @@ export default function DeliveryWeekSelector({
   disabled = false,
 }: DeliveryWeekSelectorProps) {
   const deliveryWeeks = useMemo(() => getNextFourFridays(), [])
+
+  // Auto-select first week on mount if nothing selected
+  useEffect(() => {
+    if (selectedWeeks.length === 0 && deliveryWeeks.length > 0) {
+      onWeeksChange([deliveryWeeks[0].value])
+    }
+  }, [deliveryWeeks, selectedWeeks.length, onWeeksChange])
 
   const handleModeChange = (newMode: DeliveryMode) => {
     if (disabled) return
