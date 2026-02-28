@@ -139,6 +139,11 @@ export default async function handler(
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Debug: Check if Stripe key exists
+  const hasStripeKey = !!process.env.STRIPE_SECRET_KEY;
+  const keyPrefix = process.env.STRIPE_SECRET_KEY?.substring(0, 10) || 'missing';
+  console.log(`[DEBUG] Stripe key exists: ${hasStripeKey}, prefix: ${keyPrefix}`);
+
   try {
     const { order, lineItems, total } = req.body as CreateCheckoutRequest;
 
