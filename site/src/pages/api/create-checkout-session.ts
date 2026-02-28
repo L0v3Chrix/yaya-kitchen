@@ -18,7 +18,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2024-12-18.acacia',
+  timeout: 20000, // 20 second timeout
+  maxNetworkRetries: 1, // Reduce retries for faster failure
+});
 
 interface LineItem {
   priceId: string;
@@ -242,7 +246,28 @@ export default async function handler(
     });
 
   } catch (error: any) {
-    console.error('Checkout session error:', error);
+    console.error('Checkout session error:', {
+      message: error.message,
+      type: error.type,
+      code: error.code,
+      statusCode: error.statusCode,
+    });
+    
+    // Handle specific Stripe errors
+    if (error.type === 'StripeConnectionError') {
+      return res.status(503).json({ 
+        error: 'Payment service temporarily unavailable. Please try again.',
+        code: 'STRIPE_CONNECTION'
+      });
+    }
+    
+    if (error.type === 'StripeAPIError') {
+      return res.status(500).json({ 
+        error: 'Payment processing error. Please contact YaYa.',
+        code: 'STRIPE_API'
+      });
+    }
+    
     return res.status(500).json({ 
       error: error.message || 'Failed to create checkout session',
       code: 'UNKNOWN_ERROR'
