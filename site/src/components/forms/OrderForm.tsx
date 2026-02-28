@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import OrderSummary from './OrderSummary'
-import MenuWeekSelector from './MenuWeekSelector'
+// MenuWeekSelector removed - menu rotates with delivery week
 import DeliveryWeekSelector from './DeliveryWeekSelector'
 import { calculateOrderTotal } from '@/lib/calculate-order'
 
@@ -524,32 +524,16 @@ export default function OrderForm() {
         />
         {errors.deliveryWeeks && <p className="text-red-500 text-sm mt-2">{errors.deliveryWeeks}</p>}
 
-        {/* Menu Week Selector - Only show for single/multi week orders */}
-        {formData.deliveryMode !== 'every' && (
-          <div className="mt-8">
-            <MenuWeekSelector
-              selectedWeek={formData.menuWeek}
-              onWeekChange={(week) => setFormData(prev => ({ ...prev, menuWeek: week as '1' | '2' | '3' | '4' }))}
-              disabled={status === 'submitting'}
-            />
-          </div>
-        )}
-
-        {/* For subscription, show rotating menu message */}
-        {formData.deliveryMode === 'every' && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="mt-6 p-4 bg-[--color-cream] border border-[--color-charcoal]/10"
-          >
-            <p className="font-headline text-sm tracking-wider text-[--color-charcoal] mb-2">
-              ROTATING WEEKLY MENUS
-            </p>
-            <p className="text-sm text-[--color-charcoal]/70">
-              With your subscription, you'll receive a different themed menu each week — Italian, Comfort Classics, Global Flavors, and Southern Soul — on rotation. Fresh variety, no decisions needed.
-            </p>
-          </motion.div>
-        )}
+        {/* Menu info - menus rotate with delivery weeks */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mt-6 p-4 bg-[--color-cream] border border-[--color-charcoal]/10 rounded-lg"
+        >
+          <p className="text-sm text-[--color-charcoal]/70">
+            <strong>Menu rotates weekly:</strong> Week 1 = Italian, Week 2 = Comfort Classics, Week 3 = Global Flavors, Week 4 = Southern Soul
+          </p>
+        </motion.div>
       </div>
 
       {/* Section 3: Weekly Basket */}

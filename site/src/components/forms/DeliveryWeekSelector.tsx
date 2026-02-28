@@ -132,45 +132,45 @@ export default function DeliveryWeekSelector({
             type="button"
             onClick={() => handleModeChange('single')}
             disabled={disabled}
-            className={`p-3 border-2 text-center transition-all duration-200 ${
+            className={`p-3 border-2 text-center transition-all duration-200 rounded-lg ${
               mode === 'single'
-                ? 'border-[--color-gold] bg-[--color-gold]/10 ring-2 ring-[--color-gold]/30'
-                : 'border-[--color-charcoal]/20 hover:border-[--color-gold]/50'
+                ? 'border-[--color-purple] bg-[--color-purple] text-white shadow-md'
+                : 'border-[--color-charcoal]/20 hover:border-[--color-purple]/50 bg-white'
             } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
           >
-            <span className="block font-headline text-sm tracking-wider">One Week</span>
-            <span className="text-xs text-[--color-charcoal]/60">This time only</span>
+            <span className={`block font-headline text-sm tracking-wider ${mode === 'single' ? 'text-white' : ''}`}>One Week</span>
+            <span className={`text-xs ${mode === 'single' ? 'text-white/80' : 'text-[--color-charcoal]/60'}`}>This time only</span>
           </button>
           
           <button
             type="button"
             onClick={() => handleModeChange('multi')}
             disabled={disabled}
-            className={`p-3 border-2 text-center transition-all duration-200 ${
+            className={`p-3 border-2 text-center transition-all duration-200 rounded-lg ${
               mode === 'multi'
-                ? 'border-[--color-gold] bg-[--color-gold]/10 ring-2 ring-[--color-gold]/30'
-                : 'border-[--color-charcoal]/20 hover:border-[--color-gold]/50'
+                ? 'border-[--color-purple] bg-[--color-purple] text-white shadow-md'
+                : 'border-[--color-charcoal]/20 hover:border-[--color-purple]/50 bg-white'
             } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
           >
-            <span className="block font-headline text-sm tracking-wider">Multi-Week</span>
-            <span className="text-xs text-[--color-charcoal]/60">Pick your weeks</span>
+            <span className={`block font-headline text-sm tracking-wider ${mode === 'multi' ? 'text-white' : ''}`}>Multi-Week</span>
+            <span className={`text-xs ${mode === 'multi' ? 'text-white/80' : 'text-[--color-charcoal]/60'}`}>Pick your weeks</span>
           </button>
           
           <button
             type="button"
             onClick={() => handleModeChange('every')}
             disabled={disabled}
-            className={`p-3 border-2 text-center transition-all duration-200 relative overflow-hidden ${
+            className={`p-3 border-2 text-center transition-all duration-200 rounded-lg relative overflow-hidden ${
               mode === 'every'
-                ? 'border-[--color-green] bg-[--color-green]/10 ring-2 ring-[--color-green]/30'
-                : 'border-[--color-charcoal]/20 hover:border-[--color-green]/50'
+                ? 'border-[--color-green] bg-[--color-green] text-white shadow-md'
+                : 'border-[--color-charcoal]/20 hover:border-[--color-green]/50 bg-white'
             } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
           >
-            <span className="absolute -top-1 -right-1 bg-[--color-green] text-white text-[10px] font-headline px-2 py-0.5 rotate-12">
+            <span className="absolute -top-1 -right-1 bg-white/20 text-white text-[10px] font-headline px-2 py-0.5 rotate-12 backdrop-blur-sm">
               SAVE 15%
             </span>
-            <span className="block font-headline text-sm tracking-wider text-[--color-green]">Every Week</span>
-            <span className="text-xs text-[--color-charcoal]/60">Auto-delivery</span>
+            <span className={`block font-headline text-sm tracking-wider ${mode === 'every' ? 'text-white' : 'text-[--color-green]'}`}>Every Week</span>
+            <span className={`text-xs ${mode === 'every' ? 'text-white/80' : 'text-[--color-charcoal]/60'}`}>Auto-delivery</span>
           </button>
         </div>
       </div>
@@ -197,24 +197,24 @@ export default function DeliveryWeekSelector({
                 transition={{ delay: index * 0.05 }}
                 onClick={() => !isEveryMode && handleWeekToggle(week.value)}
                 disabled={disabled || isEveryMode}
-                className={`relative p-4 border-3 text-center transition-all duration-200 ${
+                className={`relative p-4 border-2 text-center transition-all duration-200 rounded-lg ${
                   isSelected
                     ? isEveryMode 
-                      ? 'border-[--color-green] bg-[--color-green]/20 shadow-lg'
-                      : 'border-[--color-gold] bg-[--color-gold]/30 shadow-lg ring-4 ring-[--color-gold]/40'
-                    : 'border-[--color-charcoal]/20 hover:border-[--color-gold]/50 bg-white'
+                      ? 'border-[--color-green] bg-[--color-green] shadow-lg'
+                      : 'border-[--color-purple] bg-[--color-purple] shadow-lg'
+                    : 'border-[--color-charcoal]/20 hover:border-[--color-purple]/50 bg-white'
                 } ${disabled || isEveryMode ? 'cursor-default' : 'cursor-pointer'}`}
               >
                 {/* Week number */}
                 <span className={`block text-xs font-headline tracking-wider mb-1 ${
-                  isSelected ? 'text-[--color-charcoal] font-bold' : 'text-[--color-charcoal]/50'
+                  isSelected ? 'text-white/80 font-bold' : 'text-[--color-charcoal]/50'
                 }`}>
                   WEEK {index + 1}
                 </span>
                 
                 {/* Date */}
                 <span className={`block font-bold text-lg ${
-                  isSelected ? 'text-[--color-purple]' : 'text-[--color-charcoal]'
+                  isSelected ? 'text-white' : 'text-[--color-charcoal]'
                 }`}>
                   {week.shortLabel}
                 </span>
@@ -224,9 +224,7 @@ export default function DeliveryWeekSelector({
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className={`absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center shadow-md ${
-                      isEveryMode ? 'bg-[--color-green]' : 'bg-[--color-gold]'
-                    }`}
+                    className="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center bg-white/20"
                   >
                     <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -239,11 +237,9 @@ export default function DeliveryWeekSelector({
                   <motion.span
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className={`block text-xs font-headline tracking-wider mt-2 ${
-                      isEveryMode ? 'text-[--color-green]' : 'text-[--color-gold]'
-                    }`}
+                    className="block text-xs font-headline tracking-wider mt-2 text-white/90"
                   >
-                    SELECTED
+                    ✓ SELECTED
                   </motion.span>
                 )}
               </motion.button>
