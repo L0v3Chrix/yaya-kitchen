@@ -18,10 +18,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  timeout: 20000, // 20 second timeout
-  maxNetworkRetries: 1, // Reduce retries for faster failure
-});
+// Validate Stripe key at startup
+if (!process.env.STRIPE_SECRET_KEY) {
+  console.error('STRIPE_SECRET_KEY environment variable is not set!');
+}
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_missing');
 
 interface LineItem {
   priceId: string;
