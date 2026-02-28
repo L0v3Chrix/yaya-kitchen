@@ -133,8 +133,8 @@ export default async function handler(
       mode: 'payment',
       customer_email: order.email,
       line_items: stripeLineItems,
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://yaya-kitchen.vercel.app'}/order-success?session_id={CHECKOUT_SESSION_ID}&order_id=${orderId}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || 'https://yaya-kitchen.vercel.app'}/#order`,
+      success_url: `https://www.yayasbaskets.com/order-success?session_id={CHECKOUT_SESSION_ID}&order_id=${orderId}`,
+      cancel_url: `https://www.yayasbaskets.com/#order`,
       metadata: {
         orderId,
         customerName: order.name,
