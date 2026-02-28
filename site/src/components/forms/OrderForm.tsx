@@ -45,13 +45,24 @@ interface FormData {
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error'
 
+// Get first Friday date for default selection
+function getFirstFridayDate(): string {
+  const today = new Date()
+  const dayOfWeek = today.getDay()
+  let daysUntilFriday = (5 - dayOfWeek + 7) % 7
+  if (daysUntilFriday === 0) daysUntilFriday = 7
+  const friday = new Date(today)
+  friday.setDate(today.getDate() + daysUntilFriday)
+  return friday.toISOString().split('T')[0]
+}
+
 const initialFormData: FormData = {
   name: '',
   email: '',
   phone: '',
   address: '',
   zipCode: '',
-  deliveryWeeks: [],
+  deliveryWeeks: [getFirstFridayDate()], // Pre-select first Friday
   deliveryMode: 'single',
   menuWeek: '1',
   deliveryInstructions: '',

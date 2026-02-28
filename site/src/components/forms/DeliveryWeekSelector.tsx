@@ -67,11 +67,14 @@ export default function DeliveryWeekSelector({
   const deliveryWeeks = useMemo(() => getNextFourFridays(), [])
 
   // Auto-select first week on mount if nothing selected
+  // Use a ref to ensure this only fires once
   useEffect(() => {
     if (selectedWeeks.length === 0 && deliveryWeeks.length > 0) {
+      // Immediate call to ensure selection
       onWeeksChange([deliveryWeeks[0].value])
     }
-  }, [deliveryWeeks, selectedWeeks.length, onWeeksChange])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleModeChange = (newMode: DeliveryMode) => {
     if (disabled) return
@@ -194,37 +197,54 @@ export default function DeliveryWeekSelector({
                 transition={{ delay: index * 0.05 }}
                 onClick={() => !isEveryMode && handleWeekToggle(week.value)}
                 disabled={disabled || isEveryMode}
-                className={`relative p-4 border-2 text-center transition-all duration-200 ${
+                className={`relative p-4 border-3 text-center transition-all duration-200 ${
                   isSelected
                     ? isEveryMode 
-                      ? 'border-[--color-green] bg-[--color-green]/10'
-                      : 'border-[--color-gold] bg-[--color-gold]/10 ring-2 ring-[--color-gold]/30'
-                    : 'border-[--color-charcoal]/20 hover:border-[--color-gold]/50'
+                      ? 'border-[--color-green] bg-[--color-green]/20 shadow-lg'
+                      : 'border-[--color-gold] bg-[--color-gold]/30 shadow-lg ring-4 ring-[--color-gold]/40'
+                    : 'border-[--color-charcoal]/20 hover:border-[--color-gold]/50 bg-white'
                 } ${disabled || isEveryMode ? 'cursor-default' : 'cursor-pointer'}`}
               >
                 {/* Week number */}
-                <span className="block text-xs text-[--color-charcoal]/50 font-headline tracking-wider mb-1">
+                <span className={`block text-xs font-headline tracking-wider mb-1 ${
+                  isSelected ? 'text-[--color-charcoal] font-bold' : 'text-[--color-charcoal]/50'
+                }`}>
                   WEEK {index + 1}
                 </span>
                 
                 {/* Date */}
-                <span className="block font-medium text-[--color-charcoal]">
+                <span className={`block font-bold text-lg ${
+                  isSelected ? 'text-[--color-purple]' : 'text-[--color-charcoal]'
+                }`}>
                   {week.shortLabel}
                 </span>
                 
-                {/* Checkmark for selected */}
+                {/* Checkmark for selected - larger and more prominent */}
                 {isSelected && (
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className={`absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center ${
+                    className={`absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center shadow-md ${
                       isEveryMode ? 'bg-[--color-green]' : 'bg-[--color-gold]'
                     }`}
                   >
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                   </motion.div>
+                )}
+                
+                {/* Selected label */}
+                {isSelected && (
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className={`block text-xs font-headline tracking-wider mt-2 ${
+                      isEveryMode ? 'text-[--color-green]' : 'text-[--color-gold]'
+                    }`}
+                  >
+                    SELECTED
+                  </motion.span>
                 )}
               </motion.button>
             )
