@@ -125,6 +125,9 @@ export default async function handler(
       quantity: item.quantity,
     }));
 
+    console.log(`[${orderId}] Creating Stripe session with ${stripeLineItems.length} line items`);
+    console.log(`[${orderId}] Line items:`, JSON.stringify(stripeLineItems));
+    
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
@@ -185,6 +188,8 @@ export default async function handler(
       type: error.type,
       code: error.code,
       statusCode: error.statusCode,
+      raw: error.raw || 'no raw error',
+      stack: error.stack?.slice(0, 500),
     });
     
     // Handle specific Stripe errors
