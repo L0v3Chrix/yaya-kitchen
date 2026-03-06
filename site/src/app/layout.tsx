@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Cormorant_Garamond, Oswald, Lato } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 
 const cormorantGaramond = Cormorant_Garamond({
@@ -46,6 +47,19 @@ export default function RootLayout({
       className={`${cormorantGaramond.variable} ${oswald.variable} ${lato.variable}`}
     >
       <body className="antialiased">
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-K2HD28D0WT"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-K2HD28D0WT');
+          `}
+        </Script>
         {children}
       </body>
     </html>
