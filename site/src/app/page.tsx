@@ -5,6 +5,7 @@ import WeeklyBasket from '@/components/sections/WeeklyBasket'
 import BasketDetails from '@/components/sections/BasketDetails'
 import CoreKitchen from '@/components/sections/CoreKitchen'
 import DinnerAnchor from '@/components/sections/DinnerAnchor'
+import MonthlyMenu from '@/components/sections/MonthlyMenu'
 import Flowers from '@/components/sections/Flowers'
 import DessertGallery from '@/components/sections/DessertGallery'
 import ArrivalBaskets from '@/components/sections/ArrivalBaskets'
@@ -31,6 +32,9 @@ export default function Home() {
 
         {/* 4. Dinner Anchor (Text Left, Image Right) */}
         <DinnerAnchor />
+
+        {/* 4b. Monthly Menu */}
+        <MonthlyMenu />
 
         {/* 5. Flowers (Image Left, Text Right) */}
         <Flowers />
