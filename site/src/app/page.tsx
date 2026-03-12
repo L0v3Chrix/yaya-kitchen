@@ -10,7 +10,6 @@ import Flowers from '@/components/sections/Flowers'
 import DessertGallery from '@/components/sections/DessertGallery'
 import ArrivalBaskets from '@/components/sections/ArrivalBaskets'
 import AboutYaya from '@/components/sections/AboutYaya'
-import MonthlyMenu from '@/components/sections/MonthlyMenu'
 import OrderForm from '@/components/forms/OrderForm'
 
 export default function Home() {
@@ -48,10 +47,7 @@ export default function Home() {
         {/* 8. About YaYa */}
         <AboutYaya />
 
-        {/* 9. Monthly Menu */}
-        <MonthlyMenu />
-
-        {/* 10. Order Form Section */}
+        {/* 9. Order Form Section */}
         <section id="order" className="pt-10 pb-20 md:pt-14 md:pb-32 bg-[--color-cream-dark]">
           <div className="max-w-4xl mx-auto px-6">
             <div className="text-center mb-10">
