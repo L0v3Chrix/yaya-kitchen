@@ -85,20 +85,28 @@ export default function MonthlyMenu() {
           </motion.div>
 
           {/* Month Tabs */}
-          <div className="flex gap-2 justify-center mb-8 flex-wrap">
-            {MONTHS.map((m, idx) => (
-              <button
-                key={m.label}
-                onClick={() => { setActiveMonth(idx); setSelectedWeek(null) }}
-                className={`font-headline text-sm tracking-widest uppercase px-6 py-2 border-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-gold] focus-visible:ring-offset-2 focus-visible:ring-offset-[--color-purple] ${
-                  activeMonth === idx
-                    ? 'bg-[--color-gold] border-[--color-gold] text-[--color-charcoal]'
-                    : 'bg-transparent border-white/30 text-white/60 hover:border-[--color-gold] hover:text-[--color-gold]'
-                }`}
-              >
-                {m.label}
-              </button>
-            ))}
+          <div className="mb-8">
+            <p className="text-center text-white/50 text-xs tracking-widest uppercase mb-3">
+              Choose a month
+            </p>
+            <div className="flex gap-3 justify-center flex-wrap">
+              {MONTHS.map((m, idx) => (
+                <button
+                  key={m.label}
+                  onClick={() => { setActiveMonth(idx); setSelectedWeek(null) }}
+                  className={`font-headline text-base tracking-widest uppercase px-8 py-3 border-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[--color-gold] focus-visible:ring-offset-2 focus-visible:ring-offset-[--color-purple] ${
+                    activeMonth === idx
+                      ? 'bg-[--color-gold] border-[--color-gold] text-[--color-charcoal] shadow-lg scale-105'
+                      : 'bg-white/10 border-white text-white hover:bg-[--color-gold]/20 hover:border-[--color-gold] hover:text-[--color-gold]'
+                  }`}
+                >
+                  {m.label}
+                  {activeMonth === idx && (
+                    <span className="ml-2 text-xs">✓</span>
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Week Grid */}
